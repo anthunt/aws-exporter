@@ -12,6 +12,7 @@
         <aws.sdk.version>1.11.359</aws.sdk.version>
         <poi.version>3.14</poi.version>
         <poi-helper.version>1.0.0-RELEASE</poi-helper.version>
+        <mvn-artifact-downloader.version>0.0.3-RELEASE</mvn-artifact-downloader.version>
     </properties>
 
 	<distributionManagement>
@@ -72,6 +73,12 @@
 				<version>${poi-helper.version}</version>
 			</dependency>
 			
+			<dependency>
+				<groupId>anthunt.mvn</groupId>
+				<artifactId>mvn-artifact-downloader</artifactId>
+				<version>${mvn-artifact-downloader.version}</version>
+			</dependency>
+			
         </dependencies>
 
     </dependencyManagement>
@@ -82,45 +89,56 @@
         <dependency>
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-java-sdk</artifactId>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
         	<groupId>org.apache.poi</groupId>
         	<artifactId>poi</artifactId>
+            <scope>provided</scope>
         </dependency>
         
         <dependency>
         	<groupId>org.apache.poi</groupId>
         	<artifactId>poi-ooxml</artifactId>
+            <scope>provided</scope>
         </dependency>
         
         <!-- https://mvnrepository.com/artifact/org.apache.poi/poi-ooxml-schemas -->
 		<dependency>
 		    <groupId>org.apache.poi</groupId>
 		    <artifactId>poi-ooxml-schemas</artifactId>
+            <scope>provided</scope>
 		</dependency>
 		
 		<!-- https://mvnrepository.com/artifact/org.apache.poi/poi-scratchpad -->
 		<dependency>
 		    <groupId>org.apache.poi</groupId>
 		    <artifactId>poi-scratchpad</artifactId>
+            <scope>provided</scope>
 		</dependency>
 		
 		<!-- https://mvnrepository.com/artifact/org.apache.poi/poi-excelant -->
 		<dependency>
 		    <groupId>org.apache.poi</groupId>
 		    <artifactId>poi-excelant</artifactId>
+            <scope>provided</scope>
 		</dependency>
 		
 		<dependency>
 			<groupId>anthunt.poi</groupId>
 			<artifactId>poi-helper</artifactId>
 		</dependency>
-			
+		
+		<dependency>
+			<groupId>anthunt.mvn</groupId>
+			<artifactId>mvn-artifact-downloader</artifactId>
+		</dependency>
+		
 	</dependencies>
     
     <build>
-    
+        	
 		<plugins>
 		
 			<plugin>
@@ -139,12 +157,13 @@
 			    <configuration>
 			        <archive>
 			            <manifest>
-			                <mainClass>anthunt.aws.exporter.AWSExportStarter</mainClass>
+			                <mainClass>anthunt.aws.exporter.Installer</mainClass>
 			            </manifest>
 			        </archive>
-			        <descriptorRefs>
-			            <descriptorRef>jar-with-dependencies</descriptorRef>
-			        </descriptorRefs>
+			        <descriptors>
+			        	<descriptor>/jar-with-dependencies.xml</descriptor>
+			        </descriptors>
+			        <attach>false</attach>
 			    </configuration>
 			    <executions>
 			        <execution>
@@ -156,7 +175,28 @@
 			        </execution>
 			    </executions>
 			</plugin>
-			
+      
+			<plugin>
+		        <artifactId>maven-antrun-plugin</artifactId>
+		        <version>1.8</version>
+		        <executions>
+		          <execution>
+		            <phase>verify</phase>
+		            <configuration>
+		              <target>
+		              		<echo>Ant Run</echo>
+		              		<echo>target/${project.artifactId}-${project.version}-jar-with-dependencies.jar</echo>
+		              		<echo>target/${project.artifactId}-${project.version}.jar</echo>
+							<move file="target/${project.artifactId}-${project.version}-jar-with-dependencies.jar" tofile="target/${project.artifactId}-${project.version}.jar"/>
+		              </target>
+		            </configuration>
+		            <goals>
+		              <goal>run</goal>
+		            </goals>
+		          </execution>
+		        </executions>
+		      </plugin>
+      
 		</plugins>
 		
     </build>

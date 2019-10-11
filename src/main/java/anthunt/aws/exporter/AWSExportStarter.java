@@ -6,6 +6,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -14,6 +15,9 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Scanner;
 import java.util.Set;
+
+import org.apache.maven.model.building.ModelBuildingException;
+import org.eclipse.aether.resolution.DependencyResolutionException;
 
 public class AWSExportStarter
 {
@@ -583,40 +587,44 @@ public class AWSExportStarter
     return this.scanner.nextInt();
   }
   
-  public static void main(String[] args)
-  {
-    Scanner sc = null;
-    try
-    {
-      sc = new Scanner(System.in);
-      
-      System.out.println("========================================================================");
-      System.out.println("|     ___ _       _______    ______                      __            |");
-      System.out.println("|    /   | |     / / ___/   / ____/  ______  ____  _____/ /____  _____ |");
-      System.out.println("|   / /| | | /| / /\\__ \\   / __/ | |/_/ __ \\/ __ \\/ ___/ __/ _ \\/ ___/ |");
-      System.out.println("|  / ___ | |/ |/ /___/ /  / /____>  </ /_/ / /_/ / /  / /_/  __/ /     |");
-      System.out.println("| /_/  |_|__/|__//____/  /_____/_/|_/ .___/\\____/_/   \\__/\\___/_/      |");
-      System.out.println("|                                  /_/                                 |");
-      System.out.println("========================================================================");
-      System.out.println("");
-      
-      AWSExportStarter awsExportStarter = new AWSExportStarter(sc);
-      awsExportStarter.execute(); return;
-    }
-    catch (Exception e)
-    {
-      e.printStackTrace();
-    }
-    finally
-    {
-      if (sc != null) {
-        try
-        {
-          sc.close();
-        }
-        catch (Exception localException3) {}
-      }
-    }
+  public static void main(String[] args) throws DependencyResolutionException, URISyntaxException, ModelBuildingException
+  {	
+	initialize();
+  }
+  
+  private static void initialize() {
+	  Scanner sc = null;
+	    try
+	    {
+	      sc = new Scanner(System.in);
+	      
+	      System.out.println("========================================================================");
+	      System.out.println("|     ___ _       _______    ______                      __            |");
+	      System.out.println("|    /   | |     / / ___/   / ____/  ______  ____  _____/ /____  _____ |");
+	      System.out.println("|   / /| | | /| / /\\__ \\   / __/ | |/_/ __ \\/ __ \\/ ___/ __/ _ \\/ ___/ |");
+	      System.out.println("|  / ___ | |/ |/ /___/ /  / /____>  </ /_/ / /_/ / /  / /_/  __/ /     |");
+	      System.out.println("| /_/  |_|__/|__//____/  /_____/_/|_/ .___/\\____/_/   \\__/\\___/_/      |");
+	      System.out.println("|                                  /_/                                 |");
+	      System.out.println("========================================================================");
+	      System.out.println("");
+	      
+	      AWSExportStarter awsExportStarter = new AWSExportStarter(sc);
+	      awsExportStarter.execute(); return;
+	    }
+	    catch (Exception e)
+	    {
+	      e.printStackTrace();
+	    }
+	    finally
+	    {
+	      if (sc != null) {
+	        try
+	        {
+	          sc.close();
+	        }
+	        catch (Exception localException3) {}
+	      }
+	    }  
   }
   
   public Properties getProperties()
