@@ -2,10 +2,9 @@
 setlocal
 
 SET RUN_DIR=%~dp0
-SET ENV_FILE=env.bat
+SET ENV_FILE=conf/env.bat
 SET CHECK_TMP_FILE=aws_export_check.tmp
 SET PROXY_ALIAS=proxycertforawsexporter
-SET JAR_NAME=aws-exporter-1.2.0-RELEASE.jar
 
 :CHECK_ENV
 
@@ -20,13 +19,13 @@ SET JAR_NAME=aws-exporter-1.2.0-RELEASE.jar
 
 
 :RUN_AWS_EXPORTER
-
+	 
 	echo.Run AWS Exporter Jar
 	
-	echo.RunScript "%JRE_HOME%\bin\java.exe" %ENV_TRUST_STORE% %ENV_TRUST_STORE_PASS% -jar %JAR_NAME%
+	echo.RunScript "%JRE_HOME%\bin\java.exe" -cp ./*;lib/*; %ENV_TRUST_STORE% %ENV_TRUST_STORE_PASS% anthunt.aws.exporter.AWSExportStarter
 	echo.
 	
-	"%JRE_HOME%\bin\java.exe" %ENV_TRUST_STORE% %ENV_TRUST_STORE_PASS% -jar %JAR_NAME%
+	"%JRE_HOME%\bin\java.exe" -cp ./*;lib/*; %ENV_TRUST_STORE% %ENV_TRUST_STORE_PASS% anthunt.aws.exporter.AWSExportStarter
 
 	GOTO RUN_EXIST
 

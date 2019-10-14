@@ -21,7 +21,7 @@ import org.eclipse.aether.resolution.DependencyResolutionException;
 
 public class AWSExportStarter
 {
-  private static final String dataFileName = "awsExporter.data";
+  private static final String dataFileName = "conf/awsExporter.data";
   private Scanner scanner;
   private Properties properties;
   private File propertiesFile;
@@ -408,10 +408,8 @@ public class AWSExportStarter
 	  try {
 		loadProperties();
 	} catch (FileNotFoundException e) {
-		// TODO Auto-generated catch block
 		e.printStackTrace();
 	} catch (IOException e) {
-		// TODO Auto-generated catch block
 		e.printStackTrace();
 	}
 	  
