@@ -6,6 +6,8 @@ SET ENV_FILE=conf/env.bat
 SET CHECK_TMP_FILE=aws_export_check.tmp
 SET PROXY_ALIAS=proxycertforawsexporter
 
+cd %RUN_DIR%
+
 :CHECK_ENV
 
 	IF NOT EXIST %ENV_FILE% GOTO SET_ENV
@@ -31,16 +33,18 @@ SET PROXY_ALIAS=proxycertforawsexporter
 
 
 :JRE_HOME_FAIL
-
 	echo.
 	echo.Invalid JRE home path. try again.
 	GOTO SET_JRE_HOME
 
+:MAKE_CONF
+	MKDIR conf
+
 :SET_ENV
-	
 	echo.
 	echo.You have launched AWS Exporter for the first time.
 	echo.Java home setting is required.
+	IF NOT EXIST "conf" GOTO :MAKE_CONF
 
 :SET_JRE_HOME
 
