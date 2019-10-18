@@ -1,6 +1,10 @@
 package anthunt.aws.exporter;
 
 import com.amazonaws.regions.Regions;
+
+import anthunt.aws.exporter.model.AmazonAccess;
+import anthunt.aws.exporter.model.CrossAccountRole;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;

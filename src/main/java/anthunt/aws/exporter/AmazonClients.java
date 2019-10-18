@@ -38,6 +38,9 @@ import com.amazonaws.services.securitytoken.model.AssumeRoleRequest;
 import com.amazonaws.services.securitytoken.model.AssumeRoleResult;
 import com.amazonaws.services.securitytoken.model.Credentials;
 
+import anthunt.aws.exporter.model.AmazonAccess;
+import anthunt.aws.exporter.model.CrossAccountRole;
+
 public class AmazonClients
 {
 	public AmazonEC2 AmazonEC2;

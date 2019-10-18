@@ -1,4 +1,4 @@
-package anthunt.aws.exporter;
+package anthunt.aws.exporter.model;
 
 public class CrossAccountRole {
 	

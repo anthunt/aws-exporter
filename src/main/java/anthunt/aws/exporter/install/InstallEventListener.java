@@ -1,4 +1,4 @@
-package anthunt.aws.exporter;
+package anthunt.aws.exporter.install;
 
 import org.eclipse.aether.AbstractRepositoryListener;
 import org.eclipse.aether.RepositoryEvent;

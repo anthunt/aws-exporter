@@ -1,4 +1,4 @@
-package anthunt.aws.exporter;
+package anthunt.aws.exporter.install;
 
 import java.io.File;
 import java.io.FileNotFoundException;

@@ -1,4 +1,4 @@
-package anthunt.aws.exporter;
+package anthunt.aws.exporter.model;
 
 import java.util.HashMap;
 import java.util.Map;
