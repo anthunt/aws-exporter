@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>anthunt.aws</groupId>
   <artifactId>aws-exporter</artifactId>
-  <version>2.0.1-RELEASE</version>
+  <version>2.0.2-RELEASE</version>
   
   <name>aws-exporter</name>
   
@@ -12,7 +12,7 @@
         <aws.sdk.version>1.11.359</aws.sdk.version>
         <poi.version>3.14</poi.version>
         <poi-helper.version>1.0.0-RELEASE</poi-helper.version>
-        <mvn-artifact-downloader.version>1.0.0-RELEASE</mvn-artifact-downloader.version>
+        <mvn-artifact-downloader.version>1.0.1-RELEASE</mvn-artifact-downloader.version>
     </properties>
 
 	<distributionManagement>
@@ -32,6 +32,16 @@
                 <groupId>com.amazonaws</groupId>
                 <artifactId>aws-java-sdk</artifactId>
                 <version>${aws.sdk.version}</version>
+		        <exclusions>
+		        	<exclusion>
+		        		<groupId>org.apache.httpcomponents</groupId>
+						<artifactId>httpclient</artifactId>
+		        	</exclusion>
+		        	<exclusion>
+		        		<groupId>org.apache.httpcomponents</groupId>
+						<artifactId>httpcore</artifactId>
+		        	</exclusion>
+		        </exclusions>
             </dependency>
 
 			<dependency>
