@@ -128,14 +128,14 @@ public class AWSExportStarter
   private void showAccessList()
   {
 
+      ProfileFile profileFile = ProfileFile.defaultProfileFile();
+      Map<String, Profile> profileMap = profileFile.profiles();
+      
       List<String> keyIndex = new ArrayList<>();
       
-      System.out.println("Select your profile.\n");
       System.out.println("==============================");
-      
-      ProfileFile profileFile = ProfileFile.defaultProfileFile();
-      
-      Map<String, Profile> profileMap = profileFile.profiles();
+      System.out.println("Profile List");
+      System.out.println("==============================");
       
       Set<String> keySet = profileMap.keySet();
       Iterator<String> keys = keySet.iterator();
@@ -188,9 +188,9 @@ public class AWSExportStarter
 	  List<Region> regions = new AWSRegionSelector(this).getRegions();
       
       System.out.println("");
-      System.out.println(profileName + " AWS 정보 생성 시작");
+      System.out.println(profileName + " Start creating AWS information");
       new AWSExporter(this.amazonAccess, regions, profileName);
-      System.out.println(profileName + " AWS 정보 생성 완료");
+      System.out.println(profileName + " Completed creation of AWS information");
       System.out.println("");
       
       showAccessList();
@@ -198,7 +198,7 @@ public class AWSExportStarter
   
   private void makeAccess()
   {
-    System.out.println("\n접속 정보를 입력하여 주십시요.");
+    System.out.println("\nPlease enter your connection information.");
         
     AmazonAccess amazonAccess = new AmazonAccess();
         
@@ -256,7 +256,7 @@ public class AWSExportStarter
   {
     boolean isUseProxy = false;
     
-    System.out.print("Proxy 사용 여부(Y/N) : ");
+    System.out.print("Proxy Use(Y/N) : ");
     while (!this.scanner.hasNextLine()) {
       this.scanner.next();
     }
@@ -271,7 +271,7 @@ public class AWSExportStarter
     }
     else
     {
-      System.out.println("잘못 입력하셨습니다. Proxy 사용 여부(Y/N)를 입력하여 주십시요.");
+      System.out.println("You mistyped it. Please enter whether to use proxy (Y / N).");
       isUseProxy = setUseProxy();
     }
     return isUseProxy;
@@ -286,7 +286,7 @@ public class AWSExportStarter
     String proxyHost = this.scanner.nextLine();
     if ((proxyHost == null) || ("".equals(proxyHost.trim())))
     {
-      System.out.println("잘못 입력하셨습니다. Proxy Host를 입력하여 주십시요.");
+      System.out.println("You mistyped it. Enter Proxy Host.");
       proxyHost = setProxyHost();
     }
     return proxyHost;
@@ -297,7 +297,7 @@ public class AWSExportStarter
     System.out.print("Proxy Port : ");
     while (!this.scanner.hasNextInt())
     {
-      System.out.println("\n잘못 입력하셧습니다. Proxy Port를 입력하여 주십시요.");
+      System.out.println("\nYou entered it incorrectly. Enter the Proxy Port.");
       System.out.print("Proxy Port : ");
       this.scanner.nextLine();
     }
