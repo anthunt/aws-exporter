@@ -1,10 +1,5 @@
 package anthunt.aws.exporter;
 
-import com.amazonaws.regions.Regions;
-
-import anthunt.aws.exporter.model.AmazonAccess;
-import anthunt.aws.exporter.model.CrossAccountRole;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -13,7 +8,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -23,23 +18,24 @@ import java.util.Set;
 import org.apache.maven.model.building.ModelBuildingException;
 import org.eclipse.aether.resolution.DependencyResolutionException;
 
+import anthunt.aws.exporter.model.AmazonAccess;
+import software.amazon.awssdk.profiles.Profile;
+import software.amazon.awssdk.profiles.ProfileFile;
+import software.amazon.awssdk.regions.Region;
+
 public class AWSExportStarter
 {
   private static final String dataFileName = "conf/awsExporter.data";
   private Scanner scanner;
   private Properties properties;
   private File propertiesFile;
-  private HashMap<String, AmazonAccess> amazonAccesses;
   private AmazonAccess amazonAccess;
   
   private static enum PropType
   {
-       ACCESS_KEY(".aws.accessKey")
-    ,  SECRET_KEY(".aws.secretKey")
-    ,  USE_PROXY(".connect.useProxy")
-    ,  PROXY_HOST(".connect.proxy.host")
-    ,  PROXY_PORT(".connect.proxy.port")
-    ,  CROSS_ACCOUNT(".aws.cross")
+       USE_PROXY("connect.useProxy")
+    ,  PROXY_HOST("connect.proxy.host")
+    ,  PROXY_PORT("connect.proxy.port")
     ;
 	  
     private String postFix;
@@ -71,7 +67,6 @@ public class AWSExportStarter
   private AWSExportStarter(Scanner scanner)
   {
     this.scanner = scanner;
-    this.amazonAccesses = new HashMap<>();
     this.properties = new Properties();
   }
   
@@ -110,22 +105,10 @@ public class AWSExportStarter
     PropType propType = PropType.getPropType(key);
     if (propType != null)
     {
-      AmazonAccess amazonAccess = null;
+      AmazonAccess amazonAccess = new AmazonAccess();
       
-      String accessType = key.substring(0, key.indexOf(propType.getPostFix()));
-      if (this.amazonAccesses.containsKey(accessType)) {
-        amazonAccess = (AmazonAccess)this.amazonAccesses.get(accessType);
-      } else {
-        amazonAccess = new AmazonAccess(accessType);
-      }
       switch (propType)
       {
-      case ACCESS_KEY: 
-        amazonAccess.setAccessKey(value);
-        break;
-      case SECRET_KEY: 
-        amazonAccess.setSecretKey(value);
-        break;
       case USE_PROXY: 
         amazonAccess.setUseProxy(Boolean.valueOf(Boolean.parseBoolean(value)));
         break;
@@ -135,63 +118,40 @@ public class AWSExportStarter
       case PROXY_PORT: 
         amazonAccess.setProxyPort(Integer.valueOf(Integer.parseInt(value)));
         break;
-      case CROSS_ACCOUNT:
-    	  
-    	String crossAccountKey = key.substring(key.indexOf(propType.getPostFix()) + propType.getPostFix().length() + 1, key.length());
-    	
-  		String[] crossAccountProps = crossAccountKey.split("[.]");
-  		String crossAccountRoleName = crossAccountProps[0];
-  		String crossAccountRoleAttr = crossAccountProps[1];
-  		
-  		CrossAccountRole crossAccountRole = amazonAccess.getCrossAccountRole(crossAccountRoleName);
-  		
-  		if("accountId".equals(crossAccountRoleAttr)) {
-  			crossAccountRole.setCrossAccountId(value);
-  			crossAccountRole.setCrossRoleSessionName(crossAccountKey);
-  		} else if("roleName".equals(crossAccountRoleAttr)) {
-  			crossAccountRole.setCrossRoleName(value);
-  		} else if("externId".equals(crossAccountRoleAttr)) {
-  			crossAccountRole.setExternId(value);
-  		}
-  		
-      	break;
       }
       
-      this.amazonAccesses.put(accessType, amazonAccess);
+      this.amazonAccess = amazonAccess;
       
     }
   }
   
   private void showAccessList()
   {
-    if (this.amazonAccesses.size() > 0)
-    {
+
       List<String> keyIndex = new ArrayList<>();
-      Set<String> keys = this.amazonAccesses.keySet();
       
-      System.out.println("접속 번호를 입력하여 주십시요.\n");
+      System.out.println("Select your profile.\n");
       System.out.println("==============================");
-      System.out.println("0. 신규  접속 정보 등록");
-      System.out.println("------------------------------");
-      for (String key : keys)
-      {
-        keyIndex.add(key);
-        System.out.print(keyIndex.size() + ". " + key + " 계정 접속");
-        int crossAccountSize = this.amazonAccesses.get(key).getCrossAccountRoles().size();
-        if(crossAccountSize > 0) {
-        	System.out.print(" - " + crossAccountSize + "개의 CrossAccount Role 사용 가능.");
-        }
-        System.out.println("");
+      
+      ProfileFile profileFile = ProfileFile.defaultProfileFile();
+      
+      Map<String, Profile> profileMap = profileFile.profiles();
+      
+      Set<String> keySet = profileMap.keySet();
+      Iterator<String> keys = keySet.iterator();
+      while(keys.hasNext()) {
+    	  String profileName = keys.next();
+    	  keyIndex.add(profileName);
+    	  System.out.print(keyIndex.size() + ". " + profileName);
+          System.out.println("");
       }
       System.out.println("------------------------------");
-      System.out.println("90. CrossAccount Role 사용");
-      System.out.println("------------------------------");
-      System.out.println("99. 종료");
+      System.out.println("99. Exit");
       System.out.println("==============================");
       System.out.println("");
       
       checkSelectAccessList(keyIndex);
-    }
+    
   }
   
   private void exit() {
@@ -200,11 +160,11 @@ public class AWSExportStarter
   
   private void checkSelectAccessList(List<String> keyIndex)
   {
-    System.out.print("접속 번호 : ");
+    System.out.print("Profile Number : ");
     while (!this.scanner.hasNextInt())
     {
-      System.out.println("\n잘못된 접속 번호를 선택하셨습니다. 다시 입력해 주십시요.");
-      System.out.print("접속 번호 : ");
+      System.out.println("\nWrong number. Try again.");
+      System.out.print("Profile Number : ");
       this.scanner.nextLine();
     }
     int index = this.scanner.nextInt();
@@ -213,56 +173,35 @@ public class AWSExportStarter
     {
       this.exit();
     }
-    else if (index == 90)
+    else if ((index < 1) || (index > keyIndex.size()))
     {
-      useCrossRoleAccess(keyIndex);
-    }
-    else if ((index < 0) || (index > keyIndex.size()))
-    {
-      System.out.println("잘못된 접속 번호를 선택하셨습니다. 다시 입력해 주십시요.");
+      System.out.println("Wrong number. Try again.");
       checkSelectAccessList(keyIndex);
-    }
-    else if (index == 0)
-    {
-      makeAccess();
     }
     else
     {
-      String accessType = (String)keyIndex.get(index - 1);
-      this.amazonAccess = this.getAmazonAccess(accessType);
-      this.extractRegion(accessType, false, null);      
+      this.extractRegion(keyIndex.get(index - 1));      
     }
   }
   
-  private void extractRegion(String accessType, boolean isCrossAccount, String crossAccountKey) {
-	  List<Regions> regions = new AWSRegionSelector(this).getRegions();
+  private void extractRegion(String profileName) {
+	  List<Region> regions = new AWSRegionSelector(this).getRegions();
       
       System.out.println("");
-      System.out.println(accessType + " AWS 정보 생성 시작");
-      new AWSExporter(this.amazonAccess, regions, isCrossAccount, crossAccountKey);
-      System.out.println(accessType + " AWS 정보 생성 완료");
+      System.out.println(profileName + " AWS 정보 생성 시작");
+      new AWSExporter(this.amazonAccess, regions, profileName);
+      System.out.println(profileName + " AWS 정보 생성 완료");
       System.out.println("");
       
       showAccessList();
   }
   
-  private AmazonAccess getAmazonAccess(String accessType) {
-	  return (AmazonAccess)this.amazonAccesses.get(accessType);
-  }
-  
   private void makeAccess()
   {
     System.out.println("\n접속 정보를 입력하여 주십시요.");
-    
-    String accessType = setAccessType();
-    String accessKey = setAccessKey();
-    String secretKey = setSecretKey();
-    
-    AmazonAccess amazonAccess = new AmazonAccess(accessType);
-    
-    amazonAccess.setAccessKey(accessKey);
-    amazonAccess.setSecretKey(secretKey);
-    
+        
+    AmazonAccess amazonAccess = new AmazonAccess();
+        
     boolean isUseProxy = setUseProxy();
     amazonAccess.setUseProxy(Boolean.valueOf(isUseProxy));
     if (isUseProxy)
@@ -272,15 +211,14 @@ public class AWSExportStarter
       amazonAccess.setProxyHost(proxyHost);
       amazonAccess.setProxyPort(Integer.valueOf(proxyPort));
     }
-    this.amazonAccesses.put(amazonAccess.getAccessType(), amazonAccess);
     
-    this.properties.put(amazonAccess.getAccessType() + PropType.ACCESS_KEY.getPostFix(), amazonAccess.getAccessKey());
-    this.properties.put(amazonAccess.getAccessType() + PropType.SECRET_KEY.getPostFix(), amazonAccess.getSecretKey());
-    this.properties.put(amazonAccess.getAccessType() + PropType.USE_PROXY.getPostFix(), amazonAccess.isUseProxy().toString());
+    this.amazonAccess = amazonAccess;
+    
+    this.properties.put(PropType.USE_PROXY.getPostFix(), amazonAccess.isUseProxy().toString());
     
     if(amazonAccess.isUseProxy()) {
-	    this.properties.put(amazonAccess.getAccessType() + PropType.PROXY_HOST.getPostFix(), amazonAccess.getProxyHost());
-	    this.properties.put(amazonAccess.getAccessType() + PropType.PROXY_PORT.getPostFix(), amazonAccess.getProxyPort().toString());
+	    this.properties.put(PropType.PROXY_HOST.getPostFix(), amazonAccess.getProxyHost());
+	    this.properties.put(PropType.PROXY_PORT.getPostFix(), amazonAccess.getProxyPort().toString());
     }
     
     storeProperties();
@@ -298,184 +236,6 @@ public class AWSExportStarter
     }
   }
   
-  private void useCrossRoleAccess(List<String> keyIndex) {
-	  
-	  System.out.println("\n\nCrossAccount Role 접속을 위한 계정 접속번호를 입력하여 주십시요.\n");
-      System.out.println("==============================");
-	  for (int i = 0; i < keyIndex.size(); i++) {
-		  String key = keyIndex.get(i);
-		  System.out.println((i + 1) + ". " + key + " 계정 접속");
-	  }
-	  System.out.println("------------------------------\n");
-	  System.out.println("90. 전 단계로 돌아가기");
-	  System.out.println("99. 종료");
-	  System.out.println("==============================\n");
-	  
-	  System.out.print("CrossAccount Role 접속 번호 : ");
-	  while (!this.scanner.hasNextInt())
-	  {
-		  System.out.println("\n잘못된 접속 번호를 선택하셨습니다. 다시 입력해 주십시요.");
-		  System.out.print("CrossAccount Role 접속 번호 : ");
-		  this.scanner.nextLine();
-	  }
-	  int index = this.scanner.nextInt();
-	  this.scanner.nextLine();
-	  
-	  if(index == 99) {
-		  this.exit();
-	  } else if(index == 90) {
-		  this.showAccessList();
-	  } else if ((index < 1) || (index > keyIndex.size()))
-	  {
-	      System.out.println("잘못된 접속 번호를 선택하셨습니다. 다시 입력해 주십시요.");
-	      useCrossRoleAccess(keyIndex);
-	  } else {
-		  showCrossRoleAccess(keyIndex, keyIndex.get(index - 1));
-	  }
-  }
-  
-  private void showCrossRoleAccess(List<String> keyIndex, String key) {
-	  System.out.println("\n\nCrossAccount Role 접속번호를 입력하여 주십시요.\n");
-      System.out.println("==============================");
-      System.out.println("0. 신규 CrossAccount Role 등록");
-      
-      this.amazonAccess = this.amazonAccesses.get(key);
-      
-      Map<String, CrossAccountRole> crossAccountRoles = this.amazonAccess.getCrossAccountRoles();
-      
-      if(crossAccountRoles.size() > 0) {
-    	  System.out.println("------------------------------\n");
-      }
-      
-      List<String> crossKeyIndex = new ArrayList<>();
-      Set<String> keys = crossAccountRoles.keySet();
-      for (String crosskey : keys) {
-    	  crossKeyIndex.add(crosskey);
-    	  System.out.println(crossKeyIndex.size() + ". " + crosskey + " Role 접속");
-      }
-      
-	  System.out.println("------------------------------\n");
-	  System.out.println("90. 전 단계로 돌아가기");
-	  System.out.println("99. 종료");
-	  System.out.println("==============================\n");
-	  
-	  System.out.print("CrossAccount Role 접속 번호 : ");
-	  while (!this.scanner.hasNextInt())
-	  {
-		  System.out.println("\n잘못된 접속 번호를 선택하셨습니다. 다시 입력해 주십시요.");
-		  System.out.print("CrossAccount Role 접속 번호 : ");
-		  this.scanner.nextLine();
-	  }
-	  int index = this.scanner.nextInt();
-	  this.scanner.nextLine();
-	  
-	  if(index == 99) {
-		  this.exit();
-	  } else if(index == 90) {
-		  this.useCrossRoleAccess(keyIndex);
-	  } else if(index == 0) {
-		  makeCrossRoleAccess(keyIndex, key);
-	  } else if ((index < 1) || (index > keyIndex.size()))
-	  {
-	      System.out.println("잘못된 접속 번호를 선택하셨습니다. 다시 입력해 주십시요.");
-	      showCrossRoleAccess(keyIndex, key);
-	  } else {
-		  extractRegion(key, true, crossKeyIndex.get(index-1));
-	  }
-	  
-  }
-  
-  private void makeCrossRoleAccess(List<String> keyIndex, String key) {
-	  
-	  System.out.println("\nCrossAccount Role 접속 정보를 입력하여 주십시요.");
-	  
-	  String crossAccountKey = this.setCrossAccountKey(key);
-	  String crossAccountId = this.setAccountId(key, crossAccountKey);
-	  String crossAccountRoleName = this.setAccountRoleName(key, crossAccountKey);
-	  String externId = this.setExternId(key, crossAccountKey);
-	  
-	  AmazonAccess amazonAccess = this.amazonAccesses.get(key);
-	  
-	  CrossAccountRole crossAccountRole = amazonAccess.getCrossAccountRole(crossAccountKey);
-	  crossAccountRole.setCrossAccountId(crossAccountId);
-	  crossAccountRole.setCrossRoleName(crossAccountRoleName);
-	  crossAccountRole.setCrossRoleSessionName(crossAccountKey);
-	  crossAccountRole.setExternId(externId);
-	  
-	  this.properties.put(amazonAccess.getAccessType() + PropType.CROSS_ACCOUNT.getPostFix() + "." + crossAccountKey + ".accountId", crossAccountRole.getCrossAccountId());
-	  this.properties.put(amazonAccess.getAccessType() + PropType.CROSS_ACCOUNT.getPostFix() + "." + crossAccountKey + ".roleName", crossAccountRole.getCrossRoleName());
-	  if(crossAccountRole.getExternId() != null) {
-		  this.properties.put(amazonAccess.getAccessType() + PropType.CROSS_ACCOUNT.getPostFix() + "." + crossAccountKey + ".externId", crossAccountRole.getExternId());
-	  }
-	  
-	  storeProperties();
-	  try {
-		loadProperties();
-	} catch (FileNotFoundException e) {
-		e.printStackTrace();
-	} catch (IOException e) {
-		e.printStackTrace();
-	}
-	  
-	  showCrossRoleAccess(keyIndex, key);
-  }
-
-  private String setCrossAccountKey(String key)
-  {
-    System.out.print("CrossAccount 접속명(영문) : ");
-    while (!this.scanner.hasNextLine()) {
-      this.scanner.nextLine();
-    }
-    String crossAccountKey = this.scanner.nextLine();
-    if ((crossAccountKey == null) || ("".equals(crossAccountKey.trim())))
-    {
-      System.out.println("잘못 입력하셨습니다. CrossAccount 접속명(영문)을 입력하여 주십시요.");
-      crossAccountKey = setCrossAccountKey(key);
-    }
-    return crossAccountKey;
-  }
-  
-  private String setAccountId(String key, String crossAccountKey)
-  {
-    System.out.print("Account ID : ");
-    while (!this.scanner.hasNextLine()) {
-      this.scanner.nextLine();
-    }
-    String accountId = this.scanner.nextLine();
-    if ((accountId == null) || ("".equals(accountId.trim())))
-    {
-      System.out.println("잘못 입력하셨습니다. Account ID를 입력하여 주십시요.");
-      accountId = setAccountId(key, crossAccountKey);
-    }
-    return accountId;
-  }
-  
-  private String setAccountRoleName(String key, String crossAccountKey)
-  {
-    System.out.print("CrossAccount Role Name : ");
-    while (!this.scanner.hasNextLine()) {
-      this.scanner.nextLine();
-    }
-    String accountRoleName = this.scanner.nextLine();
-    if ((accountRoleName == null) || ("".equals(accountRoleName.trim())))
-    {
-      System.out.println("잘못 입력하셨습니다. CrossAccount Role Name을 입력하여 주십시요.");
-      accountRoleName = setAccountRoleName(key, crossAccountKey);
-    }
-    return accountRoleName;
-  }
-  
-  private String setExternId(String key, String crossAccountKey)
-  {
-    System.out.print("Extern ID : ");
-    while (!this.scanner.hasNextLine()) {
-      this.scanner.nextLine();
-    }
-    String externId = this.scanner.nextLine();
-    
-    return externId == null ? "" : externId;
-  }
-  
   public void storeProperties()
   {
     try
@@ -490,51 +250,6 @@ public class AWSExportStarter
     {
       e.printStackTrace();
     }
-  }
-  
-  private String setAccessType()
-  {
-    System.out.print("접속 명(영문) : ");
-    while (!this.scanner.hasNextLine()) {
-      this.scanner.nextLine();
-    }
-    String accessType = this.scanner.nextLine();
-    if ((accessType == null) || ("".equals(accessType.trim())))
-    {
-      System.out.println("잘못 입력하셨습니다. 접속 명(영문)을 입력하여 주십시요.");
-      accessType = setAccessType();
-    }
-    return accessType;
-  }
-  
-  private String setAccessKey()
-  {
-    System.out.print("AWS AccessKey : ");
-    while (!this.scanner.hasNextLine()) {
-      this.scanner.nextLine();
-    }
-    String accessKey = this.scanner.nextLine();
-    if ((accessKey == null) || ("".equals(accessKey.trim())))
-    {
-      System.out.println("잘못 입력하셨습니다. AWS Access Key를 입력하여 주십시요.");
-      accessKey = setAccessKey();
-    }
-    return accessKey;
-  }
-  
-  private String setSecretKey()
-  {
-    System.out.print("AWS SecretKey : ");
-    while (!this.scanner.hasNextLine()) {
-      this.scanner.next();
-    }
-    String secretKey = this.scanner.nextLine();
-    if ((secretKey == null) || ("".equals(secretKey.trim())))
-    {
-      System.out.println("잘못 입력하셨습니다. AWS SecretKey를 입력하여 주십시요.");
-      secretKey = setSecretKey();
-    }
-    return secretKey;
   }
   
   private boolean setUseProxy()

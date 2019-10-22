@@ -1,18 +1,19 @@
 package anthunt.aws.exporter;
 
-import com.amazonaws.regions.Regions;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
+import software.amazon.awssdk.regions.Region;
+
 public class AWSRegionSelector
 {
   private static final String FAV_PROP_PREFIX = "favorite.";
-  private HashMap<Integer, List<Regions>> favRegions;
+  private HashMap<Integer, List<Region>> favRegions;
   private AWSExportStarter awsExportStarter;
-  private List<Regions> allRegions;
-  private List<Regions> selectedRegions;
+  private List<Region> allRegions;
+  private List<Region> selectedRegions;
   
   public AWSRegionSelector(AWSExportStarter awsExportStarter)
   {
@@ -21,9 +22,9 @@ public class AWSRegionSelector
     this.allRegions = new ArrayList<>();
     this.awsExportStarter = awsExportStarter;
     
-    Regions[] allRegions = Regions.values();
-    for (Regions regions : allRegions) {
-      this.allRegions.add(regions);
+    List<Region> allRegions = Region.regions();
+    for (Region region : allRegions) {
+      this.allRegions.add(region);
     }
     select();
   }
@@ -64,7 +65,7 @@ public class AWSRegionSelector
         StringBuffer valueBuffer = new StringBuffer();
         String[] values = propValue.split(",");
         
-        List<Regions> fav = new ArrayList<>();
+        List<Region> fav = new ArrayList<>();
         for (String value : values)
         {
           value = value.trim();
@@ -72,7 +73,7 @@ public class AWSRegionSelector
             valueBuffer.append(", ");
           }
           valueBuffer.append(value);
-          fav.add(Regions.fromName(value));
+          fav.add(Region.of(value));
         }
         this.favRegions.put(Integer.valueOf(iFav), fav);
         System.out.println(valueBuffer.toString());
@@ -85,11 +86,11 @@ public class AWSRegionSelector
   {
     for (int i = 0; i < this.allRegions.size(); i++)
     {
-      Regions regions = (Regions)this.allRegions.get(i);
+      Region region = (Region)this.allRegions.get(i);
       if ((i + 1) % 2 == 0) {
-        System.out.println("[" + (i + 1) + "] " + regions.getName());
+        System.out.println("[" + (i + 1) + "] " + region.id());
       } else {
-        System.out.print(padRight("[" + (i + 1) + "] " + regions.getName(), 30, " "));
+        System.out.print(padRight("[" + (i + 1) + "] " + region.id(), 30, " "));
       }
     }
   }
@@ -115,8 +116,8 @@ public class AWSRegionSelector
     System.out.println("-------------------------------------------------");
     System.out.println("선택된 Region [" + this.selectedRegions.size() + "개]");
     System.out.println("-------------------------------------------------");
-    for (Regions regions : this.selectedRegions) {
-      System.out.println(regions.getName());
+    for (Region region : this.selectedRegions) {
+      System.out.println(region.id());
     }
     System.out.println("-------------------------------------------------");
   }
@@ -164,7 +165,7 @@ public class AWSRegionSelector
           if (favBuffer.length() > 0) {
             favBuffer.append(",");
           }
-          favBuffer.append(((Regions)this.allRegions.get(selectedIdx - 1)).getName());
+          favBuffer.append(((Region)this.allRegions.get(selectedIdx - 1)).id());
         }
         catch (NumberFormatException e)
         {
@@ -259,7 +260,7 @@ public class AWSRegionSelector
     }
   }
   
-  public List<Regions> getRegions()
+  public List<Region> getRegions()
   {
     return this.selectedRegions;
   }

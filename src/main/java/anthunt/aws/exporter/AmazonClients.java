@@ -1,192 +1,125 @@
 package anthunt.aws.exporter;
 
-import com.amazonaws.ClientConfiguration;
-import com.amazonaws.auth.AWSCredentials;
-import com.amazonaws.auth.AWSStaticCredentialsProvider;
-import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.auth.BasicSessionCredentials;
-import com.amazonaws.regions.Regions;
-import com.amazonaws.services.apigateway.AmazonApiGateway;
-import com.amazonaws.services.apigateway.AmazonApiGatewayClientBuilder;
-import com.amazonaws.services.certificatemanager.AWSCertificateManager;
-import com.amazonaws.services.certificatemanager.AWSCertificateManagerClientBuilder;
-import com.amazonaws.services.directconnect.AmazonDirectConnect;
-import com.amazonaws.services.directconnect.AmazonDirectConnectClientBuilder;
-import com.amazonaws.services.directory.AWSDirectoryService;
-import com.amazonaws.services.directory.AWSDirectoryServiceClientBuilder;
-import com.amazonaws.services.ec2.AmazonEC2;
-import com.amazonaws.services.ec2.AmazonEC2ClientBuilder;
-import com.amazonaws.services.elasticache.AmazonElastiCache;
-import com.amazonaws.services.elasticache.AmazonElastiCacheClientBuilder;
-import com.amazonaws.services.elasticloadbalancing.AmazonElasticLoadBalancing;
-import com.amazonaws.services.elasticloadbalancing.AmazonElasticLoadBalancingClientBuilder;
-import com.amazonaws.services.identitymanagement.AmazonIdentityManagement;
-import com.amazonaws.services.identitymanagement.AmazonIdentityManagementClientBuilder;
-import com.amazonaws.services.kms.AWSKMS;
-import com.amazonaws.services.kms.AWSKMSClientBuilder;
-import com.amazonaws.services.lambda.AWSLambda;
-import com.amazonaws.services.lambda.AWSLambdaClientBuilder;
-import com.amazonaws.services.rds.AmazonRDS;
-import com.amazonaws.services.rds.AmazonRDSClientBuilder;
-import com.amazonaws.services.route53.AmazonRoute53;
-import com.amazonaws.services.route53.AmazonRoute53ClientBuilder;
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.AmazonS3ClientBuilder;
-import com.amazonaws.services.securitytoken.AWSSecurityTokenService;
-import com.amazonaws.services.securitytoken.AWSSecurityTokenServiceClientBuilder;
-import com.amazonaws.services.securitytoken.model.AssumeRoleRequest;
-import com.amazonaws.services.securitytoken.model.AssumeRoleResult;
-import com.amazonaws.services.securitytoken.model.Credentials;
-
 import anthunt.aws.exporter.model.AmazonAccess;
-import anthunt.aws.exporter.model.CrossAccountRole;
+import software.amazon.awssdk.auth.credentials.ProfileCredentialsProvider;
+import software.amazon.awssdk.regions.Region;
+import software.amazon.awssdk.services.acm.AcmClient;
+import software.amazon.awssdk.services.apigateway.ApiGatewayClient;
+import software.amazon.awssdk.services.directconnect.DirectConnectClient;
+import software.amazon.awssdk.services.directory.DirectoryClient;
+import software.amazon.awssdk.services.ec2.Ec2Client;
+import software.amazon.awssdk.services.elasticache.ElastiCacheClient;
+import software.amazon.awssdk.services.elasticloadbalancing.ElasticLoadBalancingClient;
+import software.amazon.awssdk.services.elasticloadbalancingv2.ElasticLoadBalancingV2Client;
+import software.amazon.awssdk.services.iam.IamClient;
+import software.amazon.awssdk.services.kms.KmsClient;
+import software.amazon.awssdk.services.lambda.LambdaClient;
+import software.amazon.awssdk.services.rds.RdsClient;
+import software.amazon.awssdk.services.route53.Route53Client;
+import software.amazon.awssdk.services.s3.S3Client;
 
 public class AmazonClients
 {
-	public AmazonEC2 AmazonEC2;
-	public AmazonElasticLoadBalancing AmazonElasticLoadBalancing;
-	public com.amazonaws.services.elasticloadbalancingv2.AmazonElasticLoadBalancing AmazonElasticLoadBalancing2;
-	public AmazonElastiCache AmazonElastiCache;
-	public AmazonRDS AmazonRDS;
-	public AWSKMS AwsKMS;
-	public AWSCertificateManager AwsCertificateManager;
-	public AmazonS3 AmazonS3;
-	public AWSLambda AwsLambda;
-	public AmazonApiGateway AmazonApiGateway;
-	public AmazonIdentityManagement AmazonIdentityManagement;
-	public AmazonDirectConnect AmazonDirectConnect;
-	public AWSDirectoryService AwsDirectoryService;
-	public AmazonRoute53 AmazonRoute53;
+	public Ec2Client ec2Client;
+	public ElasticLoadBalancingClient elasticLoadBalancingClient;
+	public ElasticLoadBalancingV2Client elasticLoadBalancingV2Client;
+	public ElastiCacheClient elastiCacheClient;
+	public RdsClient rdsClient;
+	public KmsClient kmsClient;
+	public AcmClient acmClient;
+	public S3Client s3Client;
+	public LambdaClient lambdaClient;
+	public ApiGatewayClient apiGatewayClient;
+	public IamClient iamClient;
+	public DirectConnectClient directConnectClient;
+	public DirectoryClient directoryClient;
+	public Route53Client route53Client;
     
-	public AmazonClients(Regions regions, AmazonAccess amazonAccess, boolean isCrossAccountRole, String crossAccountKey) {
+	public AmazonClients(AmazonAccess amazonAccess, String profileName, Region region) {
+
+		/*
 		ClientConfiguration config = new ClientConfiguration();
 		if (amazonAccess.isUseProxy().booleanValue()) {
 			config.setProxyHost(amazonAccess.getProxyHost());
 			config.setProxyPort(amazonAccess.getProxyPort().intValue());
 		}
-    
-		AWSCredentials credentials = new BasicAWSCredentials(amazonAccess.getAccessKey(), amazonAccess.getSecretKey());
-		if(isCrossAccountRole) {
-			CrossAccountRole crossAccountRole = amazonAccess.getCrossAccountRole(crossAccountKey);
-			credentials = this.getAssumeRole(credentials, crossAccountRole.getCrossRoleArn(), crossAccountRole.getCrossRoleSessionName(), crossAccountRole.getExternId());
-		}
-    
-		initial(config, regions, new AWSStaticCredentialsProvider(credentials));
+    	*/
+		initial(region, ProfileCredentialsProvider.create(profileName));
     
 	}
   
-	private void initial(ClientConfiguration config, Regions regions, AWSStaticCredentialsProvider awsStaticCredentialsProvider) {
+	private void initial(Region region, ProfileCredentialsProvider profileCredentialsProvider) {
 	    
-	    this.AmazonEC2 = AmazonEC2ClientBuilder.standard()
-	    										.withCredentials(awsStaticCredentialsProvider)
-	    										.withClientConfiguration(config)
-	    										.withRegion(regions)
+	    this.ec2Client = Ec2Client.builder()
+	    						  .region(region)
+	    						  .credentialsProvider(profileCredentialsProvider)
+	    						  .build();
+	    
+	    this.elastiCacheClient = ElastiCacheClient.builder()
+	    										  .region(region)
+	    										  .credentialsProvider(profileCredentialsProvider)
+	    										  .build();
+	    
+	    this.elasticLoadBalancingClient = ElasticLoadBalancingClient.builder()
+	    															.region(region)
+	    															.credentialsProvider(profileCredentialsProvider)
+	    															.build();
+	    
+	    this.elasticLoadBalancingV2Client = ElasticLoadBalancingV2Client.builder()
+	    															   .region(region)
+	    															   .credentialsProvider(profileCredentialsProvider)
+	    															   .build();
+	    
+	    this.rdsClient = RdsClient.builder()
+	    						  .region(region)
+	    						  .credentialsProvider(profileCredentialsProvider)
+	    						  .build();
+	    
+	    this.kmsClient = KmsClient.builder()
+	    					   .region(region)
+	    					   .credentialsProvider(profileCredentialsProvider)
+	    					   .build();
+	    
+	    this.acmClient = AcmClient.builder()
+	    									  .region(region)
+	    									  .credentialsProvider(profileCredentialsProvider)
+	    									  .build();
+	    
+	    this.s3Client = S3Client.builder()
+	    						.region(region)
+	    						.credentialsProvider(profileCredentialsProvider)
+	    						.build();
+	    
+	    this.lambdaClient = LambdaClient.builder()
+	    							 .region(region)
+	    							 .credentialsProvider(profileCredentialsProvider)
+	    							 .build();
+	    
+	    this.apiGatewayClient = ApiGatewayClient.builder()
+	    										.region(region)
+	    										.credentialsProvider(profileCredentialsProvider)
 	    										.build();
 	    
-	    this.AmazonElastiCache = AmazonElastiCacheClientBuilder.standard()
-	    										.withCredentials(awsStaticCredentialsProvider)
-	    										.withClientConfiguration(config)
-	    										.withRegion(regions)
-	    										.build();
+	    this.iamClient = IamClient.builder()
+	    										 .region(region)
+	    										 .credentialsProvider(profileCredentialsProvider)
+	    										 .build();
 	    
-	    this.AmazonElasticLoadBalancing = AmazonElasticLoadBalancingClientBuilder.standard()
-												.withCredentials(awsStaticCredentialsProvider)
-												.withClientConfiguration(config)
-												.withRegion(regions)
-												.build();
+	    this.directConnectClient = DirectConnectClient.builder()
+	    											  .region(region)
+	    											  .credentialsProvider(profileCredentialsProvider)
+	    											  .build();
 	    
-	    this.AmazonElasticLoadBalancing2 = com.amazonaws.services.elasticloadbalancingv2.AmazonElasticLoadBalancingClientBuilder.standard()
-	    										.withCredentials(awsStaticCredentialsProvider)
-	    										.withClientConfiguration(config)
-	    										.withRegion(regions)
-	    										.build();
+	    this.directoryClient = DirectoryClient.builder()
+	    										  .region(region)
+	    										  .credentialsProvider(profileCredentialsProvider)
+	    										  .build();
 	    
-	    this.AmazonRDS = AmazonRDSClientBuilder.standard()
-	    										.withClientConfiguration(config)
-	    										.withCredentials(awsStaticCredentialsProvider)
-	    										.withRegion(regions)
-	    										.build();
+	    this.route53Client = Route53Client.builder()
+	    								  .region(region)
+	    								  .credentialsProvider(profileCredentialsProvider)
+	    								  .build();
 	    
-	    this.AwsKMS = AWSKMSClientBuilder.standard()
-												.withClientConfiguration(config)
-												.withCredentials(awsStaticCredentialsProvider)
-												.withRegion(regions)
-												.build();
-	    
-	    this.AwsCertificateManager = AWSCertificateManagerClientBuilder.standard()
-												.withClientConfiguration(config)
-												.withCredentials(awsStaticCredentialsProvider)
-												.withRegion(regions)
-												.build();
-	    
-	    this.AmazonS3 = AmazonS3ClientBuilder.standard()
-												.withClientConfiguration(config)
-												.withCredentials(awsStaticCredentialsProvider)
-												.withRegion(regions)
-												.build();
-	    
-	    this.AwsLambda = AWSLambdaClientBuilder.standard()
-												.withClientConfiguration(config)
-												.withCredentials(awsStaticCredentialsProvider)
-												.withRegion(regions)
-												.build();
-	    
-	    this.AmazonApiGateway = AmazonApiGatewayClientBuilder.standard()
-												.withClientConfiguration(config)
-												.withCredentials(awsStaticCredentialsProvider)
-												.withRegion(regions)
-												.build();
-	    
-	    this.AmazonIdentityManagement = AmazonIdentityManagementClientBuilder.standard()
-												.withClientConfiguration(config)
-												.withCredentials(awsStaticCredentialsProvider)
-												.withRegion(regions)
-												.build();
-	    
-	    this.AmazonDirectConnect = AmazonDirectConnectClientBuilder.standard()
-												.withClientConfiguration(config)
-												.withCredentials(awsStaticCredentialsProvider)
-												.withRegion(regions)
-												.build();
-	    
-	    this.AwsDirectoryService = AWSDirectoryServiceClientBuilder.standard()
-												.withClientConfiguration(config)
-												.withCredentials(awsStaticCredentialsProvider)
-												.withRegion(regions)
-												.build();
-	    
-	    this.AmazonRoute53 = AmazonRoute53ClientBuilder.standard()
-												.withClientConfiguration(config)
-												.withCredentials(awsStaticCredentialsProvider)
-												.withRegion(regions)
-												.build();
-	    
-	}
-  
-	private AWSCredentials getAssumeRole(AWSCredentials credentials, String crossAccountRoleArn, String crossAccountRoleSessionName, String crossAccountRoleExternalId) {
-	  
-		AWSSecurityTokenService awsSecurityTokenService = AWSSecurityTokenServiceClientBuilder.standard()
-															.withCredentials(new AWSStaticCredentialsProvider(credentials))
-														    .withRegion(Regions.DEFAULT_REGION)
-														    .build();
-		
-		AssumeRoleRequest assumeRoleRequest = new AssumeRoleRequest()
-				.withRoleArn(crossAccountRoleArn)
-				.withRoleSessionName(crossAccountRoleSessionName)
-				.withExternalId(crossAccountRoleExternalId);
-		
-		AssumeRoleResult assumeRoleResult = awsSecurityTokenService.assumeRole(assumeRoleRequest);
-				
-		Credentials assumeRoleCredentials = assumeRoleResult.getCredentials();
-
-		BasicSessionCredentials crossAccountSessionCredentials = new BasicSessionCredentials(
-			  assumeRoleCredentials.getAccessKeyId()
-			, assumeRoleCredentials.getSecretAccessKey()
-			, assumeRoleCredentials.getSessionToken()
-		);
-		
-		return crossAccountSessionCredentials;
-		
 	}
   
 }
