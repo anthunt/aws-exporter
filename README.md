@@ -32,7 +32,7 @@ $ startAWSExporter.bat
 ```
 
 <p align="center">
-  <img src="https://github.com/anthunt/aws-exporter/blob/master/running.png?raw=true">
+  <img src="https://github.com/anthunt/aws-exporter/blob/3.x/running.png?raw=true">
 </p>
 
 :pencil: Output Excel File
