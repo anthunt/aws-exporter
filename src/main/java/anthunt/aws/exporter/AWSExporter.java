@@ -5,223 +5,236 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import com.amazonaws.regions.Regions;
-import com.amazonaws.services.certificatemanager.model.CertificateDetail;
-import com.amazonaws.services.certificatemanager.model.CertificateSummary;
-import com.amazonaws.services.certificatemanager.model.DescribeCertificateRequest;
-import com.amazonaws.services.certificatemanager.model.DescribeCertificateResult;
-import com.amazonaws.services.certificatemanager.model.DomainValidation;
-import com.amazonaws.services.certificatemanager.model.ExtendedKeyUsage;
-import com.amazonaws.services.certificatemanager.model.KeyUsage;
-import com.amazonaws.services.certificatemanager.model.ListCertificatesRequest;
-import com.amazonaws.services.certificatemanager.model.ListCertificatesResult;
-import com.amazonaws.services.certificatemanager.model.RenewalSummary;
-import com.amazonaws.services.directconnect.model.BGPPeer;
-import com.amazonaws.services.directconnect.model.Connection;
-import com.amazonaws.services.directconnect.model.DescribeConnectionsResult;
-import com.amazonaws.services.directconnect.model.DescribeDirectConnectGatewaysRequest;
-import com.amazonaws.services.directconnect.model.DescribeDirectConnectGatewaysResult;
-import com.amazonaws.services.directconnect.model.DescribeLagsRequest;
-import com.amazonaws.services.directconnect.model.DescribeLagsResult;
-import com.amazonaws.services.directconnect.model.DescribeLocationsResult;
-import com.amazonaws.services.directconnect.model.DescribeVirtualGatewaysResult;
-import com.amazonaws.services.directconnect.model.DescribeVirtualInterfacesResult;
-import com.amazonaws.services.directconnect.model.DirectConnectGateway;
-import com.amazonaws.services.directconnect.model.Lag;
-import com.amazonaws.services.directconnect.model.Location;
-import com.amazonaws.services.directconnect.model.RouteFilterPrefix;
-import com.amazonaws.services.directconnect.model.VirtualGateway;
-import com.amazonaws.services.directconnect.model.VirtualInterface;
-import com.amazonaws.services.directory.model.ConditionalForwarder;
-import com.amazonaws.services.directory.model.DescribeConditionalForwardersRequest;
-import com.amazonaws.services.directory.model.DescribeConditionalForwardersResult;
-import com.amazonaws.services.directory.model.DescribeDirectoriesResult;
-import com.amazonaws.services.directory.model.DescribeDomainControllersRequest;
-import com.amazonaws.services.directory.model.DescribeDomainControllersResult;
-import com.amazonaws.services.directory.model.DescribeTrustsRequest;
-import com.amazonaws.services.directory.model.DescribeTrustsResult;
-import com.amazonaws.services.directory.model.DirectoryConnectSettingsDescription;
-import com.amazonaws.services.directory.model.DirectoryDescription;
-import com.amazonaws.services.directory.model.DirectoryVpcSettingsDescription;
-import com.amazonaws.services.directory.model.DomainController;
-import com.amazonaws.services.directory.model.InvalidParameterException;
-import com.amazonaws.services.directory.model.RadiusSettings;
-import com.amazonaws.services.directory.model.Trust;
-import com.amazonaws.services.ec2.model.CidrBlock;
-import com.amazonaws.services.ec2.model.CpuOptions;
-import com.amazonaws.services.ec2.model.CustomerGateway;
-import com.amazonaws.services.ec2.model.DescribeCustomerGatewaysResult;
-import com.amazonaws.services.ec2.model.DescribeEgressOnlyInternetGatewaysRequest;
-import com.amazonaws.services.ec2.model.DescribeEgressOnlyInternetGatewaysResult;
-import com.amazonaws.services.ec2.model.DescribeInstancesRequest;
-import com.amazonaws.services.ec2.model.DescribeInternetGatewaysRequest;
-import com.amazonaws.services.ec2.model.DescribeNatGatewaysRequest;
-import com.amazonaws.services.ec2.model.DescribeNatGatewaysResult;
-import com.amazonaws.services.ec2.model.DescribeNetworkAclsRequest;
-import com.amazonaws.services.ec2.model.DescribeRouteTablesRequest;
-import com.amazonaws.services.ec2.model.DescribeSecurityGroupsRequest;
-import com.amazonaws.services.ec2.model.DescribeSecurityGroupsResult;
-import com.amazonaws.services.ec2.model.DescribeSubnetsRequest;
-import com.amazonaws.services.ec2.model.DescribeVpcPeeringConnectionsResult;
-import com.amazonaws.services.ec2.model.DescribeVpnConnectionsResult;
-import com.amazonaws.services.ec2.model.DescribeVpnGatewaysResult;
-import com.amazonaws.services.ec2.model.EbsInstanceBlockDevice;
-import com.amazonaws.services.ec2.model.EgressOnlyInternetGateway;
-import com.amazonaws.services.ec2.model.ElasticGpuAssociation;
-import com.amazonaws.services.ec2.model.Filter;
-import com.amazonaws.services.ec2.model.GroupIdentifier;
-import com.amazonaws.services.ec2.model.IamInstanceProfile;
-import com.amazonaws.services.ec2.model.InstanceBlockDeviceMapping;
-import com.amazonaws.services.ec2.model.InstanceIpv6Address;
-import com.amazonaws.services.ec2.model.InstanceNetworkInterface;
-import com.amazonaws.services.ec2.model.InstanceNetworkInterfaceAssociation;
-import com.amazonaws.services.ec2.model.InstanceNetworkInterfaceAttachment;
-import com.amazonaws.services.ec2.model.InstancePrivateIpAddress;
-import com.amazonaws.services.ec2.model.InstanceState;
-import com.amazonaws.services.ec2.model.InternetGateway;
-import com.amazonaws.services.ec2.model.InternetGatewayAttachment;
-import com.amazonaws.services.ec2.model.IpPermission;
-import com.amazonaws.services.ec2.model.IpRange;
-import com.amazonaws.services.ec2.model.Ipv6CidrBlock;
-import com.amazonaws.services.ec2.model.Ipv6Range;
-import com.amazonaws.services.ec2.model.Monitoring;
-import com.amazonaws.services.ec2.model.NatGateway;
-import com.amazonaws.services.ec2.model.NatGatewayAddress;
-import com.amazonaws.services.ec2.model.NetworkAcl;
-import com.amazonaws.services.ec2.model.Placement;
-import com.amazonaws.services.ec2.model.PrefixListId;
-import com.amazonaws.services.ec2.model.ProductCode;
-import com.amazonaws.services.ec2.model.ProvisionedBandwidth;
-import com.amazonaws.services.ec2.model.Reservation;
-import com.amazonaws.services.ec2.model.Route;
-import com.amazonaws.services.ec2.model.RouteTable;
-import com.amazonaws.services.ec2.model.RouteTableAssociation;
-import com.amazonaws.services.ec2.model.SecurityGroup;
-import com.amazonaws.services.ec2.model.StateReason;
-import com.amazonaws.services.ec2.model.Subnet;
-import com.amazonaws.services.ec2.model.SubnetCidrBlockState;
-import com.amazonaws.services.ec2.model.SubnetIpv6CidrBlockAssociation;
-import com.amazonaws.services.ec2.model.Tag;
-import com.amazonaws.services.ec2.model.UserIdGroupPair;
-import com.amazonaws.services.ec2.model.VgwTelemetry;
-import com.amazonaws.services.ec2.model.Volume;
-import com.amazonaws.services.ec2.model.VolumeAttachment;
-import com.amazonaws.services.ec2.model.Vpc;
-import com.amazonaws.services.ec2.model.VpcAttachment;
-import com.amazonaws.services.ec2.model.VpcCidrBlockAssociation;
-import com.amazonaws.services.ec2.model.VpcCidrBlockState;
-import com.amazonaws.services.ec2.model.VpcIpv6CidrBlockAssociation;
-import com.amazonaws.services.ec2.model.VpcPeeringConnection;
-import com.amazonaws.services.ec2.model.VpcPeeringConnectionOptionsDescription;
-import com.amazonaws.services.ec2.model.VpcPeeringConnectionStateReason;
-import com.amazonaws.services.ec2.model.VpcPeeringConnectionVpcInfo;
-import com.amazonaws.services.ec2.model.VpnConnection;
-import com.amazonaws.services.ec2.model.VpnGateway;
-import com.amazonaws.services.ec2.model.VpnStaticRoute;
-import com.amazonaws.services.elasticache.model.CacheCluster;
-import com.amazonaws.services.elasticache.model.DescribeCacheClustersRequest;
-import com.amazonaws.services.elasticache.model.NodeGroup;
-import com.amazonaws.services.elasticache.model.NodeGroupMember;
-import com.amazonaws.services.elasticache.model.ReplicationGroup;
-import com.amazonaws.services.elasticache.model.SecurityGroupMembership;
-import com.amazonaws.services.elasticloadbalancing.model.Listener;
-import com.amazonaws.services.elasticloadbalancing.model.ListenerDescription;
-import com.amazonaws.services.elasticloadbalancing.model.LoadBalancerDescription;
-import com.amazonaws.services.elasticloadbalancingv2.model.Action;
-import com.amazonaws.services.elasticloadbalancingv2.model.AvailabilityZone;
-import com.amazonaws.services.elasticloadbalancingv2.model.Certificate;
-import com.amazonaws.services.elasticloadbalancingv2.model.DescribeListenersRequest;
-import com.amazonaws.services.elasticloadbalancingv2.model.DescribeListenersResult;
-import com.amazonaws.services.elasticloadbalancingv2.model.DescribeLoadBalancersRequest;
-import com.amazonaws.services.elasticloadbalancingv2.model.DescribeRulesRequest;
-import com.amazonaws.services.elasticloadbalancingv2.model.DescribeRulesResult;
-import com.amazonaws.services.elasticloadbalancingv2.model.DescribeTagsRequest;
-import com.amazonaws.services.elasticloadbalancingv2.model.DescribeTagsResult;
-import com.amazonaws.services.elasticloadbalancingv2.model.DescribeTargetGroupAttributesRequest;
-import com.amazonaws.services.elasticloadbalancingv2.model.DescribeTargetGroupAttributesResult;
-import com.amazonaws.services.elasticloadbalancingv2.model.DescribeTargetGroupsRequest;
-import com.amazonaws.services.elasticloadbalancingv2.model.DescribeTargetGroupsResult;
-import com.amazonaws.services.elasticloadbalancingv2.model.DescribeTargetHealthRequest;
-import com.amazonaws.services.elasticloadbalancingv2.model.DescribeTargetHealthResult;
-import com.amazonaws.services.elasticloadbalancingv2.model.LoadBalancer;
-import com.amazonaws.services.elasticloadbalancingv2.model.LoadBalancerAddress;
-import com.amazonaws.services.elasticloadbalancingv2.model.Rule;
-import com.amazonaws.services.elasticloadbalancingv2.model.RuleCondition;
-import com.amazonaws.services.elasticloadbalancingv2.model.TagDescription;
-import com.amazonaws.services.elasticloadbalancingv2.model.TargetDescription;
-import com.amazonaws.services.elasticloadbalancingv2.model.TargetGroup;
-import com.amazonaws.services.elasticloadbalancingv2.model.TargetGroupAttribute;
-import com.amazonaws.services.elasticloadbalancingv2.model.TargetHealth;
-import com.amazonaws.services.elasticloadbalancingv2.model.TargetHealthDescription;
-import com.amazonaws.services.kms.model.AliasListEntry;
-import com.amazonaws.services.kms.model.DescribeKeyRequest;
-import com.amazonaws.services.kms.model.DescribeKeyResult;
-import com.amazonaws.services.kms.model.KeyListEntry;
-import com.amazonaws.services.kms.model.KeyMetadata;
-import com.amazonaws.services.kms.model.ListAliasesResult;
-import com.amazonaws.services.kms.model.ListKeysResult;
-import com.amazonaws.services.rds.model.DBCluster;
-import com.amazonaws.services.rds.model.DBClusterMember;
-import com.amazonaws.services.rds.model.DBClusterOptionGroupStatus;
-import com.amazonaws.services.rds.model.DBClusterRole;
-import com.amazonaws.services.rds.model.DBInstance;
-import com.amazonaws.services.rds.model.DBParameterGroupStatus;
-import com.amazonaws.services.rds.model.DBSecurityGroupMembership;
-import com.amazonaws.services.rds.model.DescribeDBClustersResult;
-import com.amazonaws.services.rds.model.DescribeDBInstancesResult;
-import com.amazonaws.services.rds.model.DomainMembership;
-import com.amazonaws.services.rds.model.Endpoint;
-import com.amazonaws.services.rds.model.VpcSecurityGroupMembership;
-import com.amazonaws.services.s3.model.AbortIncompleteMultipartUpload;
-import com.amazonaws.services.s3.model.AccessControlList;
-import com.amazonaws.services.s3.model.AmazonS3Exception;
-import com.amazonaws.services.s3.model.Bucket;
-import com.amazonaws.services.s3.model.BucketAccelerateConfiguration;
-import com.amazonaws.services.s3.model.BucketCrossOriginConfiguration;
-import com.amazonaws.services.s3.model.BucketLifecycleConfiguration;
-import com.amazonaws.services.s3.model.BucketLifecycleConfiguration.NoncurrentVersionTransition;
-import com.amazonaws.services.s3.model.BucketLifecycleConfiguration.Transition;
-import com.amazonaws.services.s3.model.BucketLoggingConfiguration;
-import com.amazonaws.services.s3.model.BucketNotificationConfiguration;
-import com.amazonaws.services.s3.model.BucketReplicationConfiguration;
-import com.amazonaws.services.s3.model.BucketTaggingConfiguration;
-import com.amazonaws.services.s3.model.BucketVersioningConfiguration;
-import com.amazonaws.services.s3.model.BucketWebsiteConfiguration;
-import com.amazonaws.services.s3.model.CORSRule;
-import com.amazonaws.services.s3.model.CORSRule.AllowedMethods;
-import com.amazonaws.services.s3.model.FilterRule;
-import com.amazonaws.services.s3.model.GetBucketEncryptionResult;
-import com.amazonaws.services.s3.model.Grant;
-import com.amazonaws.services.s3.model.Grantee;
-import com.amazonaws.services.s3.model.NotificationConfiguration;
-import com.amazonaws.services.s3.model.RedirectRule;
-import com.amazonaws.services.s3.model.ReplicationDestinationConfig;
-import com.amazonaws.services.s3.model.ReplicationRule;
-import com.amazonaws.services.s3.model.RoutingRule;
-import com.amazonaws.services.s3.model.RoutingRuleCondition;
-import com.amazonaws.services.s3.model.S3KeyFilter;
-import com.amazonaws.services.s3.model.ServerSideEncryptionByDefault;
-import com.amazonaws.services.s3.model.ServerSideEncryptionConfiguration;
-import com.amazonaws.services.s3.model.ServerSideEncryptionRule;
-import com.amazonaws.services.s3.model.SourceSelectionCriteria;
-import com.amazonaws.services.s3.model.SseKmsEncryptedObjects;
-import com.amazonaws.services.s3.model.TagSet;
-
 import anthunt.aws.exporter.model.AmazonAccess;
 import anthunt.poi.helper.XSSFHelper;
+import software.amazon.awssdk.regions.Region;
+import software.amazon.awssdk.services.acm.model.CertificateDetail;
+import software.amazon.awssdk.services.acm.model.CertificateSummary;
+import software.amazon.awssdk.services.acm.model.DescribeCertificateRequest;
+import software.amazon.awssdk.services.acm.model.DescribeCertificateResponse;
+import software.amazon.awssdk.services.acm.model.DomainValidation;
+import software.amazon.awssdk.services.acm.model.ExtendedKeyUsage;
+import software.amazon.awssdk.services.acm.model.KeyUsage;
+import software.amazon.awssdk.services.acm.model.ListCertificatesResponse;
+import software.amazon.awssdk.services.acm.model.RenewalSummary;
+import software.amazon.awssdk.services.directconnect.model.BGPPeer;
+import software.amazon.awssdk.services.directconnect.model.Connection;
+import software.amazon.awssdk.services.directconnect.model.DescribeConnectionsResponse;
+import software.amazon.awssdk.services.directconnect.model.DescribeDirectConnectGatewaysRequest;
+import software.amazon.awssdk.services.directconnect.model.DescribeDirectConnectGatewaysResponse;
+import software.amazon.awssdk.services.directconnect.model.DescribeLagsRequest;
+import software.amazon.awssdk.services.directconnect.model.DescribeLagsResponse;
+import software.amazon.awssdk.services.directconnect.model.DescribeLocationsResponse;
+import software.amazon.awssdk.services.directconnect.model.DescribeVirtualGatewaysResponse;
+import software.amazon.awssdk.services.directconnect.model.DescribeVirtualInterfacesResponse;
+import software.amazon.awssdk.services.directconnect.model.DirectConnectGateway;
+import software.amazon.awssdk.services.directconnect.model.Lag;
+import software.amazon.awssdk.services.directconnect.model.Location;
+import software.amazon.awssdk.services.directconnect.model.RouteFilterPrefix;
+import software.amazon.awssdk.services.directconnect.model.VirtualGateway;
+import software.amazon.awssdk.services.directconnect.model.VirtualInterface;
+import software.amazon.awssdk.services.directory.model.ConditionalForwarder;
+import software.amazon.awssdk.services.directory.model.DescribeConditionalForwardersRequest;
+import software.amazon.awssdk.services.directory.model.DescribeConditionalForwardersResponse;
+import software.amazon.awssdk.services.directory.model.DescribeDirectoriesResponse;
+import software.amazon.awssdk.services.directory.model.DescribeDomainControllersRequest;
+import software.amazon.awssdk.services.directory.model.DescribeDomainControllersResponse;
+import software.amazon.awssdk.services.directory.model.DescribeTrustsRequest;
+import software.amazon.awssdk.services.directory.model.DescribeTrustsResponse;
+import software.amazon.awssdk.services.directory.model.DirectoryConnectSettingsDescription;
+import software.amazon.awssdk.services.directory.model.DirectoryDescription;
+import software.amazon.awssdk.services.directory.model.DirectoryVpcSettingsDescription;
+import software.amazon.awssdk.services.directory.model.DomainController;
+import software.amazon.awssdk.services.directory.model.InvalidParameterException;
+import software.amazon.awssdk.services.directory.model.RadiusSettings;
+import software.amazon.awssdk.services.directory.model.Trust;
+import software.amazon.awssdk.services.ec2.model.CidrBlock;
+import software.amazon.awssdk.services.ec2.model.CpuOptions;
+import software.amazon.awssdk.services.ec2.model.CustomerGateway;
+import software.amazon.awssdk.services.ec2.model.DescribeCustomerGatewaysResponse;
+import software.amazon.awssdk.services.ec2.model.DescribeEgressOnlyInternetGatewaysRequest;
+import software.amazon.awssdk.services.ec2.model.DescribeEgressOnlyInternetGatewaysResponse;
+import software.amazon.awssdk.services.ec2.model.DescribeInstancesRequest;
+import software.amazon.awssdk.services.ec2.model.DescribeNatGatewaysRequest;
+import software.amazon.awssdk.services.ec2.model.DescribeNatGatewaysResponse;
+import software.amazon.awssdk.services.ec2.model.DescribeNetworkAclsRequest;
+import software.amazon.awssdk.services.ec2.model.DescribeNetworkAclsResponse;
+import software.amazon.awssdk.services.ec2.model.DescribeRouteTablesRequest;
+import software.amazon.awssdk.services.ec2.model.DescribeSecurityGroupsRequest;
+import software.amazon.awssdk.services.ec2.model.DescribeSecurityGroupsResponse;
+import software.amazon.awssdk.services.ec2.model.DescribeSubnetsRequest;
+import software.amazon.awssdk.services.ec2.model.DescribeVpcPeeringConnectionsResponse;
+import software.amazon.awssdk.services.ec2.model.DescribeVpnConnectionsResponse;
+import software.amazon.awssdk.services.ec2.model.DescribeVpnGatewaysResponse;
+import software.amazon.awssdk.services.ec2.model.EbsInstanceBlockDevice;
+import software.amazon.awssdk.services.ec2.model.EgressOnlyInternetGateway;
+import software.amazon.awssdk.services.ec2.model.ElasticGpuAssociation;
+import software.amazon.awssdk.services.ec2.model.Filter;
+import software.amazon.awssdk.services.ec2.model.GroupIdentifier;
+import software.amazon.awssdk.services.ec2.model.IamInstanceProfile;
+import software.amazon.awssdk.services.ec2.model.Instance;
+import software.amazon.awssdk.services.ec2.model.InstanceBlockDeviceMapping;
+import software.amazon.awssdk.services.ec2.model.InstanceIpv6Address;
+import software.amazon.awssdk.services.ec2.model.InstanceNetworkInterface;
+import software.amazon.awssdk.services.ec2.model.InstanceNetworkInterfaceAssociation;
+import software.amazon.awssdk.services.ec2.model.InstanceNetworkInterfaceAttachment;
+import software.amazon.awssdk.services.ec2.model.InstancePrivateIpAddress;
+import software.amazon.awssdk.services.ec2.model.InstanceState;
+import software.amazon.awssdk.services.ec2.model.InternetGateway;
+import software.amazon.awssdk.services.ec2.model.InternetGatewayAttachment;
+import software.amazon.awssdk.services.ec2.model.IpPermission;
+import software.amazon.awssdk.services.ec2.model.IpRange;
+import software.amazon.awssdk.services.ec2.model.Ipv6CidrBlock;
+import software.amazon.awssdk.services.ec2.model.Ipv6Range;
+import software.amazon.awssdk.services.ec2.model.Monitoring;
+import software.amazon.awssdk.services.ec2.model.NatGateway;
+import software.amazon.awssdk.services.ec2.model.NatGatewayAddress;
+import software.amazon.awssdk.services.ec2.model.NetworkAcl;
+import software.amazon.awssdk.services.ec2.model.Placement;
+import software.amazon.awssdk.services.ec2.model.PrefixListId;
+import software.amazon.awssdk.services.ec2.model.ProductCode;
+import software.amazon.awssdk.services.ec2.model.ProvisionedBandwidth;
+import software.amazon.awssdk.services.ec2.model.Reservation;
+import software.amazon.awssdk.services.ec2.model.Route;
+import software.amazon.awssdk.services.ec2.model.RouteTable;
+import software.amazon.awssdk.services.ec2.model.RouteTableAssociation;
+import software.amazon.awssdk.services.ec2.model.SecurityGroup;
+import software.amazon.awssdk.services.ec2.model.StateReason;
+import software.amazon.awssdk.services.ec2.model.Subnet;
+import software.amazon.awssdk.services.ec2.model.SubnetCidrBlockState;
+import software.amazon.awssdk.services.ec2.model.SubnetIpv6CidrBlockAssociation;
+import software.amazon.awssdk.services.ec2.model.Tag;
+import software.amazon.awssdk.services.ec2.model.UserIdGroupPair;
+import software.amazon.awssdk.services.ec2.model.VgwTelemetry;
+import software.amazon.awssdk.services.ec2.model.Volume;
+import software.amazon.awssdk.services.ec2.model.VolumeAttachment;
+import software.amazon.awssdk.services.ec2.model.Vpc;
+import software.amazon.awssdk.services.ec2.model.VpcAttachment;
+import software.amazon.awssdk.services.ec2.model.VpcCidrBlockAssociation;
+import software.amazon.awssdk.services.ec2.model.VpcCidrBlockState;
+import software.amazon.awssdk.services.ec2.model.VpcIpv6CidrBlockAssociation;
+import software.amazon.awssdk.services.ec2.model.VpcPeeringConnection;
+import software.amazon.awssdk.services.ec2.model.VpcPeeringConnectionOptionsDescription;
+import software.amazon.awssdk.services.ec2.model.VpcPeeringConnectionStateReason;
+import software.amazon.awssdk.services.ec2.model.VpcPeeringConnectionVpcInfo;
+import software.amazon.awssdk.services.ec2.model.VpnConnection;
+import software.amazon.awssdk.services.ec2.model.VpnGateway;
+import software.amazon.awssdk.services.ec2.model.VpnStaticRoute;
+import software.amazon.awssdk.services.elasticache.model.CacheCluster;
+import software.amazon.awssdk.services.elasticache.model.DescribeCacheClustersRequest;
+import software.amazon.awssdk.services.elasticache.model.NodeGroup;
+import software.amazon.awssdk.services.elasticache.model.NodeGroupMember;
+import software.amazon.awssdk.services.elasticache.model.ReplicationGroup;
+import software.amazon.awssdk.services.elasticache.model.SecurityGroupMembership;
+import software.amazon.awssdk.services.elasticloadbalancing.model.Listener;
+import software.amazon.awssdk.services.elasticloadbalancing.model.ListenerDescription;
+import software.amazon.awssdk.services.elasticloadbalancing.model.LoadBalancerDescription;
+import software.amazon.awssdk.services.elasticloadbalancingv2.model.Action;
+import software.amazon.awssdk.services.elasticloadbalancingv2.model.AvailabilityZone;
+import software.amazon.awssdk.services.elasticloadbalancingv2.model.Certificate;
+import software.amazon.awssdk.services.elasticloadbalancingv2.model.DescribeListenersRequest;
+import software.amazon.awssdk.services.elasticloadbalancingv2.model.DescribeListenersResponse;
+import software.amazon.awssdk.services.elasticloadbalancingv2.model.DescribeLoadBalancersResponse;
+import software.amazon.awssdk.services.elasticloadbalancingv2.model.DescribeRulesRequest;
+import software.amazon.awssdk.services.elasticloadbalancingv2.model.DescribeRulesResponse;
+import software.amazon.awssdk.services.elasticloadbalancingv2.model.DescribeTagsRequest;
+import software.amazon.awssdk.services.elasticloadbalancingv2.model.DescribeTagsResponse;
+import software.amazon.awssdk.services.elasticloadbalancingv2.model.DescribeTargetGroupAttributesRequest;
+import software.amazon.awssdk.services.elasticloadbalancingv2.model.DescribeTargetGroupAttributesResponse;
+import software.amazon.awssdk.services.elasticloadbalancingv2.model.DescribeTargetGroupsRequest;
+import software.amazon.awssdk.services.elasticloadbalancingv2.model.DescribeTargetGroupsResponse;
+import software.amazon.awssdk.services.elasticloadbalancingv2.model.DescribeTargetHealthRequest;
+import software.amazon.awssdk.services.elasticloadbalancingv2.model.DescribeTargetHealthResponse;
+import software.amazon.awssdk.services.elasticloadbalancingv2.model.LoadBalancer;
+import software.amazon.awssdk.services.elasticloadbalancingv2.model.LoadBalancerAddress;
+import software.amazon.awssdk.services.elasticloadbalancingv2.model.Rule;
+import software.amazon.awssdk.services.elasticloadbalancingv2.model.RuleCondition;
+import software.amazon.awssdk.services.elasticloadbalancingv2.model.TagDescription;
+import software.amazon.awssdk.services.elasticloadbalancingv2.model.TargetDescription;
+import software.amazon.awssdk.services.elasticloadbalancingv2.model.TargetGroup;
+import software.amazon.awssdk.services.elasticloadbalancingv2.model.TargetGroupAttribute;
+import software.amazon.awssdk.services.elasticloadbalancingv2.model.TargetHealth;
+import software.amazon.awssdk.services.elasticloadbalancingv2.model.TargetHealthDescription;
+import software.amazon.awssdk.services.kms.model.AliasListEntry;
+import software.amazon.awssdk.services.kms.model.DescribeKeyRequest;
+import software.amazon.awssdk.services.kms.model.DescribeKeyResponse;
+import software.amazon.awssdk.services.kms.model.KeyListEntry;
+import software.amazon.awssdk.services.kms.model.KeyMetadata;
+import software.amazon.awssdk.services.kms.model.ListAliasesResponse;
+import software.amazon.awssdk.services.kms.model.ListKeysResponse;
+import software.amazon.awssdk.services.rds.model.DBCluster;
+import software.amazon.awssdk.services.rds.model.DBClusterMember;
+import software.amazon.awssdk.services.rds.model.DBClusterOptionGroupStatus;
+import software.amazon.awssdk.services.rds.model.DBClusterRole;
+import software.amazon.awssdk.services.rds.model.DBInstance;
+import software.amazon.awssdk.services.rds.model.DBParameterGroupStatus;
+import software.amazon.awssdk.services.rds.model.DBSecurityGroupMembership;
+import software.amazon.awssdk.services.rds.model.DescribeDbClustersResponse;
+import software.amazon.awssdk.services.rds.model.DescribeDbInstancesResponse;
+import software.amazon.awssdk.services.rds.model.DomainMembership;
+import software.amazon.awssdk.services.rds.model.Endpoint;
+import software.amazon.awssdk.services.rds.model.VpcSecurityGroupMembership;
+import software.amazon.awssdk.services.s3.model.AbortIncompleteMultipartUpload;
+import software.amazon.awssdk.services.s3.model.Bucket;
+import software.amazon.awssdk.services.s3.model.CORSRule;
+import software.amazon.awssdk.services.s3.model.Condition;
+import software.amazon.awssdk.services.s3.model.Destination;
+import software.amazon.awssdk.services.s3.model.GetBucketAccelerateConfigurationRequest;
+import software.amazon.awssdk.services.s3.model.GetBucketAccelerateConfigurationResponse;
+import software.amazon.awssdk.services.s3.model.GetBucketAclRequest;
+import software.amazon.awssdk.services.s3.model.GetBucketAclResponse;
+import software.amazon.awssdk.services.s3.model.GetBucketCorsRequest;
+import software.amazon.awssdk.services.s3.model.GetBucketCorsResponse;
+import software.amazon.awssdk.services.s3.model.GetBucketEncryptionRequest;
+import software.amazon.awssdk.services.s3.model.GetBucketEncryptionResponse;
+import software.amazon.awssdk.services.s3.model.GetBucketLifecycleConfigurationRequest;
+import software.amazon.awssdk.services.s3.model.GetBucketLifecycleConfigurationResponse;
+import software.amazon.awssdk.services.s3.model.GetBucketLocationRequest;
+import software.amazon.awssdk.services.s3.model.GetBucketLoggingRequest;
+import software.amazon.awssdk.services.s3.model.GetBucketLoggingResponse;
+import software.amazon.awssdk.services.s3.model.GetBucketNotificationConfigurationRequest;
+import software.amazon.awssdk.services.s3.model.GetBucketNotificationConfigurationResponse;
+import software.amazon.awssdk.services.s3.model.GetBucketPolicyRequest;
+import software.amazon.awssdk.services.s3.model.GetBucketReplicationRequest;
+import software.amazon.awssdk.services.s3.model.GetBucketReplicationResponse;
+import software.amazon.awssdk.services.s3.model.GetBucketTaggingRequest;
+import software.amazon.awssdk.services.s3.model.GetBucketTaggingResponse;
+import software.amazon.awssdk.services.s3.model.GetBucketVersioningRequest;
+import software.amazon.awssdk.services.s3.model.GetBucketVersioningResponse;
+import software.amazon.awssdk.services.s3.model.GetBucketWebsiteRequest;
+import software.amazon.awssdk.services.s3.model.GetBucketWebsiteResponse;
+import software.amazon.awssdk.services.s3.model.Grant;
+import software.amazon.awssdk.services.s3.model.Grantee;
+import software.amazon.awssdk.services.s3.model.LambdaFunctionConfiguration;
+import software.amazon.awssdk.services.s3.model.LifecycleRule;
+import software.amazon.awssdk.services.s3.model.NoncurrentVersionTransition;
+import software.amazon.awssdk.services.s3.model.QueueConfiguration;
+import software.amazon.awssdk.services.s3.model.Redirect;
+import software.amazon.awssdk.services.s3.model.RedirectAllRequestsTo;
+import software.amazon.awssdk.services.s3.model.ReplicationConfiguration;
+import software.amazon.awssdk.services.s3.model.ReplicationRule;
+import software.amazon.awssdk.services.s3.model.RoutingRule;
+import software.amazon.awssdk.services.s3.model.S3Exception;
+import software.amazon.awssdk.services.s3.model.ServerSideEncryptionByDefault;
+import software.amazon.awssdk.services.s3.model.ServerSideEncryptionConfiguration;
+import software.amazon.awssdk.services.s3.model.ServerSideEncryptionRule;
+import software.amazon.awssdk.services.s3.model.SourceSelectionCriteria;
+import software.amazon.awssdk.services.s3.model.SseKmsEncryptedObjects;
+import software.amazon.awssdk.services.s3.model.TopicConfiguration;
+import software.amazon.awssdk.services.s3.model.Transition;
 
 public class AWSExporter
 {
@@ -259,18 +272,20 @@ public class AWSExporter
 	private XSSFSheet directorySheet;
 	private AmazonAccess amazonAccess;
 	private AmazonClients amazonClients;
-	private Regions region;
+	private Region region;
   
-	private DateFormat formatDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	private DateTimeFormatter formatDate = DateTimeFormatter
+												.ofPattern("yyyy-MM-dd HH:mm:ss Z")
+												.withZone(ZoneOffset.UTC);
 	private DateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
   
-	public AWSExporter(AmazonAccess amazonAccess, List<Regions> regions, boolean isCrossAccount, String crossAccountKey) {
+	public AWSExporter(AmazonAccess amazonAccess, List<Region> regions, String profileName) {
 		this.amazonAccess = amazonAccess;
 		this.executeTime = format.format(new Date());
     
 		System.out.println("AWS Exporter Start");
-		for (Regions region : regions) {
-			make(region, isCrossAccount, crossAccountKey);
+		for (Region region : regions) {
+			make(region, profileName);
 			write();
 			try { this.workbook.close(); } catch (IOException e) { e.printStackTrace(); }
 		}
@@ -330,8 +345,8 @@ public class AWSExporter
 	private String getNameTagValue(List<Tag> tags) {
 		String name = "";
 		for (Tag tag : tags) {
-			if ("Name".equals(tag.getKey())) {
-				name = tag.getValue();
+			if ("Name".equals(tag.key())) {
+				name = tag.value();
 				break;
 			}
 		}
@@ -344,89 +359,87 @@ public class AWSExporter
 			if(tagValues.length() > 0) {
 				tagValues.append("\n");
 			}
-			tagValues.append(tag.getKey());
+			tagValues.append(tag.key());
 			tagValues.append("=");
-			tagValues.append(tag.getValue());
+			tagValues.append(tag.value());
 		}
 		return tagValues.toString();
 	}
   
-	private void make(Regions region, boolean isCrossAccountRole, String crossAccountKey) {
+	private void make(Region region, String profileName) {
 		this.region = region;
-    
-		String typeName = isCrossAccountRole ? crossAccountKey : this.amazonAccess.getAccessType().toUpperCase();
-    
-		this.fileName = ("[" + typeName + "][" + this.region.getName() + "] AWSExport-" + this.executeTime + ".xlsx");
-		System.out.println("Start " + this.region.getName() + " Export. OutputFile [" + this.fileName + "]");
+        
+		this.fileName = ("[" + profileName + "][" + this.region.id() + "] AWSExport-" + this.executeTime + ".xlsx");
+		System.out.println("Start " + this.region.id() + " Export. OutputFile [" + this.fileName + "]");
     
 		initializeWorkbook();
-		System.out.println("Excel Workbook 초기화 완료");
+		System.out.println("Excel Workbook Initialization Complete");
     
-		this.amazonClients = new AmazonClients(this.region, this.amazonAccess, isCrossAccountRole, crossAccountKey);
-		System.out.println("AWS Client 초기화 완료");
+		this.amazonClients = new AmazonClients(this.amazonAccess, profileName, this.region);
+		System.out.println("AWS Client Initialization Complete");
     
 		makeSheetListHeader();
-		System.out.println("Excel Workbook Sheet 생성 및 제목 줄 생성 완료 [" + this.workbook.getNumberOfSheets() + " 개 Sheet]");
+		System.out.println("Excel workbook sheet generation and subject line generation complete [" + this.workbook.getNumberOfSheets() + " ea Sheet]");
 		
-		try { makeSubnet(); System.out.println("Subnets Export 완료"); } catch (Exception e) { System.out.println("Subnets Export 실패 - [" + e.getMessage() + "]"); e.printStackTrace(); }
+		try { makeSubnet(); System.out.println("Subnets Export complete"); } catch (Exception e) { System.out.println("Subnets Export failure - [" + e.getMessage() + "]"); e.printStackTrace(); }
 		
 		HashMap<String, String> vpcMainRouteTables = null;
-		try { vpcMainRouteTables = makeRouteTable(); System.out.println("RouteTable Export 완료"); } catch (Exception e) { System.out.println("RouteTable Export 실패 - [" + e.getMessage() + "]"); e.printStackTrace(); }
-		try { makeVPC(vpcMainRouteTables); System.out.println("VPC Export 완료"); } catch (Exception e) { System.out.println("VPC Export 실패 - [" + e.getMessage() + "]"); e.printStackTrace(); }
-		try { makeVPCPeering(); System.out.println("VPC Export 완료"); } catch (Exception e) { System.out.println("VPC Export 실패 - [" + e.getMessage() + "]"); e.printStackTrace(); }
-		try { makeInternetGateway(); System.out.println("InternetGateway Export 완료"); } catch (Exception e) { System.out.println("InternetGateway Export 실패 - [" + e.getMessage() + "]"); e.printStackTrace(); }
-		try { makeEgressInternetGateway(); System.out.println("InternetGateway Export 완료"); } catch (Exception e) { System.out.println("InternetGateway Export 실패 - [" + e.getMessage() + "]"); e.printStackTrace(); }
-		try { makeNATGateway(); System.out.println("EgressOnlyInternetGateway Export 완료"); } catch (Exception e) { System.out.println("EgressOnlyInternetGateway Export 실패 - [" + e.getMessage() + "]"); e.printStackTrace(); }
-		try { makeCustomerGateway(); System.out.println("CustomerGateway Export 완료"); } catch (Exception e) { System.out.println("CustomerGateway Export 실패 - [" + e.getMessage() + "]"); e.printStackTrace(); }
-		try { makeVPNGateway(); System.out.println("VPNGateway Export 완료"); } catch (Exception e) { System.out.println("VPNGateway Export 실패 - [" + e.getMessage() + "]"); e.printStackTrace(); }
-		try { makeVPNConnection(); System.out.println("VPNConnection Export 완료"); } catch (Exception e) { System.out.println("VPNConnection Export 실패 - [" + e.getMessage() + "]"); e.printStackTrace(); }		
-		try { makeSecurityGroup(); System.out.println("SecurityGroup Export 완료"); } catch (Exception e) { System.out.println("SecurityGroup Export 실패 - [" + e.getMessage() + "]"); e.printStackTrace(); }
-		try { makeEC2Instance(); System.out.println("EC2Instances Export 완료"); } catch (Exception e) { System.out.println("EC2Instances Export 실패 - [" + e.getMessage() + "]"); e.printStackTrace(); }
-		try { makeEBS(); System.out.println("EBS Export 완료"); } catch (Exception e) { System.out.println("EBS Export 실패 - [" + e.getMessage() + "]"); e.printStackTrace(); }
-		try { makeClassicELB(); System.out.println("Classic ELB Export 완료"); } catch (Exception e) { System.out.println("Classic ELB Export 실패 - [" + e.getMessage() + "]"); e.printStackTrace(); }
-		try { makeOtherELB(); System.out.println("Other ELB Export 완료"); } catch (Exception e) { System.out.println("Other ELB Export 실패 - [" + e.getMessage() + "]"); e.printStackTrace(); }
-		try { makeElasticCache(); System.out.println("ElasticCache Export 완료"); } catch (Exception e) { System.out.println("ElasticCache Export 실패 - [" + e.getMessage() + "]"); e.printStackTrace(); }
-		try { makeRDSCluster(); System.out.println("RDS Clusters Export 완료"); } catch (Exception e) { System.out.println("RDS Clusters Export 실패 - [" + e.getMessage() + "]"); e.printStackTrace(); }
-		try { makeRDSInstance(); System.out.println("RDS Instances Export 완료"); } catch (Exception e) { System.out.println("RDS Instances Export 실패 - [" + e.getMessage() + "]"); e.printStackTrace(); }
-		try { makeKMS(); System.out.println("KMS Export 완료"); } catch (Exception e) { System.out.println("KMS Export 실패 - [" + e.getMessage() + "]"); e.printStackTrace(); }
-		try { makeACM(); System.out.println("ACM Export 완료"); } catch (Exception e) { System.out.println("ACM Export 실패 - [" + e.getMessage() + "]"); e.printStackTrace(); }
-		try { makeS3(); System.out.println("S3 Export 완료"); } catch (Exception e) { System.out.println("S3 Export 실패 - [" + e.getMessage() + "]"); e.printStackTrace(); }
+		try { vpcMainRouteTables = makeRouteTable(); System.out.println("RouteTable Export complete"); } catch (Exception e) { System.out.println("RouteTable Export failure - [" + e.getMessage() + "]"); e.printStackTrace(); }
+		try { makeVPC(vpcMainRouteTables); System.out.println("VPC Export complete"); } catch (Exception e) { System.out.println("VPC Export failure - [" + e.getMessage() + "]"); e.printStackTrace(); }
+		try { makeVPCPeering(); System.out.println("VPC Export complete"); } catch (Exception e) { System.out.println("VPC Export failure - [" + e.getMessage() + "]"); e.printStackTrace(); }
+		try { makeInternetGateway(); System.out.println("InternetGateway Export complete"); } catch (Exception e) { System.out.println("InternetGateway Export failure - [" + e.getMessage() + "]"); e.printStackTrace(); }
+		try { makeEgressInternetGateway(); System.out.println("InternetGateway Export complete"); } catch (Exception e) { System.out.println("InternetGateway Export failure - [" + e.getMessage() + "]"); e.printStackTrace(); }
+		try { makeNATGateway(); System.out.println("EgressOnlyInternetGateway Export complete"); } catch (Exception e) { System.out.println("EgressOnlyInternetGateway Export failure - [" + e.getMessage() + "]"); e.printStackTrace(); }
+		try { makeCustomerGateway(); System.out.println("CustomerGateway Export complete"); } catch (Exception e) { System.out.println("CustomerGateway Export failure - [" + e.getMessage() + "]"); e.printStackTrace(); }
+		try { makeVPNGateway(); System.out.println("VPNGateway Export complete"); } catch (Exception e) { System.out.println("VPNGateway Export failure - [" + e.getMessage() + "]"); e.printStackTrace(); }
+		try { makeVPNConnection(); System.out.println("VPNConnection Export complete"); } catch (Exception e) { System.out.println("VPNConnection Export failure - [" + e.getMessage() + "]"); e.printStackTrace(); }		
+		try { makeSecurityGroup(); System.out.println("SecurityGroup Export complete"); } catch (Exception e) { System.out.println("SecurityGroup Export failure - [" + e.getMessage() + "]"); e.printStackTrace(); }
+		try { makeEC2Instance(); System.out.println("EC2Instances Export complete"); } catch (Exception e) { System.out.println("EC2Instances Export failure - [" + e.getMessage() + "]"); e.printStackTrace(); }
+		try { makeEBS(); System.out.println("EBS Export complete"); } catch (Exception e) { System.out.println("EBS Export failure - [" + e.getMessage() + "]"); e.printStackTrace(); }
+		try { makeClassicELB(); System.out.println("Classic ELB Export complete"); } catch (Exception e) { System.out.println("Classic ELB Export failure - [" + e.getMessage() + "]"); e.printStackTrace(); }
+		try { makeOtherELB(); System.out.println("Other ELB Export complete"); } catch (Exception e) { System.out.println("Other ELB Export failure - [" + e.getMessage() + "]"); e.printStackTrace(); }
+		try { makeElasticCache(); System.out.println("ElasticCache Export complete"); } catch (Exception e) { System.out.println("ElasticCache Export failure - [" + e.getMessage() + "]"); e.printStackTrace(); }
+		try { makeRDSCluster(); System.out.println("RDS Clusters Export complete"); } catch (Exception e) { System.out.println("RDS Clusters Export failure - [" + e.getMessage() + "]"); e.printStackTrace(); }
+		try { makeRDSInstance(); System.out.println("RDS Instances Export complete"); } catch (Exception e) { System.out.println("RDS Instances Export failure - [" + e.getMessage() + "]"); e.printStackTrace(); }
+		try { makeKMS(); System.out.println("KMS Export complete"); } catch (Exception e) { System.out.println("KMS Export failure - [" + e.getMessage() + "]"); e.printStackTrace(); }
+		try { makeACM(); System.out.println("ACM Export complete"); } catch (Exception e) { System.out.println("ACM Export failure - [" + e.getMessage() + "]"); e.printStackTrace(); }
+		try { makeS3(); System.out.println("S3 Export complete"); } catch (Exception e) { System.out.println("S3 Export failure - [" + e.getMessage() + "]"); e.printStackTrace(); }
 		
-		try { makeDirectConnection(); System.out.println("DirectConnect Export 완료"); } catch (Exception e) { System.out.println("DirectConnect Export 실패 - [" + e.getMessage() + "]"); e.printStackTrace(); }
-		try { makeDirectLocation(); System.out.println("DirectLocation Export 완료"); } catch (Exception e) { System.out.println("DirectLocation Export 실패 - [" + e.getMessage() + "]"); e.printStackTrace(); }
-		try { makeVirtualGateway(); System.out.println("VirtualGateway Export 완료"); } catch (Exception e) { System.out.println("VirtualGateway Export 실패 - [" + e.getMessage() + "]"); e.printStackTrace(); }
-		try { makeVirtualInterface(); System.out.println("VirtualInterface Export 완료"); } catch (Exception e) { System.out.println("VirtualInterface Export 실패 - [" + e.getMessage() + "]"); e.printStackTrace(); }
-		try { makeLag(); System.out.println("Lag Export 완료"); } catch (Exception e) { System.out.println("Lag Export 실패 - [" + e.getMessage() + "]"); e.printStackTrace(); }
-		try { makeDirectConnectGateway(); System.out.println("DirectConnect Gateway Export 완료"); } catch (Exception e) { System.out.println("DirectConnect Gateway Export 실패 - [" + e.getMessage() + "]"); e.printStackTrace(); }
+		try { makeDirectConnection(); System.out.println("DirectConnect Export complete"); } catch (Exception e) { System.out.println("DirectConnect Export failure - [" + e.getMessage() + "]"); e.printStackTrace(); }
+		try { makeDirectLocation(); System.out.println("DirectLocation Export complete"); } catch (Exception e) { System.out.println("DirectLocation Export failure - [" + e.getMessage() + "]"); e.printStackTrace(); }
+		try { makeVirtualGateway(); System.out.println("VirtualGateway Export complete"); } catch (Exception e) { System.out.println("VirtualGateway Export failure - [" + e.getMessage() + "]"); e.printStackTrace(); }
+		try { makeVirtualInterface(); System.out.println("VirtualInterface Export complete"); } catch (Exception e) { System.out.println("VirtualInterface Export failure - [" + e.getMessage() + "]"); e.printStackTrace(); }
+		try { makeLag(); System.out.println("Lag Export complete"); } catch (Exception e) { System.out.println("Lag Export failure - [" + e.getMessage() + "]"); e.printStackTrace(); }
+		try { makeDirectConnectGateway(); System.out.println("DirectConnect Gateway Export complete"); } catch (Exception e) { System.out.println("DirectConnect Gateway Export failure - [" + e.getMessage() + "]"); e.printStackTrace(); }
 		
-		try { makeDirectoryService(); System.out.println("Directory Service Export 완료"); } catch (Exception e) { System.out.println("Directory Service Export 실패 - [" + e.getMessage() + "]"); e.printStackTrace(); }
+		try { makeDirectoryService(); System.out.println("Directory Service Export complete"); } catch (Exception e) { System.out.println("Directory Service Export failure - [" + e.getMessage() + "]"); e.printStackTrace(); }
 		
 		this.xssfHelper.setAutoSizeColumn();
 	}
 	
 	private void makeDirectoryService() {
 		XSSFRow row = null;
-		DescribeDirectoriesResult describeDirectoriesResult = this.amazonClients.AwsDirectoryService.describeDirectories();
-		List<DirectoryDescription> directoryDescriptions = describeDirectoriesResult.getDirectoryDescriptions();
+		DescribeDirectoriesResponse describeDirectoriesResponse = this.amazonClients.directoryClient.describeDirectories();
+		List<DirectoryDescription> directoryDescriptions = describeDirectoriesResponse.directoryDescriptions();
 		for (DirectoryDescription directoryDescription : directoryDescriptions) {
 			row = this.xssfHelper.createRow(this.directorySheet, 1);
 			this.xssfHelper.setLeftThinCell(row, Integer.toString(row.getRowNum() - 1));
-			this.xssfHelper.setCell(row, directoryDescription.getDirectoryId());
-			this.xssfHelper.setCell(row, directoryDescription.getType());
-			this.xssfHelper.setCell(row, directoryDescription.getAlias());
-			this.xssfHelper.setCell(row, directoryDescription.getName());
-			this.xssfHelper.setCell(row, directoryDescription.getShortName());
-			this.xssfHelper.setCell(row, directoryDescription.getSize());
-			this.xssfHelper.setCell(row, directoryDescription.getAccessUrl());
-			this.xssfHelper.setCell(row, directoryDescription.getDesiredNumberOfDomainControllers().toString());
+			this.xssfHelper.setCell(row, directoryDescription.directoryId());
+			this.xssfHelper.setCell(row, this.getEnumName(directoryDescription.type()));
+			this.xssfHelper.setCell(row, directoryDescription.alias());
+			this.xssfHelper.setCell(row, directoryDescription.name());
+			this.xssfHelper.setCell(row, directoryDescription.shortName());
+			this.xssfHelper.setCell(row, this.getEnumName(directoryDescription.size()));
+			this.xssfHelper.setCell(row, directoryDescription.accessUrl());
+			this.xssfHelper.setCell(row, directoryDescription.desiredNumberOfDomainControllers().toString());
 			
-			DirectoryVpcSettingsDescription directoryVpcSettingsDescription = directoryDescription.getVpcSettings();
-			this.xssfHelper.setCell(row, directoryVpcSettingsDescription == null ? "" : directoryVpcSettingsDescription.getVpcId());
-			this.xssfHelper.setCell(row, directoryVpcSettingsDescription == null ? "" : directoryVpcSettingsDescription.getSecurityGroupId());
+			DirectoryVpcSettingsDescription directoryVpcSettingsDescription = directoryDescription.vpcSettings();
+			this.xssfHelper.setCell(row, directoryVpcSettingsDescription == null ? "" : directoryVpcSettingsDescription.vpcId());
+			this.xssfHelper.setCell(row, directoryVpcSettingsDescription == null ? "" : directoryVpcSettingsDescription.securityGroupId());
 			
 			StringBuffer vpcAvas = new StringBuffer();
 			if(directoryVpcSettingsDescription != null) {
-			List<String> availabilityZones = directoryVpcSettingsDescription.getAvailabilityZones();
+			List<String> availabilityZones = directoryVpcSettingsDescription.availabilityZones();
 				for(String availabilityZone : availabilityZones) {
 					if(vpcAvas.length() > 0) vpcAvas.append("\n");
 					vpcAvas.append(availabilityZone);
@@ -436,7 +449,7 @@ public class AWSExporter
 			
 			StringBuffer vpcSubs = new StringBuffer();
 			if(directoryVpcSettingsDescription != null) {
-			List<String> subnetIds = directoryVpcSettingsDescription.getSubnetIds();
+			List<String> subnetIds = directoryVpcSettingsDescription.subnetIds();
 				for(String subnetId : subnetIds) {
 					if(vpcSubs.length() > 0) vpcSubs.append("\n");
 					vpcSubs.append(subnetId);
@@ -444,14 +457,14 @@ public class AWSExporter
 			}
 			this.xssfHelper.setCell(row, vpcSubs.toString());
 			
-			DirectoryConnectSettingsDescription directoryConnectSettingsDescription = directoryDescription.getConnectSettings();
-			this.xssfHelper.setCell(row, directoryConnectSettingsDescription == null ? "" : directoryConnectSettingsDescription.getCustomerUserName());
-			this.xssfHelper.setCell(row, directoryConnectSettingsDescription == null ? "" : directoryConnectSettingsDescription.getVpcId());
-			this.xssfHelper.setCell(row, directoryConnectSettingsDescription == null ? "" : directoryConnectSettingsDescription.getSecurityGroupId());
+			DirectoryConnectSettingsDescription directoryConnectSettingsDescription = directoryDescription.connectSettings();
+			this.xssfHelper.setCell(row, directoryConnectSettingsDescription == null ? "" : directoryConnectSettingsDescription.customerUserName());
+			this.xssfHelper.setCell(row, directoryConnectSettingsDescription == null ? "" : directoryConnectSettingsDescription.vpcId());
+			this.xssfHelper.setCell(row, directoryConnectSettingsDescription == null ? "" : directoryConnectSettingsDescription.securityGroupId());
 			
 			StringBuffer csAvas = new StringBuffer();
 			if(directoryConnectSettingsDescription != null) {
-				List<String> csavailabilityZones = directoryConnectSettingsDescription.getAvailabilityZones();
+				List<String> csavailabilityZones = directoryConnectSettingsDescription.availabilityZones();
 				for(String availabilityZone : csavailabilityZones) {
 					if(csAvas.length() > 0) csAvas.append("\n");
 					csAvas.append(availabilityZone);
@@ -461,7 +474,7 @@ public class AWSExporter
 			
 			StringBuffer cips = new StringBuffer();
 			if(directoryConnectSettingsDescription != null) {
-				List<String> connectIps = directoryConnectSettingsDescription.getConnectIps();
+				List<String> connectIps = directoryConnectSettingsDescription.connectIps();
 				for(String connectIp : connectIps) {
 					if(cips.length() > 0) cips.append("\n");
 					cips.append(connectIp);
@@ -471,7 +484,7 @@ public class AWSExporter
 			
 			StringBuffer csSubs = new StringBuffer();
 			if(directoryConnectSettingsDescription != null) {
-				List<String> csSubnetIds = directoryConnectSettingsDescription.getSubnetIds();
+				List<String> csSubnetIds = directoryConnectSettingsDescription.subnetIds();
 				for(String csSubnetId : csSubnetIds) {
 					if(csSubs.length() > 0) csSubs.append("\n");
 					csSubs.append(csSubnetId);
@@ -479,116 +492,116 @@ public class AWSExporter
 			}			
 			this.xssfHelper.setCell(row, csSubs.toString());
 			
-			this.xssfHelper.setCell(row, directoryConnectSettingsDescription == null ? "" : directoryDescription.getDescription());
+			this.xssfHelper.setCell(row, directoryConnectSettingsDescription == null ? "" : directoryDescription.description());
 			
 			StringBuffer dias = new StringBuffer();
 			if(directoryConnectSettingsDescription != null) {
-				List<String> dnsIpAddrs = directoryDescription.getDnsIpAddrs();
+				List<String> dnsIpAddrs = directoryDescription.dnsIpAddrs();
 				for(String dnsIpAddr : dnsIpAddrs) {
 					if(dias.length() > 0) dias.append("\n");
 					dias.append(dnsIpAddr);
 				}
 			}
 			this.xssfHelper.setCell(row, dias.toString());
-			this.xssfHelper.setCell(row, directoryConnectSettingsDescription == null ? "" : directoryDescription.getEdition());
-			this.xssfHelper.setCell(row, directoryConnectSettingsDescription == null ? "" : directoryDescription.getSsoEnabled().toString());
-			this.xssfHelper.setCell(row, directoryConnectSettingsDescription == null ? "" : directoryDescription.getStage());
-			this.xssfHelper.setCell(row, directoryConnectSettingsDescription == null ? "" : directoryDescription.getStageLastUpdatedDateTime().toString());
-			this.xssfHelper.setCell(row, directoryConnectSettingsDescription == null ? "" : directoryDescription.getStageReason());
+			this.xssfHelper.setCell(row, directoryConnectSettingsDescription == null ? "" : this.getEnumName(directoryDescription.edition()));
+			this.xssfHelper.setCell(row, directoryConnectSettingsDescription == null ? "" : directoryDescription.ssoEnabled().toString());
+			this.xssfHelper.setCell(row, directoryConnectSettingsDescription == null ? "" : this.getEnumName(directoryDescription.stage()));
+			this.xssfHelper.setCell(row, directoryConnectSettingsDescription == null ? "" : directoryDescription.stageLastUpdatedDateTime().toString());
+			this.xssfHelper.setCell(row, directoryConnectSettingsDescription == null ? "" : directoryDescription.stageReason());
 			
-			RadiusSettings radiusSettings = directoryConnectSettingsDescription == null ? null : directoryDescription.getRadiusSettings();
-			this.xssfHelper.setCell(row, radiusSettings == null ? "" : radiusSettings.getAuthenticationProtocol());
-			this.xssfHelper.setCell(row, radiusSettings == null ? "" : radiusSettings.getDisplayLabel());
-			this.xssfHelper.setCell(row, radiusSettings == null ? "" : radiusSettings.getRadiusPort().toString());
-			this.xssfHelper.setCell(row, radiusSettings == null ? "" : radiusSettings.getRadiusRetries().toString());
-			this.xssfHelper.setCell(row, radiusSettings == null ? "" : radiusSettings.getRadiusTimeout().toString());
-			this.xssfHelper.setCell(row, radiusSettings == null ? "" : radiusSettings.getSharedSecret());
-			this.xssfHelper.setCell(row, radiusSettings == null ? "" : radiusSettings.getUseSameUsername().toString());
+			RadiusSettings radiusSettings = directoryConnectSettingsDescription == null ? null : directoryDescription.radiusSettings();
+			this.xssfHelper.setCell(row, radiusSettings == null ? "" : this.getEnumName(radiusSettings.authenticationProtocol()));
+			this.xssfHelper.setCell(row, radiusSettings == null ? "" : radiusSettings.displayLabel());
+			this.xssfHelper.setCell(row, radiusSettings == null ? "" : radiusSettings.radiusPort().toString());
+			this.xssfHelper.setCell(row, radiusSettings == null ? "" : radiusSettings.radiusRetries().toString());
+			this.xssfHelper.setCell(row, radiusSettings == null ? "" : radiusSettings.radiusTimeout().toString());
+			this.xssfHelper.setCell(row, radiusSettings == null ? "" : radiusSettings.sharedSecret());
+			this.xssfHelper.setCell(row, radiusSettings == null ? "" : radiusSettings.useSameUsername().toString());
 			
 			StringBuffer rss = new StringBuffer();
 			if(radiusSettings != null) {
-				List<String> radiusServers = radiusSettings.getRadiusServers();
+				List<String> radiusServers = radiusSettings.radiusServers();
 				for(String radiusServer : radiusServers) {
 					if(rss.length() > 0) rss.append("\n");
 					rss.append(radiusServer);
 				}
 			}
 			this.xssfHelper.setCell(row, rss.toString());
-			this.xssfHelper.setCell(row, directoryDescription.getRadiusStatus());
+			this.xssfHelper.setCell(row, this.getEnumName(directoryDescription.radiusStatus()));
 			
 			StringBuffer dcrs = new StringBuffer();
-			DescribeDomainControllersResult describeDomainControllersResult = this.amazonClients.AwsDirectoryService.describeDomainControllers(new DescribeDomainControllersRequest().withDirectoryId(directoryDescription.getDirectoryId()));
-			List<DomainController> domainControllers = describeDomainControllersResult.getDomainControllers();
+			DescribeDomainControllersResponse describeDomainControllersResponse = this.amazonClients.directoryClient.describeDomainControllers(DescribeDomainControllersRequest.builder().directoryId(directoryDescription.directoryId()).build());
+			List<DomainController> domainControllers = describeDomainControllersResponse.domainControllers();
 			for(DomainController domainController : domainControllers) {
 				if(dcrs.length() > 0) dcrs.append("\n\n");
 				dcrs.append("Domain Controller");
 				dcrs.append("\nDomain Controller Id=");
-				dcrs.append(domainController.getDomainControllerId());
+				dcrs.append(domainController.domainControllerId());
 				dcrs.append("\nDirectory Id=");
-				dcrs.append(domainController.getDirectoryId());
+				dcrs.append(domainController.directoryId());
 				dcrs.append("\nVpc Id=");
-				dcrs.append(domainController.getVpcId());
+				dcrs.append(domainController.vpcId());
 				dcrs.append("\nSubnet Id=");
-				dcrs.append(domainController.getSubnetId());
+				dcrs.append(domainController.subnetId());
 				dcrs.append("\nAvailabilityZone=");
-				dcrs.append(domainController.getAvailabilityZone());
+				dcrs.append(domainController.availabilityZone());
 				dcrs.append("\nDNS Ip Address=");
-				dcrs.append(domainController.getDnsIpAddr());
+				dcrs.append(domainController.dnsIpAddr());
 				dcrs.append("\nLaunch Time=");
-				dcrs.append(domainController.getLaunchTime().toString());
+				dcrs.append(domainController.launchTime().toString());
 				dcrs.append("\nStatus=");
-				dcrs.append(domainController.getStatus());
+				dcrs.append(this.getEnumName(domainController.status()));
 				dcrs.append("\nStatus Last Updated Date Time=");
-				dcrs.append(domainController.getStatusLastUpdatedDateTime().toString());
+				dcrs.append(domainController.statusLastUpdatedDateTime().toString());
 				dcrs.append("\nStatus Reason=");
-				dcrs.append(domainController.getStatusReason());
+				dcrs.append(domainController.statusReason());
 			}
 			this.xssfHelper.setCell(row, dcrs.toString());
 			
 			StringBuffer trs = new StringBuffer();
-			DescribeTrustsResult describeTrustsResult = this.amazonClients.AwsDirectoryService.describeTrusts(new DescribeTrustsRequest().withDirectoryId(directoryDescription.getDirectoryId()));
-			List<Trust> trusts = describeTrustsResult.getTrusts();
+			DescribeTrustsResponse describeTrustsResponse = this.amazonClients.directoryClient.describeTrusts(DescribeTrustsRequest.builder().directoryId(directoryDescription.directoryId()).build());
+			List<Trust> trusts = describeTrustsResponse.trusts();
 			for(Trust trust : trusts) {
 				if(trs.length() > 0) trs.append("\n\n");
 				trs.append("Trusts");
 				trs.append("\nDirectory Id=");
-				trs.append(trust.getDirectoryId());
+				trs.append(trust.directoryId());
 				trs.append("\nRemote Domain Name=");
-				trs.append(trust.getRemoteDomainName());
+				trs.append(trust.remoteDomainName());
 				trs.append("\nId=");
-				trs.append(trust.getTrustId());
+				trs.append(trust.trustId());
 				trs.append("\nType=");
-				trs.append(trust.getTrustType());
+				trs.append(this.getEnumName(trust.trustType()));
 				trs.append("\nDirection=");
-				trs.append(trust.getTrustDirection());
+				trs.append(this.getEnumName(trust.trustDirection()));
 				trs.append("\nState=");
-				trs.append(trust.getTrustState());
+				trs.append(this.getEnumName(trust.trustState()));
 				trs.append("\nState Reason=");
-				trs.append(trust.getTrustStateReason());
+				trs.append(trust.trustStateReason());
 				trs.append("\nCreated Date Time=");
-				trs.append(trust.getCreatedDateTime().toString());
+				trs.append(trust.createdDateTime().toString());
 				trs.append("\nLast Updated Date Time=");
-				trs.append(trust.getLastUpdatedDateTime().toString());
+				trs.append(trust.lastUpdatedDateTime().toString());
 				trs.append("\nState Last Updated Date Time=");
-				trs.append(trust.getStateLastUpdatedDateTime().toString());
+				trs.append(trust.stateLastUpdatedDateTime().toString());
 			}
 			
 			this.xssfHelper.setCell(row, trs.toString());
 			
 			StringBuffer cfrs = new StringBuffer();
 			try {
-				DescribeConditionalForwardersResult describeConditionalForwardersResult = this.amazonClients.AwsDirectoryService.describeConditionalForwarders(new DescribeConditionalForwardersRequest().withDirectoryId(directoryDescription.getDirectoryId()));
-				List<ConditionalForwarder> conditionalForwarders = describeConditionalForwardersResult.getConditionalForwarders();
+				DescribeConditionalForwardersResponse describeConditionalForwardersResponse = this.amazonClients.directoryClient.describeConditionalForwarders(DescribeConditionalForwardersRequest.builder().directoryId(directoryDescription.directoryId()).build());
+				List<ConditionalForwarder> conditionalForwarders = describeConditionalForwardersResponse.conditionalForwarders();
 				for(ConditionalForwarder conditionalForwarder : conditionalForwarders) {
 					if(cfrs.length() > 0) cfrs.append("\n\n");
 					cfrs.append("Conditional Forwarder");
 					cfrs.append("\nRemote Domain Name=");
-					cfrs.append(conditionalForwarder.getRemoteDomainName());
+					cfrs.append(conditionalForwarder.remoteDomainName());
 					cfrs.append("\nReplication Scope=");
-					cfrs.append(conditionalForwarder.getReplicationScope());
+					cfrs.append(this.getEnumName(conditionalForwarder.replicationScope()));
 					
 					StringBuffer cdias = new StringBuffer();
-					List<String> dnsIpAddrs = conditionalForwarder.getDnsIpAddrs();
+					List<String> dnsIpAddrs = conditionalForwarder.dnsIpAddrs();
 					for(String dnsIpAddr : dnsIpAddrs) {
 						if(cdias.length() > 0) cdias.append(", ");
 						cdias.append(dnsIpAddr);
@@ -598,7 +611,7 @@ public class AWSExporter
 				}
 			} catch(InvalidParameterException skip) {}
 			this.xssfHelper.setCell(row, cfrs.toString());
-			this.xssfHelper.setRightThinCell(row, directoryDescription.getLaunchTime().toString());
+			this.xssfHelper.setRightThinCell(row, directoryDescription.launchTime().toString());
 			
 		}
 
@@ -606,185 +619,183 @@ public class AWSExporter
 	
 	private void makeDirectConnection() {
 		XSSFRow row = null;
-		DescribeConnectionsResult describeConnectionsResult = this.amazonClients.AmazonDirectConnect.describeConnections();
-		List<Connection> connections = describeConnectionsResult.getConnections();
+		DescribeConnectionsResponse describeConnectionsResponse = this.amazonClients.directConnectClient.describeConnections();
+		List<Connection> connections = describeConnectionsResponse.connections();
 		for (Connection connection : connections) {
 			row = this.xssfHelper.createRow(this.directConnectSheet, 1);
 			this.xssfHelper.setLeftThinCell(row, Integer.toString(row.getRowNum() - 1));
-			this.xssfHelper.setCell(row, connection.getRegion());
-			this.xssfHelper.setCell(row, connection.getOwnerAccount());
-			this.xssfHelper.setCell(row, connection.getConnectionId());
-			this.xssfHelper.setCell(row, connection.getConnectionName());
-			this.xssfHelper.setCell(row, connection.getConnectionState());
-			this.xssfHelper.setCell(row, connection.getLocation());
-			this.xssfHelper.setCell(row, connection.getAwsDevice());
-			this.xssfHelper.setCell(row, connection.getVlan() == null ? "" : connection.getVlan().toString());
-			this.xssfHelper.setCell(row, connection.getBandwidth());
-			this.xssfHelper.setCell(row, connection.getPartnerName());
-			this.xssfHelper.setCell(row, connection.getLagId());
-			this.xssfHelper.setRightThinCell(row, connection.getLoaIssueTime().toString());
+			this.xssfHelper.setCell(row, connection.region());
+			this.xssfHelper.setCell(row, connection.ownerAccount());
+			this.xssfHelper.setCell(row, connection.connectionId());
+			this.xssfHelper.setCell(row, connection.connectionName());
+			this.xssfHelper.setCell(row, this.getEnumName(connection.connectionState()));
+			this.xssfHelper.setCell(row, connection.location());
+			this.xssfHelper.setCell(row, connection.awsDevice());
+			this.xssfHelper.setCell(row, connection.vlan() == null ? "" : connection.vlan().toString());
+			this.xssfHelper.setCell(row, connection.bandwidth());
+			this.xssfHelper.setCell(row, connection.partnerName());
+			this.xssfHelper.setCell(row, connection.lagId());
+			this.xssfHelper.setRightThinCell(row, connection.loaIssueTime().toString());
 		}
 		
 	}
 	
 	private void makeDirectLocation() {
 		XSSFRow row = null;
-		DescribeLocationsResult describeLocationsResult = this.amazonClients.AmazonDirectConnect.describeLocations();
-		List<Location> locations = describeLocationsResult.getLocations();
+		DescribeLocationsResponse describeLocationsResponse = this.amazonClients.directConnectClient.describeLocations();
+		List<Location> locations = describeLocationsResponse.locations();
 		for (Location location : locations) {
 			row = this.xssfHelper.createRow(this.directLocationSheet, 1);
 			this.xssfHelper.setLeftThinCell(row, Integer.toString(row.getRowNum() - 1));
-			this.xssfHelper.setCell(row, this.region.getName());
-			this.xssfHelper.setCell(row, location.getLocationCode());
-			this.xssfHelper.setRightThinCell(row, location.getLocationName());
+			this.xssfHelper.setCell(row, this.region.id());
+			this.xssfHelper.setCell(row, location.locationCode());
+			this.xssfHelper.setRightThinCell(row, location.locationName());
 		}
 		
 	}
 	
 	private void makeVirtualGateway() {
 		XSSFRow row = null;
-		DescribeVirtualGatewaysResult describeVirtualGatewaysResult = this.amazonClients.AmazonDirectConnect.describeVirtualGateways();
-		List<VirtualGateway> virtualGateways = describeVirtualGatewaysResult.getVirtualGateways();
+		DescribeVirtualGatewaysResponse describeVirtualGatewaysResponse = this.amazonClients.directConnectClient.describeVirtualGateways();
+		List<VirtualGateway> virtualGateways = describeVirtualGatewaysResponse.virtualGateways();
 		for (VirtualGateway virtualGateway : virtualGateways) {
 			row = this.xssfHelper.createRow(this.virtualGatewaySheet, 1);
 			this.xssfHelper.setLeftThinCell(row, Integer.toString(row.getRowNum() - 1));
-			this.xssfHelper.setCell(row, this.region.getName());
-			this.xssfHelper.setCell(row, virtualGateway.getVirtualGatewayId());
-			this.xssfHelper.setRightThinCell(row, virtualGateway.getVirtualGatewayState());
+			this.xssfHelper.setCell(row, this.region.id());
+			this.xssfHelper.setCell(row, virtualGateway.virtualGatewayId());
+			this.xssfHelper.setRightThinCell(row, virtualGateway.virtualGatewayState());
 		}
 		
 	}
 	
 	private void makeVirtualInterface() {
 		XSSFRow row = null;
-		DescribeVirtualInterfacesResult describeVirtualInterfacesResult = this.amazonClients.AmazonDirectConnect.describeVirtualInterfaces();
-		List<VirtualInterface> virtualInterfaces = describeVirtualInterfacesResult.getVirtualInterfaces();
+		DescribeVirtualInterfacesResponse describeVirtualInterfacesResponse = this.amazonClients.directConnectClient.describeVirtualInterfaces();
+		List<VirtualInterface> virtualInterfaces = describeVirtualInterfacesResponse.virtualInterfaces();
 		for (VirtualInterface virtualInterface : virtualInterfaces) {
 			row = this.xssfHelper.createRow(this.virtualInterfaceSheet, 1);
 			this.xssfHelper.setLeftThinCell(row, Integer.toString(row.getRowNum() - 1));
-			this.xssfHelper.setCell(row, this.region.getName());
-			this.xssfHelper.setCell(row, virtualInterface.getVirtualGatewayId());
-			this.xssfHelper.setCell(row, virtualInterface.getVirtualInterfaceId());
-			this.xssfHelper.setCell(row, virtualInterface.getVirtualInterfaceName());
-			this.xssfHelper.setCell(row, virtualInterface.getVirtualInterfaceState());
-			this.xssfHelper.setCell(row, virtualInterface.getVirtualInterfaceType());
-			this.xssfHelper.setCell(row, virtualInterface.getAsn().toString());
-			this.xssfHelper.setCell(row, virtualInterface.getAddressFamily());
-			this.xssfHelper.setCell(row, virtualInterface.getAmazonSideAsn().toString());
-			this.xssfHelper.setCell(row, virtualInterface.getAmazonAddress());
-			this.xssfHelper.setCell(row, virtualInterface.getAuthKey());
+			this.xssfHelper.setCell(row, this.region.id());
+			this.xssfHelper.setCell(row, virtualInterface.virtualGatewayId());
+			this.xssfHelper.setCell(row, virtualInterface.virtualInterfaceId());
+			this.xssfHelper.setCell(row, virtualInterface.virtualInterfaceName());
+			this.xssfHelper.setCell(row, this.getEnumName(virtualInterface.virtualInterfaceState()));
+			this.xssfHelper.setCell(row, virtualInterface.virtualInterfaceType());
+			this.xssfHelper.setCell(row, virtualInterface.asn().toString());
+			this.xssfHelper.setCell(row, this.getEnumName(virtualInterface.addressFamily()));
+			this.xssfHelper.setCell(row, virtualInterface.amazonSideAsn().toString());
+			this.xssfHelper.setCell(row, virtualInterface.amazonAddress());
+			this.xssfHelper.setCell(row, virtualInterface.authKey());
 			
 			StringBuffer bgps = new StringBuffer();
-			List<BGPPeer> bgpPeers = virtualInterface.getBgpPeers();
+			List<BGPPeer> bgpPeers = virtualInterface.bgpPeers();
 			for(BGPPeer bgpPeer : bgpPeers) {
 				if(bgps.length() > 0) bgps.append("\n\n");
 				bgps.append("ASN=");
-				bgps.append(bgpPeer.getAsn());
+				bgps.append(bgpPeer.asn());
 				bgps.append("\nAddress Family=");
-				bgps.append(bgpPeer.getAddressFamily());
+				bgps.append(this.getEnumName(bgpPeer.addressFamily()));
 				bgps.append("\nAmazon Address=");
-				bgps.append(bgpPeer.getAmazonAddress());
+				bgps.append(bgpPeer.amazonAddress());
 				bgps.append("\nCustomer Address=");
-				bgps.append(bgpPeer.getCustomerAddress());
+				bgps.append(bgpPeer.customerAddress());
 				bgps.append("\nAuth Key=");
-				bgps.append(bgpPeer.getAuthKey());
+				bgps.append(bgpPeer.authKey());
 				bgps.append("\nBGP Peer State=");
-				bgps.append(bgpPeer.getBgpPeerState());
+				bgps.append(this.getEnumName(bgpPeer.bgpPeerState()));
 				bgps.append("\nBGP Status=");
-				bgps.append(bgpPeer.getBgpStatus());
+				bgps.append(this.getEnumName(bgpPeer.bgpStatus()));
 			}
 			this.xssfHelper.setCell(row, bgps.toString());
-			this.xssfHelper.setCell(row, virtualInterface.getConnectionId());
-			this.xssfHelper.setCell(row, virtualInterface.getCustomerAddress());
-			this.xssfHelper.setCell(row, virtualInterface.getCustomerRouterConfig());
-			this.xssfHelper.setCell(row, virtualInterface.getDirectConnectGatewayId());
-			this.xssfHelper.setCell(row, virtualInterface.getLocation());
-			this.xssfHelper.setCell(row, virtualInterface.getOwnerAccount());
+			this.xssfHelper.setCell(row, virtualInterface.connectionId());
+			this.xssfHelper.setCell(row, virtualInterface.customerAddress());
+			this.xssfHelper.setCell(row, virtualInterface.customerRouterConfig());
+			this.xssfHelper.setCell(row, virtualInterface.directConnectGatewayId());
+			this.xssfHelper.setCell(row, virtualInterface.location());
+			this.xssfHelper.setCell(row, virtualInterface.ownerAccount());
 			
 			StringBuffer rfps = new StringBuffer();
-			List<RouteFilterPrefix> routeFilterPrefixs = virtualInterface.getRouteFilterPrefixes();
+			List<RouteFilterPrefix> routeFilterPrefixs = virtualInterface.routeFilterPrefixes();
 			for(RouteFilterPrefix routeFilterPrefix : routeFilterPrefixs) {
 				if(rfps.length() > 0) rfps.append("\n");
-				rfps.append(routeFilterPrefix.getCidr());
+				rfps.append(routeFilterPrefix.cidr());
 			}
 			this.xssfHelper.setCell(row, rfps.toString());
-			this.xssfHelper.setRightThinCell(row, virtualInterface.getVlan().toString());
+			this.xssfHelper.setRightThinCell(row, virtualInterface.vlan().toString());
 		}
 		
 	}
 	
 	private void makeLag() {
 		XSSFRow row = null;
-		DescribeLagsResult describeLagsResult = this.amazonClients.AmazonDirectConnect.describeLags(new DescribeLagsRequest());
-		List<Lag> lags = describeLagsResult.getLags();
+		DescribeLagsResponse describeLagsResponse = this.amazonClients.directConnectClient.describeLags(DescribeLagsRequest.builder().build());
+		List<Lag> lags = describeLagsResponse.lags();
 		for (Lag lag : lags) {
 			row = this.xssfHelper.createRow(this.lagSheet, 1);
 			this.xssfHelper.setLeftThinCell(row, Integer.toString(row.getRowNum() - 1));
-			this.xssfHelper.setCell(row, lag.getRegion());
-			this.xssfHelper.setCell(row, lag.getAllowsHostedConnections().toString());
-			this.xssfHelper.setCell(row, lag.getAwsDevice());
+			this.xssfHelper.setCell(row, lag.region());
+			this.xssfHelper.setCell(row, lag.allowsHostedConnections().toString());
+			this.xssfHelper.setCell(row, lag.awsDevice());
 			
 			StringBuffer cons = new StringBuffer();
-			List<Connection> connections = lag.getConnections();
+			List<Connection> connections = lag.connections();
 			for(Connection connection : connections) {
 				if(cons.length() > 0) cons.append("\n");
-				cons.append(connection.getConnectionId());
+				cons.append(connection.connectionId());
 				cons.append("|");
-				cons.append(connection.getConnectionName());
+				cons.append(connection.connectionName());
 				cons.append(" (");
-				cons.append(connection.getConnectionState());
+				cons.append(connection.connectionState());
 				cons.append(")");
 			}
 			this.xssfHelper.setCell(row, cons.toString());
-			this.xssfHelper.setCell(row, lag.getConnectionsBandwidth());
-			this.xssfHelper.setCell(row, lag.getLagId());
-			this.xssfHelper.setCell(row, lag.getLagName());
-			this.xssfHelper.setCell(row, lag.getLagState());
-			this.xssfHelper.setCell(row, lag.getMinimumLinks().toString());
-			this.xssfHelper.setCell(row, lag.getNumberOfConnections().toString());
-			this.xssfHelper.setRightThinCell(row, lag.getOwnerAccount());			
+			this.xssfHelper.setCell(row, lag.connectionsBandwidth());
+			this.xssfHelper.setCell(row, lag.lagId());
+			this.xssfHelper.setCell(row, lag.lagName());
+			this.xssfHelper.setCell(row, this.getEnumName(lag.lagState()));
+			this.xssfHelper.setCell(row, lag.minimumLinks().toString());
+			this.xssfHelper.setCell(row, lag.numberOfConnections().toString());
+			this.xssfHelper.setRightThinCell(row, lag.ownerAccount());			
 		}
 		
 	}
 	
 	private void makeDirectConnectGateway() {
 		XSSFRow row = null;
-		DescribeDirectConnectGatewaysResult describeDirectConnectGatewaysResult = this.amazonClients.AmazonDirectConnect.describeDirectConnectGateways(new DescribeDirectConnectGatewaysRequest());
-		List<DirectConnectGateway> directConnectGateways = describeDirectConnectGatewaysResult.getDirectConnectGateways();
+		DescribeDirectConnectGatewaysResponse describeDirectConnectGatewaysResponse = this.amazonClients.directConnectClient.describeDirectConnectGateways(DescribeDirectConnectGatewaysRequest.builder().build());
+		List<DirectConnectGateway> directConnectGateways = describeDirectConnectGatewaysResponse.directConnectGateways();
 		for (DirectConnectGateway directConnectGateway : directConnectGateways) {
 			row = this.xssfHelper.createRow(this.directConnectGatewaySheet, 1);
 			this.xssfHelper.setLeftThinCell(row, Integer.toString(row.getRowNum() - 1));
-			this.xssfHelper.setCell(row, this.region.getName());
-			this.xssfHelper.setCell(row, directConnectGateway.getDirectConnectGatewayId());
-			this.xssfHelper.setCell(row, directConnectGateway.getDirectConnectGatewayName());
-			this.xssfHelper.setCell(row, directConnectGateway.getAmazonSideAsn().toString());
-			this.xssfHelper.setCell(row, directConnectGateway.getDirectConnectGatewayState());
-			this.xssfHelper.setCell(row, directConnectGateway.getOwnerAccount());
-			this.xssfHelper.setRightThinCell(row, directConnectGateway.getStateChangeError());
+			this.xssfHelper.setCell(row, this.region.id());
+			this.xssfHelper.setCell(row, directConnectGateway.directConnectGatewayId());
+			this.xssfHelper.setCell(row, directConnectGateway.directConnectGatewayName());
+			this.xssfHelper.setCell(row, directConnectGateway.amazonSideAsn().toString());
+			this.xssfHelper.setCell(row, this.getEnumName(directConnectGateway.directConnectGatewayState()));
+			this.xssfHelper.setCell(row, directConnectGateway.ownerAccount());
+			this.xssfHelper.setRightThinCell(row, directConnectGateway.stateChangeError());
 		}
-		
-		
 	}
 	
 	private void makeEgressInternetGateway() {
 		XSSFRow row = null;
 		
-		DescribeEgressOnlyInternetGatewaysResult describeEgressOnlyInternetGatewaysResult = this.amazonClients.AmazonEC2.describeEgressOnlyInternetGateways(new DescribeEgressOnlyInternetGatewaysRequest());
-		List<EgressOnlyInternetGateway> egressOnlyInternetGateways = describeEgressOnlyInternetGatewaysResult.getEgressOnlyInternetGateways();
+		DescribeEgressOnlyInternetGatewaysResponse describeEgressOnlyInternetGatewaysResponse = this.amazonClients.ec2Client.describeEgressOnlyInternetGateways(DescribeEgressOnlyInternetGatewaysRequest.builder().build());
+		List<EgressOnlyInternetGateway> egressOnlyInternetGateways = describeEgressOnlyInternetGatewaysResponse.egressOnlyInternetGateways();
 		for (EgressOnlyInternetGateway egressOnlyInternetGateway : egressOnlyInternetGateways) {
 
 			row = this.xssfHelper.createRow(this.egressInternetGatewaySheet, 1);
 			this.xssfHelper.setLeftThinCell(row, Integer.toString(row.getRowNum() - 1));
-			this.xssfHelper.setCell(row, this.region.getName());
-			this.xssfHelper.setCell(row, egressOnlyInternetGateway.getEgressOnlyInternetGatewayId());
+			this.xssfHelper.setCell(row, this.region.id());
+			this.xssfHelper.setCell(row, egressOnlyInternetGateway.egressOnlyInternetGatewayId());
 			
 			StringBuffer iga = new StringBuffer();
-			List<InternetGatewayAttachment> internetGatewayAttachments = egressOnlyInternetGateway.getAttachments();
+			List<InternetGatewayAttachment> internetGatewayAttachments = egressOnlyInternetGateway.attachments();
 			for(InternetGatewayAttachment internetGatewayAttachment : internetGatewayAttachments) {
 				if(iga.length() > 0) iga.append("\n");
-				iga.append(internetGatewayAttachment.getVpcId());
+				iga.append(internetGatewayAttachment.vpcId());
 				iga.append("(");
-				iga.append(internetGatewayAttachment.getState());
+				iga.append(internetGatewayAttachment.state());
 				iga.append(")");
 			}
 			this.xssfHelper.setRightThinCell(row, iga.toString());
@@ -796,42 +807,42 @@ public class AWSExporter
 	private void makeNATGateway() {
 		XSSFRow row = null;
 		
-		DescribeNatGatewaysResult describeNatGatewaysResult = this.amazonClients.AmazonEC2.describeNatGateways(new DescribeNatGatewaysRequest());
-		List<NatGateway> natGateways = describeNatGatewaysResult.getNatGateways();
+		DescribeNatGatewaysResponse describeNatGatewaysResponse = this.amazonClients.ec2Client.describeNatGateways(DescribeNatGatewaysRequest.builder().build());
+		List<NatGateway> natGateways = describeNatGatewaysResponse.natGateways();
 		for(NatGateway natGateway : natGateways) {
 			row = this.xssfHelper.createRow(this.natGatewaySheet, 1);
 			this.xssfHelper.setLeftThinCell(row, Integer.toString(row.getRowNum() - 1));
-			this.xssfHelper.setCell(row, this.region.getName());
-			this.xssfHelper.setCell(row, natGateway.getNatGatewayId());
+			this.xssfHelper.setCell(row, this.region.id());
+			this.xssfHelper.setCell(row, natGateway.natGatewayId());
 			
 			StringBuffer ngas = new StringBuffer();
-			List<NatGatewayAddress> natGatewayAddresses = natGateway.getNatGatewayAddresses();
+			List<NatGatewayAddress> natGatewayAddresses = natGateway.natGatewayAddresses();
 			for(NatGatewayAddress natGatewayAddress : natGatewayAddresses) {
 				if(ngas.length() > 0) ngas.append("\n\n");
 				ngas.append("\nNetworkInterfaceId=");
-				ngas.append(natGatewayAddress.getNetworkInterfaceId());
+				ngas.append(natGatewayAddress.networkInterfaceId());
 				ngas.append("\nPrivate Ip=");
-				ngas.append(natGatewayAddress.getPrivateIp());
+				ngas.append(natGatewayAddress.privateIp());
 				ngas.append("\nPublic Ip=");
-				ngas.append(natGatewayAddress.getPublicIp());
+				ngas.append(natGatewayAddress.publicIp());
 				ngas.append("\nAllocation Id=");
-				ngas.append(natGatewayAddress.getAllocationId());
+				ngas.append(natGatewayAddress.allocationId());
 			}
 			this.xssfHelper.setCell(row, ngas.toString());
-			this.xssfHelper.setCell(row, natGateway.getVpcId());
-			this.xssfHelper.setCell(row, natGateway.getSubnetId());
-			this.xssfHelper.setCell(row, natGateway.getFailureCode());
-			this.xssfHelper.setCell(row, natGateway.getFailureMessage());
-			ProvisionedBandwidth provisionedBandwidth = natGateway.getProvisionedBandwidth();
-			this.xssfHelper.setCell(row, provisionedBandwidth == null ? "" : provisionedBandwidth.getProvisioned());
-			this.xssfHelper.setCell(row, provisionedBandwidth == null ? "" : provisionedBandwidth.getProvisionTime().toString());
-			this.xssfHelper.setCell(row, provisionedBandwidth == null ? "" : provisionedBandwidth.getRequested());
-			this.xssfHelper.setCell(row, provisionedBandwidth == null ? "" : provisionedBandwidth.getRequestTime().toString());
-			this.xssfHelper.setCell(row, provisionedBandwidth == null ? "" : provisionedBandwidth.getStatus());
-			this.xssfHelper.setCell(row, natGateway.getState());
-			this.xssfHelper.setCell(row, natGateway.getCreateTime().toString());
-			this.xssfHelper.setCell(row, natGateway.getDeleteTime() == null ? "" : natGateway.getDeleteTime().toString());
-			this.xssfHelper.setRightThinCell(row, this.getAllTagValue(natGateway.getTags()));
+			this.xssfHelper.setCell(row, natGateway.vpcId());
+			this.xssfHelper.setCell(row, natGateway.subnetId());
+			this.xssfHelper.setCell(row, natGateway.failureCode());
+			this.xssfHelper.setCell(row, natGateway.failureMessage());
+			ProvisionedBandwidth provisionedBandwidth = natGateway.provisionedBandwidth();
+			this.xssfHelper.setCell(row, provisionedBandwidth == null ? "" : provisionedBandwidth.provisioned());
+			this.xssfHelper.setCell(row, provisionedBandwidth == null ? "" : provisionedBandwidth.provisionTime().toString());
+			this.xssfHelper.setCell(row, provisionedBandwidth == null ? "" : provisionedBandwidth.requested());
+			this.xssfHelper.setCell(row, provisionedBandwidth == null ? "" : provisionedBandwidth.requestTime().toString());
+			this.xssfHelper.setCell(row, provisionedBandwidth == null ? "" : provisionedBandwidth.status());
+			this.xssfHelper.setCell(row, this.getEnumName(natGateway.state()));
+			this.xssfHelper.setCell(row, natGateway.createTime().toString());
+			this.xssfHelper.setCell(row, natGateway.deleteTime() == null ? "" : natGateway.deleteTime().toString());
+			this.xssfHelper.setRightThinCell(row, this.getAllTagValue(natGateway.tags()));
 		}
 		
 	}
@@ -839,18 +850,18 @@ public class AWSExporter
 	private void makeCustomerGateway() {
 		XSSFRow row = null;
 		
-		DescribeCustomerGatewaysResult describeCustomerGatewaysResult = this.amazonClients.AmazonEC2.describeCustomerGateways();
-		List<CustomerGateway> customerGateways = describeCustomerGatewaysResult.getCustomerGateways();
+		DescribeCustomerGatewaysResponse describeCustomerGatewaysResponse = this.amazonClients.ec2Client.describeCustomerGateways();
+		List<CustomerGateway> customerGateways = describeCustomerGatewaysResponse.customerGateways();
 		for(CustomerGateway customerGateway : customerGateways) {
 			row = this.xssfHelper.createRow(this.customerGatewaySheet, 1);
 			this.xssfHelper.setLeftThinCell(row, Integer.toString(row.getRowNum() - 1));
-			this.xssfHelper.setCell(row, this.region.getName());
-			this.xssfHelper.setCell(row, customerGateway.getCustomerGatewayId());
-			this.xssfHelper.setCell(row, customerGateway.getType());
-			this.xssfHelper.setCell(row, customerGateway.getIpAddress());
-			this.xssfHelper.setCell(row, customerGateway.getBgpAsn());
-			this.xssfHelper.setCell(row, customerGateway.getState());
-			this.xssfHelper.setRightThinCell(row, this.getAllTagValue(customerGateway.getTags()));
+			this.xssfHelper.setCell(row, this.region.id());
+			this.xssfHelper.setCell(row, customerGateway.customerGatewayId());
+			this.xssfHelper.setCell(row, customerGateway.type());
+			this.xssfHelper.setCell(row, customerGateway.ipAddress());
+			this.xssfHelper.setCell(row, customerGateway.bgpAsn());
+			this.xssfHelper.setCell(row, customerGateway.state());
+			this.xssfHelper.setRightThinCell(row, this.getAllTagValue(customerGateway.tags()));
 		}
 		
 	}
@@ -858,29 +869,29 @@ public class AWSExporter
 	private void makeVPNGateway() {
 		XSSFRow row = null;
 		
-		DescribeVpnGatewaysResult describeVpnGatewaysResult = this.amazonClients.AmazonEC2.describeVpnGateways();
-		List<VpnGateway> vpnGateways = describeVpnGatewaysResult.getVpnGateways();
+		DescribeVpnGatewaysResponse describeVpnGatewaysResponse = this.amazonClients.ec2Client.describeVpnGateways();
+		List<VpnGateway> vpnGateways = describeVpnGatewaysResponse.vpnGateways();
 		for(VpnGateway vpnGateway : vpnGateways) {
 			row = this.xssfHelper.createRow(this.vpnGatewaySheet, 1);
 			this.xssfHelper.setLeftThinCell(row, Integer.toString(row.getRowNum() - 1));
-			this.xssfHelper.setCell(row, this.region.getName());
-			this.xssfHelper.setCell(row, vpnGateway.getVpnGatewayId());
-			this.xssfHelper.setCell(row, vpnGateway.getAvailabilityZone());
-			this.xssfHelper.setCell(row, vpnGateway.getType());
-			this.xssfHelper.setCell(row, vpnGateway.getAmazonSideAsn().toString());
-			this.xssfHelper.setCell(row, vpnGateway.getState());
+			this.xssfHelper.setCell(row, this.region.id());
+			this.xssfHelper.setCell(row, vpnGateway.vpnGatewayId());
+			this.xssfHelper.setCell(row, vpnGateway.availabilityZone());
+			this.xssfHelper.setCell(row, this.getEnumName(vpnGateway.type()));
+			this.xssfHelper.setCell(row, vpnGateway.amazonSideAsn().toString());
+			this.xssfHelper.setCell(row, this.getEnumName(vpnGateway.state()));
 			
 			StringBuffer vas = new StringBuffer();
-			List<VpcAttachment> vpcAttachments = vpnGateway.getVpcAttachments();
+			List<VpcAttachment> vpcAttachments = vpnGateway.vpcAttachments();
 			for(VpcAttachment vpcAttachment : vpcAttachments) {
 				if(vas.length() > 0) vas.append("\n");
-				vas.append(vpcAttachment.getVpcId());
+				vas.append(vpcAttachment.vpcId());
 				vas.append(" (");
-				vas.append(vpcAttachment.getState());
+				vas.append(vpcAttachment.state());
 				vas.append(")");
 			}
 			this.xssfHelper.setCell(row, vas.toString());
-			this.xssfHelper.setRightThinCell(row, this.getAllTagValue(vpnGateway.getTags()));
+			this.xssfHelper.setRightThinCell(row, this.getAllTagValue(vpnGateway.tags()));
 		}
 		
 	}
@@ -888,51 +899,51 @@ public class AWSExporter
 	private void makeVPNConnection() {
 		XSSFRow row = null;
 		
-		DescribeVpnConnectionsResult describeVpnConnectionsResult = this.amazonClients.AmazonEC2.describeVpnConnections();
-		List<VpnConnection> vpnConnections = describeVpnConnectionsResult.getVpnConnections();
+		DescribeVpnConnectionsResponse describeVpnConnectionsResponse = this.amazonClients.ec2Client.describeVpnConnections();
+		List<VpnConnection> vpnConnections = describeVpnConnectionsResponse.vpnConnections();
 		for(VpnConnection vpnConnection : vpnConnections) {
 			row = this.xssfHelper.createRow(this.vpnConnectionSheet, 1);
 			this.xssfHelper.setLeftThinCell(row, Integer.toString(row.getRowNum() - 1));
-			this.xssfHelper.setCell(row, this.region.getName());
-			this.xssfHelper.setCell(row, vpnConnection.getVpnConnectionId());
-			this.xssfHelper.setCell(row, vpnConnection.getVpnGatewayId());
-			this.xssfHelper.setCell(row, vpnConnection.getCustomerGatewayId());
-			this.xssfHelper.setCell(row, vpnConnection.getCustomerGatewayConfiguration());
+			this.xssfHelper.setCell(row, this.region.id());
+			this.xssfHelper.setCell(row, vpnConnection.vpnConnectionId());
+			this.xssfHelper.setCell(row, vpnConnection.vpnGatewayId());
+			this.xssfHelper.setCell(row, vpnConnection.customerGatewayId());
+			this.xssfHelper.setCell(row, vpnConnection.customerGatewayConfiguration());
 			
 			StringBuffer vgts = new StringBuffer();
-			List<VgwTelemetry> vgwTelemetries = vpnConnection.getVgwTelemetry();
+			List<VgwTelemetry> vgwTelemetries = vpnConnection.vgwTelemetry();
 			for(VgwTelemetry vgwTelemetry : vgwTelemetries) {
 				if(vgts.length() > 0) vgts.append("\n\n");
 				vgts.append("\nOutside IpAddress=");
-				vgts.append(vgwTelemetry.getOutsideIpAddress());
+				vgts.append(vgwTelemetry.outsideIpAddress());
 				vgts.append("\nAccepted Route Count=");
-				vgts.append(vgwTelemetry.getAcceptedRouteCount());
+				vgts.append(vgwTelemetry.acceptedRouteCount());
 				vgts.append("\nLast Status Change=");
-				vgts.append(vgwTelemetry.getLastStatusChange().toString());
+				vgts.append(vgwTelemetry.lastStatusChange().toString());
 				vgts.append("\nStatus=");
-				vgts.append(vgwTelemetry.getStatus());
+				vgts.append(this.getEnumName(vgwTelemetry.status()));
 				vgts.append("\nStatus Message=");
-				vgts.append(vgwTelemetry.getStatusMessage());
+				vgts.append(vgwTelemetry.statusMessage());
 			}
 			this.xssfHelper.setCell(row, vgts.toString());
-			this.xssfHelper.setCell(row, vpnConnection.getType());
-			this.xssfHelper.setCell(row, vpnConnection.getCategory());
-			this.xssfHelper.setCell(row, vpnConnection.getOptions().getStaticRoutesOnly().toString());
+			this.xssfHelper.setCell(row, this.getEnumName(vpnConnection.type()));
+			this.xssfHelper.setCell(row, vpnConnection.category());
+			this.xssfHelper.setCell(row, vpnConnection.options().staticRoutesOnly().toString());
 			
 			StringBuffer vsrs = new StringBuffer();
-			List<VpnStaticRoute> vpnStaticRoutes = vpnConnection.getRoutes();
+			List<VpnStaticRoute> vpnStaticRoutes = vpnConnection.routes();
 			for(VpnStaticRoute vpnStaticRoute : vpnStaticRoutes) {
 				if(vsrs.length() > 0) vsrs.append("\n\n");
 				vsrs.append("\nSource=");
-				vsrs.append(vpnStaticRoute.getSource());
+				vsrs.append(vpnStaticRoute.source());
 				vsrs.append("\nDestination=");
-				vsrs.append(vpnStaticRoute.getDestinationCidrBlock());
+				vsrs.append(vpnStaticRoute.destinationCidrBlock());
 				vsrs.append("\nState=");
-				vsrs.append(vpnStaticRoute.getState());
+				vsrs.append(this.getEnumName(vpnStaticRoute.state()));
 			}
 			this.xssfHelper.setCell(row, vsrs.toString());
-			this.xssfHelper.setCell(row, vpnConnection.getState());
-			this.xssfHelper.setRightThinCell(row, this.getAllTagValue(vpnConnection.getTags()));
+			this.xssfHelper.setCell(row, this.getEnumName(vpnConnection.state()));
+			this.xssfHelper.setRightThinCell(row, this.getAllTagValue(vpnConnection.tags()));
 		}
 		
 	}
@@ -942,117 +953,121 @@ public class AWSExporter
 	
 		XSSFRow row = null;
 		
-		DescribeVpcPeeringConnectionsResult describeVpcPeeringConnectionsResult = this.amazonClients.AmazonEC2.describeVpcPeeringConnections();
-		List<VpcPeeringConnection> vpcPeeringConnections = describeVpcPeeringConnectionsResult.getVpcPeeringConnections();
+		DescribeVpcPeeringConnectionsResponse describeVpcPeeringConnectionsResponse = this.amazonClients.ec2Client.describeVpcPeeringConnections();
+		List<VpcPeeringConnection> vpcPeeringConnections = describeVpcPeeringConnectionsResponse.vpcPeeringConnections();
 		for (VpcPeeringConnection vpcPeeringConnection : vpcPeeringConnections) {
 			
 			row = this.xssfHelper.createRow(this.vpcPeeringSheet, 1);
 			this.xssfHelper.setLeftThinCell(row, Integer.toString(row.getRowNum() - 1));
-			this.xssfHelper.setCell(row, this.region.getName());
+			this.xssfHelper.setCell(row, this.region.id());
 			
-			this.xssfHelper.setCell(row, vpcPeeringConnection.getVpcPeeringConnectionId());
-			this.getVpcPeeringVPCInfo(row, vpcPeeringConnection.getRequesterVpcInfo());						
-			this.getVpcPeeringVPCInfo(row, vpcPeeringConnection.getAccepterVpcInfo());
-			this.xssfHelper.setCell(row, vpcPeeringConnection.getExpirationTime() == null ? "" : vpcPeeringConnection.getExpirationTime().toString());
-			VpcPeeringConnectionStateReason vpcPeeringConnectionStateReason = vpcPeeringConnection.getStatus();
-			this.xssfHelper.setCell(row, vpcPeeringConnectionStateReason == null ? "" : vpcPeeringConnectionStateReason.getCode());
-			this.xssfHelper.setCell(row, vpcPeeringConnectionStateReason == null ? "" : vpcPeeringConnectionStateReason.getMessage());
-			this.xssfHelper.setCell(row, this.getAllTagValue(vpcPeeringConnection.getTags()));
+			this.xssfHelper.setCell(row, vpcPeeringConnection.vpcPeeringConnectionId());
+			this.getVpcPeeringVPCInfo(row, vpcPeeringConnection.requesterVpcInfo());						
+			this.getVpcPeeringVPCInfo(row, vpcPeeringConnection.accepterVpcInfo());
+			this.xssfHelper.setCell(row, vpcPeeringConnection.expirationTime() == null ? "" : vpcPeeringConnection.expirationTime().toString());
+			VpcPeeringConnectionStateReason vpcPeeringConnectionStateReason = vpcPeeringConnection.status();
+			this.xssfHelper.setCell(row, vpcPeeringConnectionStateReason == null ? "" : this.getEnumName(vpcPeeringConnectionStateReason.code()));
+			this.xssfHelper.setCell(row, vpcPeeringConnectionStateReason == null ? "" : vpcPeeringConnectionStateReason.message());
+			this.xssfHelper.setCell(row, this.getAllTagValue(vpcPeeringConnection.tags()));
 		}
 	}
 	
 	private void getVpcPeeringVPCInfo(XSSFRow row, VpcPeeringConnectionVpcInfo vpcPeeringConnectionVpcInfo) {
-		this.xssfHelper.setCell(row, vpcPeeringConnectionVpcInfo.getVpcId());
-		this.xssfHelper.setCell(row, vpcPeeringConnectionVpcInfo.getRegion());
-		this.xssfHelper.setCell(row, vpcPeeringConnectionVpcInfo.getCidrBlock());
+		this.xssfHelper.setCell(row, vpcPeeringConnectionVpcInfo.vpcId());
+		this.xssfHelper.setCell(row, vpcPeeringConnectionVpcInfo.region());
+		this.xssfHelper.setCell(row, vpcPeeringConnectionVpcInfo.cidrBlock());
 		
 		StringBuffer cidrs = new StringBuffer();
-		List<CidrBlock> cidrBlocks = vpcPeeringConnectionVpcInfo.getCidrBlockSet();
+		List<CidrBlock> cidrBlocks = vpcPeeringConnectionVpcInfo.cidrBlockSet();
 		for(CidrBlock cidrBlock : cidrBlocks) {
 			if(cidrs.length() > 0) cidrs.append("\n");
-			cidrs.append(cidrBlock.getCidrBlock());
+			cidrs.append(cidrBlock.cidrBlock());
 		}
 		this.xssfHelper.setCell(row, cidrs.toString());
 		
 		StringBuffer ipv6s = new StringBuffer();
-		List<Ipv6CidrBlock> ipv6CidrBlocks = vpcPeeringConnectionVpcInfo.getIpv6CidrBlockSet();
+		List<Ipv6CidrBlock> ipv6CidrBlocks = vpcPeeringConnectionVpcInfo.ipv6CidrBlockSet();
 		for(Ipv6CidrBlock ipv6CidrBlock : ipv6CidrBlocks) {
 			if(ipv6s.length() > 0) ipv6s.append("\n");
-			ipv6s.append(ipv6CidrBlock.getIpv6CidrBlock());
+			ipv6s.append(ipv6CidrBlock.ipv6CidrBlock());
 		}
 		this.xssfHelper.setCell(row, ipv6s.toString());
-		this.xssfHelper.setCell(row, vpcPeeringConnectionVpcInfo.getOwnerId());
-		VpcPeeringConnectionOptionsDescription vpcPeeringConnectionOptionsDescription = vpcPeeringConnectionVpcInfo.getPeeringOptions();
-		this.xssfHelper.setCell(row, vpcPeeringConnectionOptionsDescription == null ? "" : vpcPeeringConnectionOptionsDescription.getAllowDnsResolutionFromRemoteVpc() == null ? "" : vpcPeeringConnectionOptionsDescription.getAllowDnsResolutionFromRemoteVpc().toString());
-		this.xssfHelper.setCell(row, vpcPeeringConnectionOptionsDescription == null ? "" : vpcPeeringConnectionOptionsDescription.getAllowEgressFromLocalClassicLinkToRemoteVpc() == null ? "" : vpcPeeringConnectionOptionsDescription.getAllowEgressFromLocalClassicLinkToRemoteVpc().toString());
-		this.xssfHelper.setRightThinCell(row, vpcPeeringConnectionOptionsDescription == null ? "" : vpcPeeringConnectionOptionsDescription.getAllowEgressFromLocalVpcToRemoteClassicLink() == null ? "" : vpcPeeringConnectionOptionsDescription.getAllowEgressFromLocalVpcToRemoteClassicLink().toString());
+		this.xssfHelper.setCell(row, vpcPeeringConnectionVpcInfo.ownerId());
+		VpcPeeringConnectionOptionsDescription vpcPeeringConnectionOptionsDescription = vpcPeeringConnectionVpcInfo.peeringOptions();
+		this.xssfHelper.setCell(row, vpcPeeringConnectionOptionsDescription == null ? "" : vpcPeeringConnectionOptionsDescription.allowDnsResolutionFromRemoteVpc() == null ? "" : vpcPeeringConnectionOptionsDescription.allowDnsResolutionFromRemoteVpc().toString());
+		this.xssfHelper.setCell(row, vpcPeeringConnectionOptionsDescription == null ? "" : vpcPeeringConnectionOptionsDescription.allowEgressFromLocalClassicLinkToRemoteVpc() == null ? "" : vpcPeeringConnectionOptionsDescription.allowEgressFromLocalClassicLinkToRemoteVpc().toString());
+		this.xssfHelper.setRightThinCell(row, vpcPeeringConnectionOptionsDescription == null ? "" : vpcPeeringConnectionOptionsDescription.allowEgressFromLocalVpcToRemoteClassicLink() == null ? "" : vpcPeeringConnectionOptionsDescription.allowEgressFromLocalVpcToRemoteClassicLink().toString());
 	}
 	
 	private void makeVPC(HashMap<String, String> vpcMainRouteTables) {
 	    XSSFRow row = null;
-	    List<Vpc> vpcs = this.amazonClients.AmazonEC2.describeVpcs().getVpcs();
+	    List<Vpc> vpcs = this.amazonClients.ec2Client.describeVpcs().vpcs();
 	    for (int i = 0; i < vpcs.size(); i++)
 	    {
-			Vpc vpc = (Vpc)vpcs.get(i);
+			Vpc vpc = vpcs.get(i);
 			  
 			row = this.xssfHelper.createRow(this.vpcSheet, 1);
 			this.xssfHelper.setLeftThinCell(row, Integer.toString(i + 1));
-			this.xssfHelper.setCell(row, this.region.getName());
+			this.xssfHelper.setCell(row, this.region.id());
 			  
 			  
-			this.xssfHelper.setCell(row, getNameTagValue(vpc.getTags()));
-			this.xssfHelper.setCell(row, vpc.getVpcId());
-			this.xssfHelper.setCell(row, vpc.getCidrBlock());
-			this.xssfHelper.setCell(row, vpc.getDhcpOptionsId());
-			this.xssfHelper.setCell(row, vpc.getInstanceTenancy());
+			this.xssfHelper.setCell(row, getNameTagValue(vpc.tags()));
+			this.xssfHelper.setCell(row, vpc.vpcId());
+			this.xssfHelper.setCell(row, vpc.cidrBlock());
+			this.xssfHelper.setCell(row, vpc.dhcpOptionsId());
+			this.xssfHelper.setCell(row, this.getEnumName(vpc.instanceTenancy()));
 			
 			if (vpcMainRouteTables != null) {
-			    this.xssfHelper.setCell(row, (String)vpcMainRouteTables.get(vpc.getVpcId()));
+			    this.xssfHelper.setCell(row, vpcMainRouteTables.get(vpc.vpcId()));
 			} else {
 			    this.xssfHelper.setCell(row, "");
 			}
 			
-			List<String> vpcList = new ArrayList<String>();
-			vpcList.add(vpc.getVpcId());
-			NetworkAcl networkAcl = (NetworkAcl)this.amazonClients.AmazonEC2.describeNetworkAcls(new DescribeNetworkAclsRequest().withFilters(new Filter[] { new Filter("vpc-id", vpcList) })).getNetworkAcls().get(0);
-			this.xssfHelper.setCell(row, networkAcl.getNetworkAclId() + " | " + getNameTagValue(networkAcl.getTags()));
+			DescribeNetworkAclsResponse describeNetworkAclsResponse = this.amazonClients.ec2Client.describeNetworkAcls(
+																				DescribeNetworkAclsRequest.builder().filters(
+																							Filter.builder().name("vpc-id").values(vpc.vpcId()).build()
+																							, Filter.builder().name("default").values("true").build()
+																				).build()
+																	  );
+			NetworkAcl networkAcl = describeNetworkAclsResponse.networkAcls().get(0);
+			this.xssfHelper.setCell(row, networkAcl.networkAclId() + " | " + getNameTagValue(networkAcl.tags()));
 			
-			this.xssfHelper.setCell(row, Boolean.toString(vpc.getIsDefault()));
-			this.xssfHelper.setCell(row, vpc.getState());
+			this.xssfHelper.setCell(row, Boolean.toString(vpc.isDefault()));
+			this.xssfHelper.setCell(row, this.getEnumName(vpc.state()));
 			 
 			StringBuffer vpcCidr = new StringBuffer();
-			List<VpcCidrBlockAssociation> vpcCidrBlockAssociations = vpc.getCidrBlockAssociationSet();
+			List<VpcCidrBlockAssociation> vpcCidrBlockAssociations = vpc.cidrBlockAssociationSet();
 			for(VpcCidrBlockAssociation vpcCidrBlockAssociation : vpcCidrBlockAssociations) {
-				  vpcCidr.append("AssociationId : " + vpcCidrBlockAssociation.getAssociationId());
+				  vpcCidr.append("AssociationId : " + vpcCidrBlockAssociation.associationId());
 				  vpcCidr.append("\n");
-				  vpcCidr.append("CIDR Block : " + vpcCidrBlockAssociation.getCidrBlock());
-				  VpcCidrBlockState vpcCidrBlockState = vpcCidrBlockAssociation.getCidrBlockState();
+				  vpcCidr.append("CIDR Block : " + vpcCidrBlockAssociation.cidrBlock());
+				  VpcCidrBlockState vpcCidrBlockState = vpcCidrBlockAssociation.cidrBlockState();
 				  if(vpcCidrBlockState != null) {
 					  vpcCidr.append("\n");
-					  vpcCidr.append("State : " + vpcCidrBlockState.getState());
+					  vpcCidr.append("State : " + vpcCidrBlockState.state());
 					  vpcCidr.append("\n");
-					  vpcCidr.append("Status Message : " + vpcCidrBlockState.getStatusMessage());
+					  vpcCidr.append("Status Message : " + vpcCidrBlockState.statusMessage());
 				  }
 			}
 			this.xssfHelper.setCell(row, vpcCidr.toString());
 			  
 			StringBuffer vpcIpv6Cidr = new StringBuffer();
-			List<VpcIpv6CidrBlockAssociation> vpcIpv6CidrBlockAssociations = vpc.getIpv6CidrBlockAssociationSet();
+			List<VpcIpv6CidrBlockAssociation> vpcIpv6CidrBlockAssociations = vpc.ipv6CidrBlockAssociationSet();
 			for(VpcIpv6CidrBlockAssociation vpcIpv6CidrBlockAssociation : vpcIpv6CidrBlockAssociations) {
-				vpcIpv6Cidr.append("AssociationId : " + vpcIpv6CidrBlockAssociation.getAssociationId());
+				vpcIpv6Cidr.append("AssociationId : " + vpcIpv6CidrBlockAssociation.associationId());
 				vpcIpv6Cidr.append("\n");
-				vpcIpv6Cidr.append("CIDR Block : " + vpcIpv6CidrBlockAssociation.getIpv6CidrBlock());
-				VpcCidrBlockState vpcCidrBlockState = vpcIpv6CidrBlockAssociation.getIpv6CidrBlockState();
+				vpcIpv6Cidr.append("CIDR Block : " + vpcIpv6CidrBlockAssociation.ipv6CidrBlock());
+				VpcCidrBlockState vpcCidrBlockState = vpcIpv6CidrBlockAssociation.ipv6CidrBlockState();
 				if(vpcCidrBlockState != null) {
 					vpcIpv6Cidr.append("\n");
-					vpcIpv6Cidr.append("State : " + vpcCidrBlockState.getState());
+					vpcIpv6Cidr.append("State : " + this.getEnumName(vpcCidrBlockState.state()));
 					vpcIpv6Cidr.append("\n");
-					vpcIpv6Cidr.append("Status Message : " + vpcCidrBlockState.getStatusMessage());
+					vpcIpv6Cidr.append("Status Message : " + vpcCidrBlockState.statusMessage());
 				}
 			}
 			this.xssfHelper.setCell(row, vpcIpv6Cidr.toString());
 			  
-			this.xssfHelper.setRightThinCell(row, this.getAllTagValue(vpc.getTags()));
+			this.xssfHelper.setRightThinCell(row, this.getAllTagValue(vpc.tags()));
 	      
 	    }
 	}
@@ -1673,19 +1688,19 @@ public class AWSExporter
 		
 		XSSFRow row = null;
 		
-		List<Bucket> buckets = this.amazonClients.AmazonS3.listBuckets();
+		List<Bucket> buckets = this.amazonClients.s3Client.listBuckets().buckets();
 		for (Bucket bucket : buckets) {
 			
 			row = this.xssfHelper.createRow(this.s3Sheet, 1);			
 			this.xssfHelper.setLeftThinCell(row, Integer.toString(row.getRowNum() - 1));
-			this.xssfHelper.setCell(row, bucket.getOwner().getDisplayName() + "(" + bucket.getOwner().getId() + ")");
-			this.xssfHelper.setCell(row, bucket.getName());
-			this.xssfHelper.setCell(row, bucket.getCreationDate().toString());
+			this.xssfHelper.setCell(row, "");
+			this.xssfHelper.setCell(row, bucket.name());
+			this.xssfHelper.setCell(row, bucket.creationDate().toString());
 			
 			try {
-				this.xssfHelper.setCell(row, this.amazonClients.AmazonS3.getBucketLocation(bucket.getName()));
+				this.xssfHelper.setCell(row, this.amazonClients.s3Client.getBucketLocation(GetBucketLocationRequest.builder().bucket(bucket.name()).build()).locationConstraintAsString());
 
-			} catch(AmazonS3Exception skip) {		
+			} catch(S3Exception skip) {		
 				this.xssfHelper.setCell(row, "");	
 			} catch(Exception e) {
 				this.xssfHelper.setCell(row, "");
@@ -1694,19 +1709,19 @@ public class AWSExporter
 			
 			try {
 				StringBuffer bets = new StringBuffer();
-				GetBucketEncryptionResult getBucketEncryptionResult = this.amazonClients.AmazonS3.getBucketEncryption(bucket.getName());
-				ServerSideEncryptionConfiguration serverSideEncryptionConfiguration = getBucketEncryptionResult.getServerSideEncryptionConfiguration();
-				List<ServerSideEncryptionRule> serverSideEncryptionRules = serverSideEncryptionConfiguration.getRules();
+				GetBucketEncryptionResponse getBucketEncryptionResponse = this.amazonClients.s3Client.getBucketEncryption(GetBucketEncryptionRequest.builder().bucket(bucket.name()).build());
+				ServerSideEncryptionConfiguration serverSideEncryptionConfiguration = getBucketEncryptionResponse.serverSideEncryptionConfiguration();
+				List<ServerSideEncryptionRule> serverSideEncryptionRules = serverSideEncryptionConfiguration.rules();
 				for(ServerSideEncryptionRule serverSideEncryptionRule : serverSideEncryptionRules) {
-					ServerSideEncryptionByDefault serverSideEncryptionByDefault = serverSideEncryptionRule.getApplyServerSideEncryptionByDefault();
+					ServerSideEncryptionByDefault serverSideEncryptionByDefault = serverSideEncryptionRule.applyServerSideEncryptionByDefault();
 					
 					if(bets.length() > 0) bets.append("\n");
-					bets.append(serverSideEncryptionByDefault.getKMSMasterKeyID());
+					bets.append(serverSideEncryptionByDefault.kmsMasterKeyID());
 					bets.append("|");
-					bets.append(serverSideEncryptionByDefault.getSSEAlgorithm());
+					bets.append(serverSideEncryptionByDefault.sseAlgorithm());
 				}
 				this.xssfHelper.setCell(row,  bets.toString());
-			} catch(AmazonS3Exception skip) {		
+			} catch(S3Exception skip) {		
 				this.xssfHelper.setCell(row, "");		
 			} catch(Exception e) {	
 				this.xssfHelper.setCell(row, "");
@@ -1714,10 +1729,10 @@ public class AWSExporter
 			}
 			
 			try {
-				BucketAccelerateConfiguration bucketAccelerateConfiguration = this.amazonClients.AmazonS3.getBucketAccelerateConfiguration(bucket.getName());
-				this.xssfHelper.setCell(row,  Boolean.toString(bucketAccelerateConfiguration.isAccelerateEnabled()));
-				this.xssfHelper.setCell(row,  bucketAccelerateConfiguration.getStatus());
-			} catch(AmazonS3Exception skip) {
+				GetBucketAccelerateConfigurationResponse getBucketAccelerateConfigurationResponse = this.amazonClients.s3Client.getBucketAccelerateConfiguration(GetBucketAccelerateConfigurationRequest.builder().bucket(bucket.name()).build());
+				this.xssfHelper.setCell(row,  "");
+				this.xssfHelper.setCell(row,  getBucketAccelerateConfigurationResponse.statusAsString());
+			} catch(S3Exception skip) {
 				this.xssfHelper.setCell(row, "");
 				this.xssfHelper.setCell(row, "");
 			} catch(Exception e) {
@@ -1728,38 +1743,38 @@ public class AWSExporter
 			
 			try {
 				StringBuffer crrs = new StringBuffer();
-				BucketCrossOriginConfiguration bucketCrossOriginConfiguration = this.amazonClients.AmazonS3.getBucketCrossOriginConfiguration(bucket.getName());
+				GetBucketCorsResponse getBucketCorsResponse = this.amazonClients.s3Client.getBucketCors(GetBucketCorsRequest.builder().bucket(bucket.name()).build());
 				
-				if(bucketCrossOriginConfiguration != null) {
-					List<CORSRule> corsRules = bucketCrossOriginConfiguration.getRules();
+				if(getBucketCorsResponse != null) {
+					List<CORSRule> corsRules = getBucketCorsResponse.corsRules();
 					for(CORSRule corsRule : corsRules) {
 						
 						if(crrs.length() > 0) crrs.append("\n");
 						crrs.append("Id=");
-						crrs.append(corsRule.getId());
+						crrs.append("");
 						crrs.append(", MaxAgeSeconds=");
-						crrs.append(Integer.toString(corsRule.getMaxAgeSeconds()));
+						crrs.append(Integer.toString(corsRule.maxAgeSeconds()));
 						
 						crrs.append(", AllowedHeaders=");
-						List<String> allowedHeaders = corsRule.getAllowedHeaders();
+						List<String> allowedHeaders = corsRule.allowedHeaders();
 						for(String allowedHeader : allowedHeaders) {
 							crrs.append(allowedHeader);
 							crrs.append("|");
 						}
 						crrs.append(", AllowedMethods=");
-						List<AllowedMethods> allowedMethods = corsRule.getAllowedMethods();
-						for(AllowedMethods allowedMethod : allowedMethods) {
-							crrs.append(allowedMethod.name());
+						List<String> allowedMethods = corsRule.allowedMethods();
+						for(String allowedMethod : allowedMethods) {
+							crrs.append(allowedMethod);
 							crrs.append("|");
 						}
 						crrs.append(", AllowedOrigins=");
-						List<String> allowedOrigins = corsRule.getAllowedOrigins();
+						List<String> allowedOrigins = corsRule.allowedOrigins();
 						for(String allowedOrigin : allowedOrigins) {
 							crrs.append(allowedOrigin);
 							crrs.append("|");
 						}
 						crrs.append(", ExposedHeaders=");
-						List<String> exposedHeaders = corsRule.getExposedHeaders();
+						List<String> exposedHeaders = corsRule.exposeHeaders();
 						for(String exposedHeader : exposedHeaders) {
 							crrs.append(exposedHeader);
 							crrs.append("|");
@@ -1770,7 +1785,7 @@ public class AWSExporter
 				
 				this.xssfHelper.setCell(row, crrs.toString());
 
-			} catch(AmazonS3Exception skip) {
+			} catch(S3Exception skip) {
 				this.xssfHelper.setCell(row, "");
 			} catch(Exception e) {
 				this.xssfHelper.setCell(row, "");
@@ -1778,8 +1793,8 @@ public class AWSExporter
 			}
 			
 			try {
-				this.xssfHelper.setCell(row, this.amazonClients.AmazonS3.getBucketPolicy(bucket.getName()).getPolicyText());
-			} catch(AmazonS3Exception skip) {
+				this.xssfHelper.setCell(row, this.amazonClients.s3Client.getBucketPolicy(GetBucketPolicyRequest.builder().bucket(bucket.name()).build()).policy());
+			} catch(S3Exception skip) {
 				this.xssfHelper.setCell(row, "");
 			} catch(Exception e) {
 				this.xssfHelper.setCell(row, "");
@@ -1787,11 +1802,11 @@ public class AWSExporter
 			}
 			
 			try {
-				BucketLoggingConfiguration bucketLoggingConfiguration = this.amazonClients.AmazonS3.getBucketLoggingConfiguration(bucket.getName());
-				this.xssfHelper.setCell(row, Boolean.toString(bucketLoggingConfiguration.isLoggingEnabled()));
-				this.xssfHelper.setCell(row, bucketLoggingConfiguration.getDestinationBucketName());
-				this.xssfHelper.setCell(row, bucketLoggingConfiguration.getLogFilePrefix());
-			} catch(AmazonS3Exception skip) {
+				GetBucketLoggingResponse getBucketLoggingResponse = this.amazonClients.s3Client.getBucketLogging(GetBucketLoggingRequest.builder().bucket(bucket.name()).build());
+				this.xssfHelper.setCell(row, getBucketLoggingResponse.loggingEnabled() == null ? "false" : "true");
+				this.xssfHelper.setCell(row, getBucketLoggingResponse.loggingEnabled() == null ? "" : getBucketLoggingResponse.loggingEnabled().targetBucket());
+				this.xssfHelper.setCell(row, getBucketLoggingResponse.loggingEnabled() == null ? "" : getBucketLoggingResponse.loggingEnabled().targetPrefix());
+			} catch(S3Exception skip) {
 				this.xssfHelper.setCell(row, "");
 				this.xssfHelper.setCell(row, "");
 				this.xssfHelper.setCell(row, "");
@@ -1803,15 +1818,15 @@ public class AWSExporter
 			}
 			
 			try {
-				BucketVersioningConfiguration bucketVersioningConfiguration = this.amazonClients.AmazonS3.getBucketVersioningConfiguration(bucket.getName());
-				if(bucketVersioningConfiguration != null) {
-					this.xssfHelper.setCell(row, bucketVersioningConfiguration.isMfaDeleteEnabled() == null ? "" : bucketVersioningConfiguration.isMfaDeleteEnabled().toString());
-					this.xssfHelper.setCell(row, bucketVersioningConfiguration.getStatus());
+				GetBucketVersioningResponse getBucketVersioningResponse = this.amazonClients.s3Client.getBucketVersioning(GetBucketVersioningRequest.builder().bucket(bucket.name()).build());
+				if(getBucketVersioningResponse != null) {
+					this.xssfHelper.setCell(row, getBucketVersioningResponse.mfaDeleteAsString());
+					this.xssfHelper.setCell(row, getBucketVersioningResponse.statusAsString());
 				} else {
 					this.xssfHelper.setCell(row, "");
 					this.xssfHelper.setCell(row, "");
 				}
-			} catch(AmazonS3Exception skip) {
+			} catch(S3Exception skip) {
 				this.xssfHelper.setCell(row, "");
 				this.xssfHelper.setCell(row, "");
 			} catch(Exception e) {
@@ -1822,43 +1837,19 @@ public class AWSExporter
 			
 			try {
 				StringBuffer btcs = new StringBuffer();
-				BucketTaggingConfiguration bucketTaggingConfiguration = this.amazonClients.AmazonS3.getBucketTaggingConfiguration(bucket.getName());
+				GetBucketTaggingResponse getBucketTaggingResponse = this.amazonClients.s3Client.getBucketTagging(GetBucketTaggingRequest.builder().bucket(bucket.name()).build());
 				
-				if(bucketTaggingConfiguration != null) {
-					List<TagSet> tagSets = bucketTaggingConfiguration.getAllTagSets();
-					for(TagSet tagSet : tagSets) {
-						Map<String, String> allTagsMap = tagSet.getAllTags();
-						Set<String> keys = allTagsMap.keySet();
-						Iterator<String> iKeys = keys.iterator();
-						while(iKeys.hasNext()) {
-							if(btcs.length() > 0) btcs.append("\n");
-							String key = iKeys.next();
-							String value = allTagsMap.get(key);
-							btcs.append(key);
-							btcs.append("=");
-							btcs.append(value);
-						}
+				if(getBucketTaggingResponse != null) {
+					List<software.amazon.awssdk.services.s3.model.Tag> tagSets = getBucketTaggingResponse.tagSet();
+					for(software.amazon.awssdk.services.s3.model.Tag tag : tagSets) {
+						if(btcs.length() > 0) btcs.append("\n");
+						btcs.append(tag.key());
+						btcs.append("=");
+						btcs.append(tag.value());
 					}
 				}
 				this.xssfHelper.setCell(row, btcs.toString());
-				
-				StringBuffer tss = new StringBuffer();
-				if(bucketTaggingConfiguration != null) {
-					TagSet tagSet = bucketTaggingConfiguration.getTagSet();
-					Map<String, String> allTagsMap = tagSet.getAllTags();
-					Set<String> keys = allTagsMap.keySet();
-					Iterator<String> iKeys = keys.iterator();
-					while(iKeys.hasNext()) {
-						if(tss.length() > 0) tss.append("\n");
-						String key = iKeys.next();
-						String value = allTagsMap.get(key);
-						tss.append(key);
-						tss.append("=");
-						tss.append(value);
-					}
-				}
-				this.xssfHelper.setCell(row, tss.toString());
-			} catch(AmazonS3Exception skip) {
+			} catch(S3Exception skip) {
 				this.xssfHelper.setCell(row, "");
 				this.xssfHelper.setCell(row, "");
 			} catch(Exception e) {
@@ -1868,44 +1859,43 @@ public class AWSExporter
 			}
 			
 			try {
-				BucketReplicationConfiguration bucketReplicationConfiguration = this.amazonClients.AmazonS3.getBucketReplicationConfiguration(bucket.getName());
-				this.xssfHelper.setCell(row, bucketReplicationConfiguration.getRoleARN());
+				GetBucketReplicationResponse getBucketReplicationResponse = this.amazonClients.s3Client.getBucketReplication(GetBucketReplicationRequest.builder().bucket(bucket.name()).build());
+				
+				ReplicationConfiguration replicationConfiguration = getBucketReplicationResponse.replicationConfiguration();
+				
+				this.xssfHelper.setCell(row, replicationConfiguration.role());
 				
 				StringBuffer rrs = new StringBuffer();
-				Map<String, ReplicationRule> repMap = bucketReplicationConfiguration.getRules();
-				Set<String> repkeys = repMap.keySet();
-				Iterator<String> irepKeys = repkeys.iterator();
-				while(irepKeys.hasNext()) {
+				List<ReplicationRule> replicationRules = replicationConfiguration.rules();
+				for(ReplicationRule replicationRule : replicationRules) {
 					if(rrs.length() > 0) rrs.append("\n\n");
-					String key = irepKeys.next();
 					
-					rrs.append(key);
-					
-					ReplicationRule replicationRule = repMap.get(key);
-					ReplicationDestinationConfig replicationDestinationConfig = replicationRule.getDestinationConfig();
+					rrs.append(replicationRule.id());
+
+					Destination destination = replicationRule.destination();
 					rrs.append("\nAccessControlTranslation=");
-					rrs.append(replicationDestinationConfig.getAccessControlTranslation());
+					rrs.append(destination.accessControlTranslation());
 					rrs.append("\nAccount=");
-					rrs.append(replicationDestinationConfig.getAccount());
+					rrs.append(destination.account());
 					rrs.append("\nBucketARN=");
-					rrs.append(replicationDestinationConfig.getBucketARN());
+					rrs.append(destination.bucket());
 					
 					rrs.append("\nReplicaKmsKeyID=");
-					rrs.append(replicationDestinationConfig.getEncryptionConfiguration().getReplicaKmsKeyID());
+					rrs.append(destination.encryptionConfiguration().replicaKmsKeyID());
 					
 					rrs.append("\nStorageClass=");
-					rrs.append(replicationDestinationConfig.getStorageClass());
+					rrs.append(destination.storageClass());
 					rrs.append("\nPrefix=");
-					rrs.append(replicationRule.getPrefix());
-					SourceSelectionCriteria sourceSelectionCriteria = replicationRule.getSourceSelectionCriteria();
-					SseKmsEncryptedObjects sseKmsEncryptedObjects = sourceSelectionCriteria.getSseKmsEncryptedObjects();
+					rrs.append(replicationRule.prefix());
+					SourceSelectionCriteria sourceSelectionCriteria = replicationRule.sourceSelectionCriteria();
+					SseKmsEncryptedObjects sseKmsEncryptedObjects = sourceSelectionCriteria.sseKmsEncryptedObjects();
 					rrs.append("\nSSE KMS Encrypted Objects Status=");
-					rrs.append(sseKmsEncryptedObjects.getStatus());
+					rrs.append(this.getEnumName(sseKmsEncryptedObjects.status()));
 					rrs.append("\nReplicationRule Status=");
-					rrs.append(replicationRule.getStatus());
+					rrs.append(this.getEnumName(replicationRule.status()));
 				}
 				this.xssfHelper.setCell(row, rrs.toString());
-			} catch(AmazonS3Exception skip) {
+			} catch(S3Exception skip) {
 				this.xssfHelper.setCell(row, "");
 				this.xssfHelper.setCell(row, "");
 			} catch(Exception e) {
@@ -1916,38 +1906,43 @@ public class AWSExporter
 			
 			try {			
 				StringBuffer bncs = new StringBuffer();
-				BucketNotificationConfiguration bucketNotificationConfiguration = this.amazonClients.AmazonS3.getBucketNotificationConfiguration(bucket.getName());
-				Map<String, NotificationConfiguration> notiMap = bucketNotificationConfiguration.getConfigurations();
-				Set<String> notiKeys = notiMap.keySet();
-				Iterator<String> inotiKeys = notiKeys.iterator();
-				while(inotiKeys.hasNext()) {
-					String key = inotiKeys.next();
-					NotificationConfiguration notificationConfiguration = notiMap.get(key);
-					Set<String> events = notificationConfiguration.getEvents();
-					Iterator<String> ievents = events.iterator();
-					
-					if(bncs.length() > 0) bncs.append("\n\n");
-					
-					bncs.append("Events=");
-					while(ievents.hasNext()) {
-						bncs.append(ievents.next());
-						bncs.append("|");
-					}
-					
-					bncs.append("FilterRule");
-					
-					com.amazonaws.services.s3.model.Filter filter = notificationConfiguration.getFilter();
-					S3KeyFilter s3KeyFilter = filter.getS3KeyFilter();
-					List<FilterRule> filterRules = s3KeyFilter.getFilterRules();
-					for(FilterRule filterRule : filterRules) {
-						bncs.append("\nName=");
-						bncs.append(filterRule.getName());
-						bncs.append(", Value=");
-						bncs.append(filterRule.getValue());
-					}
+				GetBucketNotificationConfigurationResponse getBucketNotificationConfigurationResponse = this.amazonClients.s3Client.getBucketNotificationConfiguration(GetBucketNotificationConfigurationRequest.builder().bucket(bucket.name()).build());
+				
+				bncs.append("Topic Configurations : ");
+				bncs.append("\n");
+				List<QueueConfiguration> queueConfigurations = getBucketNotificationConfigurationResponse.queueConfigurations();
+				for (QueueConfiguration queueConfiguration : queueConfigurations) {
+					bncs.append("Queue ARN = ");
+					bncs.append(queueConfiguration.queueArn());
+					bncs.append("\n");
+					bncs.append("Event = ");
+					bncs.append(queueConfiguration.eventsAsStrings());
 				}
+				bncs.append("\n\n");
+				bncs.append("Queue Configurations : ");;
+				bncs.append("\n");
+				List<TopicConfiguration> topicConfigurations = getBucketNotificationConfigurationResponse.topicConfigurations();
+				for (TopicConfiguration topicConfiguration : topicConfigurations) {
+					bncs.append("Topic ARN = ");
+					bncs.append(topicConfiguration.topicArn());
+					bncs.append("\n");
+					bncs.append("Event = ");
+					bncs.append(topicConfiguration.eventsAsStrings());
+				}
+				bncs.append("\n\n");
+				bncs.append("Lambda Configurations : ");
+				bncs.append("\n");
+				List<LambdaFunctionConfiguration> lambdaFunctionConfigurations = getBucketNotificationConfigurationResponse.lambdaFunctionConfigurations();
+				for (LambdaFunctionConfiguration lambdaFunctionConfiguration : lambdaFunctionConfigurations) {
+					bncs.append("Lambda ARN = ");
+					bncs.append(lambdaFunctionConfiguration.lambdaFunctionArn());
+					bncs.append("\n");
+					bncs.append("Event = ");
+					bncs.append(lambdaFunctionConfiguration.eventsAsStrings());
+				}
+
 				this.xssfHelper.setCell(row, bncs.toString());
-			} catch(AmazonS3Exception skip) {
+			} catch(S3Exception skip) {
 				this.xssfHelper.setCell(row, "");
 			} catch(Exception e) {
 				this.xssfHelper.setCell(row, "");
@@ -1955,43 +1950,43 @@ public class AWSExporter
 			}
 			
 			try {
-				BucketWebsiteConfiguration bucketWebsiteConfiguration = this.amazonClients.AmazonS3.getBucketWebsiteConfiguration(bucket.getName());
-				this.xssfHelper.setCell(row, bucketWebsiteConfiguration == null ? "" : bucketWebsiteConfiguration.getErrorDocument());
-				this.xssfHelper.setCell(row, bucketWebsiteConfiguration == null ? "" : bucketWebsiteConfiguration.getIndexDocumentSuffix());
+				GetBucketWebsiteResponse getBucketWebsiteResponse = this.amazonClients.s3Client.getBucketWebsite(GetBucketWebsiteRequest.builder().bucket(bucket.name()).build());
+				this.xssfHelper.setCell(row, getBucketWebsiteResponse == null ? "" : getBucketWebsiteResponse.errorDocument().key());
+				this.xssfHelper.setCell(row, getBucketWebsiteResponse == null ? "" : getBucketWebsiteResponse.indexDocument().suffix());
 				
-				if(bucketWebsiteConfiguration != null) {
-					RedirectRule redirectRule = bucketWebsiteConfiguration.getRedirectAllRequestsTo();
-					this.xssfHelper.setCell(row, redirectRule.getHostName());
-					this.xssfHelper.setCell(row, redirectRule.getHttpRedirectCode());
-					this.xssfHelper.setCell(row, redirectRule.getprotocol());
-					this.xssfHelper.setCell(row, redirectRule.getReplaceKeyPrefixWith());
-					this.xssfHelper.setCell(row, redirectRule.getReplaceKeyWith());
+				if(getBucketWebsiteResponse != null) {
+					RedirectAllRequestsTo redirectAllRequestsTo = getBucketWebsiteResponse.redirectAllRequestsTo();
+					this.xssfHelper.setCell(row, redirectAllRequestsTo.hostName());
+					this.xssfHelper.setCell(row, "");
+					this.xssfHelper.setCell(row, this.getEnumName(redirectAllRequestsTo.protocol()));
+					this.xssfHelper.setCell(row, "");
+					this.xssfHelper.setCell(row, "");
 					
 					StringBuffer rors = new StringBuffer();
-					List<RoutingRule> routingRules = bucketWebsiteConfiguration.getRoutingRules();
+					List<RoutingRule> routingRules = getBucketWebsiteResponse.routingRules();
 					for(RoutingRule routingRule : routingRules) {
 						
 						if(rors.length() > 0) rors.append("\n\n");
 						
-						RoutingRuleCondition routingRuleCondition = routingRule.getCondition();
+						Condition routingRuleCondition = routingRule.condition();
 						
 						rors.append("HttpErrorCodeReturnedEquals=");
-						rors.append(routingRuleCondition.getHttpErrorCodeReturnedEquals());
+						rors.append(routingRuleCondition.httpErrorCodeReturnedEquals());
 						rors.append("\nKeyPrefixEquals=");
-						rors.append(routingRuleCondition.getKeyPrefixEquals());
+						rors.append(routingRuleCondition.keyPrefixEquals());
 						
-						RedirectRule rredirectRule = routingRule.getRedirect();
+						Redirect rredirectRule = routingRule.redirect();
 						rors.append("\nRedirectRule");
 						rors.append("\nHostName=");
-						rors.append(rredirectRule.getHostName());
+						rors.append(rredirectRule.hostName());
 						rors.append("\nHttpRedirectCode=");
-						rors.append(rredirectRule.getHttpRedirectCode());
+						rors.append(rredirectRule.httpRedirectCode());
 						rors.append("\nProtocol=");
-						rors.append(rredirectRule.getprotocol());
+						rors.append(rredirectRule.protocol());
 						rors.append("\nReplaceKeyPrefixWidth=");
-						rors.append(rredirectRule.getReplaceKeyPrefixWith());
+						rors.append(rredirectRule.replaceKeyPrefixWith());
 						rors.append("\nReplaceKeyWidth=");
-						rors.append(rredirectRule.getReplaceKeyWith());
+						rors.append(rredirectRule.replaceKeyWith());
 					}
 					this.xssfHelper.setCell(row, rors.toString());
 				} else {
@@ -2003,7 +1998,7 @@ public class AWSExporter
 					this.xssfHelper.setCell(row, "");
 				}
 
-			} catch(AmazonS3Exception skip) {
+			} catch(S3Exception skip) {
 				this.xssfHelper.setCell(row, "");
 				this.xssfHelper.setCell(row, "");
 				this.xssfHelper.setCell(row, "");
@@ -2025,24 +2020,24 @@ public class AWSExporter
 			}
 			
 			try {
-				AccessControlList accessControlList = this.amazonClients.AmazonS3.getBucketAcl(bucket.getName());
-				this.xssfHelper.setCell(row, accessControlList.getOwner().getDisplayName());
+				GetBucketAclResponse getBucketAclResponse = this.amazonClients.s3Client.getBucketAcl(GetBucketAclRequest.builder().bucket(bucket.name()).build());
+				this.xssfHelper.setCell(row, getBucketAclResponse.owner().displayName());
 				
 				StringBuffer grts = new StringBuffer();
-				List<Grant> grants = accessControlList.getGrantsAsList();
+				List<Grant> grants = getBucketAclResponse.grants();
 				for(Grant grant : grants) {
-					Grantee grantee = grant.getGrantee();
+					Grantee grantee = grant.grantee();
 					
 					if(grts.length() > 0) grts.append("\n\n");
 					grts.append("Identifier=");
-					grts.append(grantee.getIdentifier());
+					grts.append(grantee.id());
 					grts.append("\nTypeIdentifier=");
-					grts.append(grantee.getTypeIdentifier());
+					grts.append(grantee.typeAsString());
 					grts.append("\nPermission=");
-					grts.append(grant.getPermission().getHeaderName());
+					grts.append(grant.permissionAsString());
 				}
 				this.xssfHelper.setCell(row, grts.toString());
-			} catch(AmazonS3Exception skip) {
+			} catch(S3Exception skip) {
 				this.xssfHelper.setCell(row, "");
 				this.xssfHelper.setCell(row, "");
 			} catch(Exception e) {
@@ -2053,51 +2048,51 @@ public class AWSExporter
 			
 			try {
 				StringBuffer lcs = new StringBuffer();
-				BucketLifecycleConfiguration bucketLifecycleConfiguration = this.amazonClients.AmazonS3.getBucketLifecycleConfiguration(bucket.getName());
+				GetBucketLifecycleConfigurationResponse getBucketLifecycleConfigurationResponse = this.amazonClients.s3Client.getBucketLifecycleConfiguration(GetBucketLifecycleConfigurationRequest.builder().bucket(bucket.name()).build());
 				
-				if(bucketLifecycleConfiguration != null) {
-					List<com.amazonaws.services.s3.model.BucketLifecycleConfiguration.Rule> rules = bucketLifecycleConfiguration.getRules();
-					for(com.amazonaws.services.s3.model.BucketLifecycleConfiguration.Rule rule : rules) {
-						AbortIncompleteMultipartUpload abortIncompleteMultipartUpload = rule.getAbortIncompleteMultipartUpload();
+				if(getBucketLifecycleConfigurationResponse != null) {
+					List<LifecycleRule> rules = getBucketLifecycleConfigurationResponse.rules();
+					for(LifecycleRule rule : rules) {
+						AbortIncompleteMultipartUpload abortIncompleteMultipartUpload = rule.abortIncompleteMultipartUpload();
 						if(lcs.length() > 0) lcs.append("\n\n");
 						
 						lcs.append("AbortInCompleteMultipartUpload=");
-						lcs.append(Integer.toString(abortIncompleteMultipartUpload.getDaysAfterInitiation()));
+						lcs.append(Integer.toString(abortIncompleteMultipartUpload.daysAfterInitiation()));
 						lcs.append("\nExpirationDate=");
-						lcs.append(rule.getExpirationDate().toString());
+						lcs.append(rule.expiration().date().toString());
 						lcs.append("\nExpirationInDays=");
-						lcs.append(Integer.toString(rule.getExpirationInDays()));
+						lcs.append(Integer.toString(rule.expiration().days()));
 						lcs.append("\nID=");
-						lcs.append(rule.getId());
+						lcs.append(rule.id());
 						lcs.append("\nNonCurrentVersionExpirationInDays=");
-						lcs.append(Integer.toString(rule.getNoncurrentVersionExpirationInDays()));
+						lcs.append(Integer.toString(rule.noncurrentVersionExpiration().noncurrentDays()));
 						
 						lcs.append("\nNoncurrentVersionTransition");
-						List<NoncurrentVersionTransition> noncurrentVersionTransitions = rule.getNoncurrentVersionTransitions();
+						List<NoncurrentVersionTransition> noncurrentVersionTransitions = rule.noncurrentVersionTransitions();
 						for(NoncurrentVersionTransition noncurrentVersionTransition : noncurrentVersionTransitions) {
 							lcs.append("\nDays=");
-							lcs.append(Integer.toString(noncurrentVersionTransition.getDays()));
+							lcs.append(Integer.toString(noncurrentVersionTransition.noncurrentDays()));
 							lcs.append("\nStorageClass=");
-							lcs.append(noncurrentVersionTransition.getStorageClassAsString());
+							lcs.append(noncurrentVersionTransition.storageClassAsString());
 						}
 						
 						lcs.append("\nStatus=");
-						lcs.append(rule.getStatus());
+						lcs.append(this.getEnumName(rule.status()));
 						
 						lcs.append("\nTransitions");
-						List<Transition> transitions = rule.getTransitions();
+						List<Transition> transitions = rule.transitions();
 						for(Transition transition : transitions) {
 							lcs.append("\nDate=");
-							lcs.append(transition.getDate().toString());
+							lcs.append(transition.date().toString());
 							lcs.append("\nDays=");
-							lcs.append(Integer.toString(transition.getDays()));
+							lcs.append(Integer.toString(transition.days()));
 							lcs.append("\nStorageClass=");
-							lcs.append(transition.getStorageClassAsString());
+							lcs.append(transition.storageClassAsString());
 						}
 					}
 				}
 				this.xssfHelper.setRightThinCell(row, lcs.toString());
-			} catch(AmazonS3Exception skip) {
+			} catch(S3Exception skip) {
 				this.xssfHelper.setRightThinCell(row, "");
 			} catch(Exception e) {
 				this.xssfHelper.setRightThinCell(row, "");
@@ -2111,69 +2106,71 @@ public class AWSExporter
 		
 		XSSFRow row = null;
 		
-		ListCertificatesResult listCertificatesResult = this.amazonClients.AwsCertificateManager.listCertificates(new ListCertificatesRequest());
-		List<CertificateSummary> certificateSummaries = listCertificatesResult.getCertificateSummaryList();
+		ListCertificatesResponse listCertificatesResponse = this.amazonClients.acmClient.listCertificates();
+		List<CertificateSummary> certificateSummaries = listCertificatesResponse.certificateSummaryList();
 		for (CertificateSummary certificateSummary : certificateSummaries) {
 			
-			DescribeCertificateResult describeCertificateResult = this.amazonClients.AwsCertificateManager.describeCertificate(new DescribeCertificateRequest().withCertificateArn(certificateSummary.getCertificateArn()));
-			CertificateDetail certificateDetail = describeCertificateResult.getCertificate();
+			DescribeCertificateResponse describeCertificateResponse = this.amazonClients.acmClient.describeCertificate(DescribeCertificateRequest.builder().certificateArn(certificateSummary.certificateArn()).build());
+			CertificateDetail certificateDetail = describeCertificateResponse.certificate();
 			
 			row = this.xssfHelper.createRow(this.acmSheet, 1);			
 			this.xssfHelper.setLeftThinCell(row, Integer.toString(row.getRowNum() - 1));
-			this.xssfHelper.setCell(row, certificateDetail.getCertificateArn());
-			this.xssfHelper.setCell(row, certificateDetail.getCertificateAuthorityArn());
-			this.xssfHelper.setCell(row, certificateDetail.getDomainName());
-			this.xssfHelper.setCell(row, certificateDetail.getStatus());
-			this.xssfHelper.setCell(row, certificateDetail.getSubject());
+			this.xssfHelper.setCell(row, certificateDetail.certificateArn());
+			this.xssfHelper.setCell(row, certificateDetail.certificateAuthorityArn());
+			this.xssfHelper.setCell(row, certificateDetail.domainName());
+			this.xssfHelper.setCell(row, this.getEnumName(certificateDetail.status()));
+			this.xssfHelper.setCell(row, certificateDetail.subject());
 			
 			StringBuffer sans = new StringBuffer();
-			List<String> subjectAlternativeNames = certificateDetail.getSubjectAlternativeNames();
+			List<String> subjectAlternativeNames = certificateDetail.subjectAlternativeNames();
 			for(String subjectAlternativeName : subjectAlternativeNames) {
 				if(sans.length() > 0) sans.append("\n");
 				sans.append(subjectAlternativeName);
 			}
 			this.xssfHelper.setCell(row, sans.toString());
-			this.xssfHelper.setCell(row, certificateDetail.getType());
-			this.xssfHelper.setCell(row, certificateDetail.getKeyAlgorithm());
+			this.xssfHelper.setCell(row, this.getEnumName(certificateDetail.type()));
+			this.xssfHelper.setCell(row, this.getEnumName(certificateDetail.keyAlgorithm()));
 			
 			StringBuffer kus = new StringBuffer();
-			List<KeyUsage> keyUsages = certificateDetail.getKeyUsages();
+			List<KeyUsage> keyUsages = certificateDetail.keyUsages();
 			for(KeyUsage keyUsage : keyUsages) {
 				if(kus.length() > 0) kus.append("\n");
-				kus.append(keyUsage.getName());
+				kus.append(keyUsage.name());
 			}
 			
 			this.xssfHelper.setCell(row, kus.toString());
-			this.xssfHelper.setCell(row, certificateDetail.getSerial());
-			this.xssfHelper.setCell(row, certificateDetail.getSignatureAlgorithm());
-			this.xssfHelper.setCell(row, certificateDetail.getOptions().getCertificateTransparencyLoggingPreference());
+			this.xssfHelper.setCell(row, certificateDetail.serial());
+			this.xssfHelper.setCell(row, certificateDetail.signatureAlgorithm());
+			this.xssfHelper.setCell(row, this.getEnumName(certificateDetail.options().certificateTransparencyLoggingPreference()));
 			
-			this.xssfHelper.setCell(row, this.getDomainValidation(certificateDetail.getDomainValidationOptions()));
+			this.xssfHelper.setCell(row, this.getDomainValidation(certificateDetail.domainValidationOptions()));
 			
 			StringBuffer ekus = new StringBuffer();
-			List<ExtendedKeyUsage> extendedKeyUsages = certificateDetail.getExtendedKeyUsages();
+			List<ExtendedKeyUsage> extendedKeyUsages = certificateDetail.extendedKeyUsages();
 			for(ExtendedKeyUsage extendedKeyUsage : extendedKeyUsages) {
 				if(ekus.length() > 0) ekus.append("\n");
-				ekus.append(extendedKeyUsage.getName());
-				ekus.append(" (");
-				ekus.append(extendedKeyUsage.getOID());
-				ekus.append(")");
+				ekus.append(extendedKeyUsage.name());
+				if(extendedKeyUsage.oid() != null) {
+					ekus.append(" (");
+					ekus.append(extendedKeyUsage.oid());
+					ekus.append(")");
+				}
 			}
 			this.xssfHelper.setCell(row, ekus.toString());
-			this.xssfHelper.setCell(row, certificateDetail.getFailureReason());
-			this.xssfHelper.setCell(row, certificateDetail.getIssuer());
-			this.xssfHelper.setCell(row, certificateDetail.getRenewalEligibility());
-			RenewalSummary renewalSummary = certificateDetail.getRenewalSummary();
-			this.xssfHelper.setCell(row, renewalSummary == null ? "" : renewalSummary.getRenewalStatus());
-			this.xssfHelper.setCell(row, renewalSummary == null ? "" : this.getDomainValidation(renewalSummary.getDomainValidationOptions()));
-			this.xssfHelper.setCell(row, certificateDetail.getCreatedAt() == null ? "" : certificateDetail.getCreatedAt().toString());
-			this.xssfHelper.setCell(row, certificateDetail.getImportedAt() == null ? "" : certificateDetail.getImportedAt().toString());
-			this.xssfHelper.setCell(row, certificateDetail.getInUseBy() == null ? "" : certificateDetail.getInUseBy().toString());
-			this.xssfHelper.setCell(row, certificateDetail.getIssuedAt() == null ? "" : certificateDetail.getIssuedAt().toString());
-			this.xssfHelper.setCell(row, certificateDetail.getRevokedAt() == null ? "" : certificateDetail.getRevokedAt().toString());
-			this.xssfHelper.setCell(row, certificateDetail.getRevocationReason());
-			this.xssfHelper.setCell(row, certificateDetail.getNotAfter() == null ? "" : certificateDetail.getNotAfter().toString());
-			this.xssfHelper.setCell(row, certificateDetail.getNotBefore() == null ? "" : certificateDetail.getNotBefore().toString());
+			this.xssfHelper.setCell(row, this.getEnumName(certificateDetail.failureReason()));
+			this.xssfHelper.setCell(row, certificateDetail.issuer());
+			this.xssfHelper.setCell(row, this.getEnumName(certificateDetail.renewalEligibility()));
+			RenewalSummary renewalSummary = certificateDetail.renewalSummary();
+			this.xssfHelper.setCell(row, renewalSummary == null ? "" : this.getEnumName(renewalSummary.renewalStatus()));
+			this.xssfHelper.setCell(row, renewalSummary == null ? "" : this.getDomainValidation(renewalSummary.domainValidationOptions()));
+			this.xssfHelper.setCell(row, certificateDetail.createdAt() == null ? "" : certificateDetail.createdAt().toString());
+			this.xssfHelper.setCell(row, certificateDetail.importedAt() == null ? "" : certificateDetail.importedAt().toString());
+			this.xssfHelper.setCell(row, certificateDetail.inUseBy() == null ? "" : certificateDetail.inUseBy().toString());
+			this.xssfHelper.setCell(row, certificateDetail.issuedAt() == null ? "" : certificateDetail.issuedAt().toString());
+			this.xssfHelper.setCell(row, certificateDetail.revokedAt() == null ? "" : certificateDetail.revokedAt().toString());
+			this.xssfHelper.setCell(row, this.getEnumName(certificateDetail.revocationReason()));
+			this.xssfHelper.setCell(row, certificateDetail.notAfter() == null ? "" : certificateDetail.notAfter().toString());
+			this.xssfHelper.setCell(row, certificateDetail.notBefore() == null ? "" : certificateDetail.notBefore().toString());
 			
 		}
 	}
@@ -2184,15 +2181,15 @@ public class AWSExporter
 		for(DomainValidation domainValidation : domainValidations) {
 			if(dvs.length() > 0) dvs.append("\n\n");
 			dvs.append("DomainName=");
-			dvs.append(domainValidation.getDomainName());
+			dvs.append(domainValidation.domainName());
 			dvs.append("\nResourceRecord=");
-			dvs.append(domainValidation.getResourceRecord());
+			dvs.append(domainValidation.resourceRecord());
 			dvs.append("\nValidation Domain=");
-			dvs.append(domainValidation.getValidationDomain());
+			dvs.append(domainValidation.validationDomain());
 			dvs.append("\nValidation Method=");
-			dvs.append(domainValidation.getValidationMethod());
+			dvs.append(domainValidation.validationMethod());
 
-			List<String> validationEmails = domainValidation.getValidationEmails();
+			List<String> validationEmails = domainValidation.validationEmails();
 			if(validationEmails != null) {
 				dvs.append("\nValidationEmail");
 				for(String validationEmail : validationEmails) {
@@ -2201,7 +2198,7 @@ public class AWSExporter
 				}
 			}
 			dvs.append("\nValidationStatus=");
-			dvs.append(domainValidation.getValidationStatus());
+			dvs.append(domainValidation.validationStatus());
 		}
 		
 		return dvs.toString();
@@ -2212,16 +2209,16 @@ public class AWSExporter
 		XSSFRow row = null;
 		
 		Map<String, AliasListEntry> aliasMap = new HashMap<>();
-		ListAliasesResult listAliasesResult = this.amazonClients.AwsKMS.listAliases();
-		List<AliasListEntry> aliasListEntries = listAliasesResult.getAliases();
+		ListAliasesResponse listAliasesResult = this.amazonClients.kmsClient.listAliases();
+		List<AliasListEntry> aliasListEntries = listAliasesResult.aliases();
 		for (AliasListEntry aliasListEntry : aliasListEntries) {
 			
-			if(aliasListEntry.getTargetKeyId() == null) {
+			if(aliasListEntry.targetKeyId() == null) {
 				row = this.xssfHelper.createRow(this.kmsSheet, 1);			
 				this.xssfHelper.setLeftThinCell(row, Integer.toString(row.getRowNum() - 1));
 				this.xssfHelper.setCell(row, "");
-				this.xssfHelper.setCell(row, aliasListEntry.getAliasArn());
-				this.xssfHelper.setCell(row, aliasListEntry.getAliasName());
+				this.xssfHelper.setCell(row, aliasListEntry.aliasArn());
+				this.xssfHelper.setCell(row, aliasListEntry.aliasName());
 				this.xssfHelper.setCell(row, "");
 				this.xssfHelper.setCell(row, "");
 				this.xssfHelper.setCell(row, "");
@@ -2235,39 +2232,39 @@ public class AWSExporter
 				this.xssfHelper.setCell(row, "");
 				this.xssfHelper.setRightThinCell(row, "");
 			} else {
-				aliasMap.put(aliasListEntry.getTargetKeyId(), aliasListEntry);
+				aliasMap.put(aliasListEntry.targetKeyId(), aliasListEntry);
 			}
 			
 		}
 		
-		ListKeysResult listKeysResult = this.amazonClients.AwsKMS.listKeys();
-		List<KeyListEntry> keyListEntries = listKeysResult.getKeys();
+		ListKeysResponse listKeysResult = this.amazonClients.kmsClient.listKeys();
+		List<KeyListEntry> keyListEntries = listKeysResult.keys();
 		for (KeyListEntry keyListEntry : keyListEntries) {
 			
 			row = this.xssfHelper.createRow(this.kmsSheet, 1);
 			
-			AliasListEntry aliasListEntry = aliasMap.get(keyListEntry.getKeyId());
+			AliasListEntry aliasListEntry = aliasMap.get(keyListEntry.keyId());
 			
-			DescribeKeyResult describeKeyResult = this.amazonClients.AwsKMS.describeKey(new DescribeKeyRequest().withKeyId(keyListEntry.getKeyId()));
-			KeyMetadata keyMetadata = describeKeyResult.getKeyMetadata();
+			DescribeKeyResponse describeKeyResult = this.amazonClients.kmsClient.describeKey(DescribeKeyRequest.builder().keyId(keyListEntry.keyId()).build());
+			KeyMetadata keyMetadata = describeKeyResult.keyMetadata();
 			
 			this.xssfHelper.setLeftThinCell(row, Integer.toString(row.getRowNum() - 1));
-			this.xssfHelper.setCell(row, keyMetadata.getKeyManager());
-			this.xssfHelper.setCell(row, aliasListEntry == null ? "" : aliasListEntry.getAliasArn());
-			this.xssfHelper.setCell(row, aliasListEntry == null ? "" : aliasListEntry.getAliasName());
+			this.xssfHelper.setCell(row, this.getEnumName(keyMetadata.keyManager()));
+			this.xssfHelper.setCell(row, aliasListEntry == null ? "" : aliasListEntry.aliasArn());
+			this.xssfHelper.setCell(row, aliasListEntry == null ? "" : aliasListEntry.aliasName());
 
-			this.xssfHelper.setCell(row, keyMetadata.getKeyId());
-			this.xssfHelper.setCell(row, keyMetadata.getArn());
-			this.xssfHelper.setCell(row, keyMetadata.getAWSAccountId());
-			this.xssfHelper.setCell(row, keyMetadata.getCreationDate().toString());
-			this.xssfHelper.setCell(row, keyMetadata.getDeletionDate() == null ? "" : keyMetadata.getDeletionDate().toString());
-			this.xssfHelper.setCell(row, keyMetadata.getDescription());
-			this.xssfHelper.setCell(row, keyMetadata.getEnabled().toString());
-			this.xssfHelper.setCell(row, keyMetadata.getExpirationModel());
-			this.xssfHelper.setCell(row, keyMetadata.getKeyState());
-			this.xssfHelper.setCell(row, keyMetadata.getKeyUsage());
-			this.xssfHelper.setCell(row, keyMetadata.getOrigin());
-			this.xssfHelper.setRightThinCell(row, keyMetadata.getValidTo() == null ? "" : keyMetadata.getValidTo().toString());
+			this.xssfHelper.setCell(row, keyMetadata.keyId());
+			this.xssfHelper.setCell(row, keyMetadata.arn());
+			this.xssfHelper.setCell(row, keyMetadata.awsAccountId());
+			this.xssfHelper.setCell(row, keyMetadata.creationDate() == null ? "" : formatDate.format(keyMetadata.creationDate()));
+			this.xssfHelper.setCell(row, keyMetadata.deletionDate() == null ? "" : formatDate.format(keyMetadata.deletionDate()));
+			this.xssfHelper.setCell(row, keyMetadata.description());
+			this.xssfHelper.setCell(row, keyMetadata.enabled().toString());
+			this.xssfHelper.setCell(row, this.getEnumName(keyMetadata.expirationModel()));
+			this.xssfHelper.setCell(row, this.getEnumName(keyMetadata.keyState()));
+			this.xssfHelper.setCell(row, this.getEnumName(keyMetadata.keyUsage()));
+			this.xssfHelper.setCell(row, this.getEnumName(keyMetadata.origin()));
+			this.xssfHelper.setRightThinCell(row, keyMetadata.validTo() == null ? "" : keyMetadata.validTo().toString());
 				
 		}
 		
@@ -2276,49 +2273,49 @@ public class AWSExporter
 	private void makeElasticCache() {
 		XSSFRow row = null;
     
-		List<ReplicationGroup> replicationGroups = this.amazonClients.AmazonElastiCache.describeReplicationGroups().getReplicationGroups();
+		List<ReplicationGroup> replicationGroups = this.amazonClients.elastiCacheClient.describeReplicationGroups().replicationGroups();
 		for (ReplicationGroup replicationGroup : replicationGroups) {
 			int firstRowNum = 0;
 			row = null;
-			List<NodeGroup> nodeGroups = replicationGroup.getNodeGroups();
+			List<NodeGroup> nodeGroups = replicationGroup.nodeGroups();
 			for (NodeGroup nodeGroup : nodeGroups) {
         
-				List<NodeGroupMember> nodeGroupMembers = nodeGroup.getNodeGroupMembers();
+				List<NodeGroupMember> nodeGroupMembers = nodeGroup.nodeGroupMembers();
 				for (NodeGroupMember nodeGroupMember : nodeGroupMembers) {
-					CacheCluster cacheCluster = (CacheCluster)this.amazonClients.AmazonElastiCache.describeCacheClusters(new DescribeCacheClustersRequest().withCacheClusterId(nodeGroupMember.getCacheClusterId())).getCacheClusters().get(0);
+					CacheCluster cacheCluster = (CacheCluster)this.amazonClients.elastiCacheClient.describeCacheClusters(DescribeCacheClustersRequest.builder().cacheClusterId(nodeGroupMember.cacheClusterId()).build()).cacheClusters().get(0);
           
 					row = this.xssfHelper.createRow(this.elastiCacheSheet, 1);
 					if (firstRowNum == 0) {
 						firstRowNum = row.getRowNum();
 					}
 					this.xssfHelper.setLeftThinCell(row, Integer.toString(row.getRowNum() - 2));
-					this.xssfHelper.setCell(row, this.region.getName());
-					this.xssfHelper.setCell(row, replicationGroup.getReplicationGroupId());
-					this.xssfHelper.setCell(row, cacheCluster.getEngine());
-					this.xssfHelper.setCell(row, cacheCluster.getEngineVersion());
-					this.xssfHelper.setCell(row, nodeGroup.getPrimaryEndpoint().getAddress() + ":" + nodeGroup.getPrimaryEndpoint().getPort());
-					this.xssfHelper.setCell(row, cacheCluster.getCacheParameterGroup().getCacheParameterGroupName() + "(" + cacheCluster.getCacheParameterGroup().getParameterApplyStatus() + ")");
-					this.xssfHelper.setCell(row, cacheCluster.getCacheSubnetGroupName());
+					this.xssfHelper.setCell(row, this.region.id());
+					this.xssfHelper.setCell(row, replicationGroup.replicationGroupId());
+					this.xssfHelper.setCell(row, cacheCluster.engine());
+					this.xssfHelper.setCell(row, cacheCluster.engineVersion());
+					this.xssfHelper.setCell(row, nodeGroup.primaryEndpoint().address() + ":" + nodeGroup.primaryEndpoint().port());
+					this.xssfHelper.setCell(row, cacheCluster.cacheParameterGroup().cacheParameterGroupName() + "(" + cacheCluster.cacheParameterGroup().parameterApplyStatus() + ")");
+					this.xssfHelper.setCell(row, cacheCluster.cacheSubnetGroupName());
           
 					StringBuffer securityGroups = new StringBuffer();
-					List<SecurityGroupMembership> securityGroupMemberships = cacheCluster.getSecurityGroups();
+					List<SecurityGroupMembership> securityGroupMemberships = cacheCluster.securityGroups();
 					for (SecurityGroupMembership securityGroupMembership : securityGroupMemberships) {
 						if (securityGroups.length() > 0) {
 							securityGroups.append("\n");
 						}
-						securityGroups.append(securityGroupMembership.getSecurityGroupId());
+						securityGroups.append(securityGroupMembership.securityGroupId());
 						securityGroups.append(" (");
-						securityGroups.append(securityGroupMembership.getStatus());
+						securityGroups.append(securityGroupMembership.status());
 						securityGroups.append(")");
 					}
 					this.xssfHelper.setCell(row, securityGroups.toString());
-					this.xssfHelper.setCell(row, cacheCluster.getPreferredMaintenanceWindow());
+					this.xssfHelper.setCell(row, cacheCluster.preferredMaintenanceWindow());
           
-					this.xssfHelper.setCell(row, cacheCluster.getCacheClusterId());
-					this.xssfHelper.setCell(row, nodeGroupMember.getPreferredAvailabilityZone());
-					this.xssfHelper.setCell(row, nodeGroupMember.getCurrentRole());
-					this.xssfHelper.setCell(row, cacheCluster.getCacheNodeType());
-					this.xssfHelper.setRightThinCell(row, nodeGroupMember.getReadEndpoint().getAddress() + ":" + nodeGroupMember.getReadEndpoint().getPort());
+					this.xssfHelper.setCell(row, cacheCluster.cacheClusterId());
+					this.xssfHelper.setCell(row, nodeGroupMember.preferredAvailabilityZone());
+					this.xssfHelper.setCell(row, nodeGroupMember.currentRole());
+					this.xssfHelper.setCell(row, cacheCluster.cacheNodeType());
+					this.xssfHelper.setRightThinCell(row, nodeGroupMember.readEndpoint().address() + ":" + nodeGroupMember.readEndpoint().port());
 				}
 			}
       
@@ -2344,120 +2341,120 @@ public class AWSExporter
 		
 		XSSFRow row = null;
 		
-		DescribeDBClustersResult describeDBClustersResult = this.amazonClients.AmazonRDS.describeDBClusters();
-		List<DBCluster> dbClusters = describeDBClustersResult.getDBClusters();
+		DescribeDbClustersResponse describeDBClustersResult = this.amazonClients.rdsClient.describeDBClusters();
+		List<DBCluster> dbClusters = describeDBClustersResult.dbClusters();
 		for (DBCluster dbCluster : dbClusters) {
 
 			row = this.xssfHelper.createRow(this.rdsClusterSheet, 1);
 			this.xssfHelper.setLeftThinCell(row, Integer.toString(row.getRowNum() - 1));
 			this.xssfHelper.setCell(row, "Cluster");
-			this.xssfHelper.setCell(row, dbCluster.getDBClusterIdentifier());
+			this.xssfHelper.setCell(row, dbCluster.dbClusterIdentifier());
 			
 			StringBuffer avzs = new StringBuffer();
-			List<String> availabilityZones = dbCluster.getAvailabilityZones();
+			List<String> availabilityZones = dbCluster.availabilityZones();
 			for (String availabilityZone : availabilityZones) {
 				if(avzs.length() > 0) avzs.append("\n");
 				avzs.append(availabilityZone);
 			}
 			this.xssfHelper.setCell(row, avzs.toString());
-			this.xssfHelper.setCell(row, dbCluster.getDBSubnetGroup());
+			this.xssfHelper.setCell(row, dbCluster.dbSubnetGroup());
 			
 			StringBuffer dbclopgs = new StringBuffer();
-			List<DBClusterOptionGroupStatus> dbClusterOptionGroupStatList = dbCluster.getDBClusterOptionGroupMemberships();
+			List<DBClusterOptionGroupStatus> dbClusterOptionGroupStatList = dbCluster.dbClusterOptionGroupMemberships();
 			for(DBClusterOptionGroupStatus dbClusterOptionGroupStatus : dbClusterOptionGroupStatList) {
 				if(dbclopgs.length() > 0) dbclopgs.append("\n");
-				dbclopgs.append(dbClusterOptionGroupStatus.getDBClusterOptionGroupName());
+				dbclopgs.append(dbClusterOptionGroupStatus.dbClusterOptionGroupName());
 				dbclopgs.append(" (");
-				dbclopgs.append(dbClusterOptionGroupStatus.getStatus());
+				dbclopgs.append(dbClusterOptionGroupStatus.status());
 				dbclopgs.append(")");
 			}
 			this.xssfHelper.setCell(row, dbclopgs.toString());
-			this.xssfHelper.setCell(row, dbCluster.getDBClusterParameterGroup());
-			this.xssfHelper.setCell(row, dbCluster.getDbClusterResourceId());
+			this.xssfHelper.setCell(row, dbCluster.dbClusterParameterGroup());
+			this.xssfHelper.setCell(row, dbCluster.dbClusterResourceId());
 			
-			this.xssfHelper.setCell(row, dbCluster.getDatabaseName());
-			this.xssfHelper.setCell(row, dbCluster.getCharacterSetName());
+			this.xssfHelper.setCell(row, dbCluster.databaseName());
+			this.xssfHelper.setCell(row, dbCluster.characterSetName());
 
-			this.xssfHelper.setCell(row, dbCluster.getAllocatedStorage().toString());
-			this.xssfHelper.setCell(row, dbCluster.getCloneGroupId());
+			this.xssfHelper.setCell(row, dbCluster.allocatedStorage().toString());
+			this.xssfHelper.setCell(row, dbCluster.cloneGroupId());
 			
-			this.xssfHelper.setCell(row, dbCluster.getBacktrackWindow() == null ? "" : dbCluster.getBacktrackWindow().toString());
-			this.xssfHelper.setCell(row, dbCluster.getBackupRetentionPeriod() == null ? "" : dbCluster.getBackupRetentionPeriod().toString());
-			this.xssfHelper.setCell(row, dbCluster.getBacktrackConsumedChangeRecords() == null ? "" : dbCluster.getBacktrackConsumedChangeRecords().toString());
+			this.xssfHelper.setCell(row, dbCluster.backtrackWindow() == null ? "" : dbCluster.backtrackWindow().toString());
+			this.xssfHelper.setCell(row, dbCluster.backupRetentionPeriod() == null ? "" : dbCluster.backupRetentionPeriod().toString());
+			this.xssfHelper.setCell(row, dbCluster.backtrackConsumedChangeRecords() == null ? "" : dbCluster.backtrackConsumedChangeRecords().toString());
 
-			this.xssfHelper.setCell(row, dbCluster.getDBClusterArn());
+			this.xssfHelper.setCell(row, dbCluster.dbClusterArn());
 			
 			StringBuffer dbclrs = new StringBuffer();
-			List<DBClusterRole> dbClusterRoles = dbCluster.getAssociatedRoles();
+			List<DBClusterRole> dbClusterRoles = dbCluster.associatedRoles();
 			for(DBClusterRole dbClusterRole : dbClusterRoles) {
 				if(dbclrs.length() > 0) dbclrs.append("\n");
 				dbclrs.append("(");
-				dbclrs.append(dbClusterRole.getStatus());
+				dbclrs.append(dbClusterRole.status());
 				dbclrs.append(") ");
-				dbclrs.append(dbClusterRole.getRoleArn());
+				dbclrs.append(dbClusterRole.roleArn());
 			}
 			this.xssfHelper.setCell(row, dbclrs.toString());
 			
-			this.xssfHelper.setCell(row, dbCluster.getEarliestBacktrackTime() == null ? "" : dbCluster.getEarliestBacktrackTime().toString());
-			this.xssfHelper.setCell(row, dbCluster.getEarliestRestorableTime() == null ? "" : dbCluster.getEarliestRestorableTime().toString());
+			this.xssfHelper.setCell(row, dbCluster.earliestBacktrackTime() == null ? "" : dbCluster.earliestBacktrackTime().toString());
+			this.xssfHelper.setCell(row, dbCluster.earliestRestorableTime() == null ? "" : dbCluster.earliestRestorableTime().toString());
 			
 			StringBuffer ecle = new StringBuffer();
-			List<String> enabledCloudwatchLogsExports = dbCluster.getEnabledCloudwatchLogsExports();
+			List<String> enabledCloudwatchLogsExports = dbCluster.enabledCloudwatchLogsExports();
 			for (String enabledCloudwatchLogsExport : enabledCloudwatchLogsExports) {
 				if(ecle.length() > 0) ecle.append("\n");
 				ecle.append(enabledCloudwatchLogsExport);
 			}
 			this.xssfHelper.setCell(row, ecle.toString());
-			this.xssfHelper.setCell(row, dbCluster.getEndpoint());
-			this.xssfHelper.setCell(row, dbCluster.getEngine());
-			this.xssfHelper.setCell(row, dbCluster.getEngineVersion());
+			this.xssfHelper.setCell(row, dbCluster.endpoint());
+			this.xssfHelper.setCell(row, dbCluster.engine());
+			this.xssfHelper.setCell(row, dbCluster.engineVersion());
 			
-			this.xssfHelper.setCell(row, dbCluster.getHostedZoneId());
-			this.xssfHelper.setCell(row, dbCluster.getIAMDatabaseAuthenticationEnabled().toString());
-			this.xssfHelper.setCell(row, dbCluster.getKmsKeyId());
-			this.xssfHelper.setCell(row, dbCluster.getLatestRestorableTime().toString());
-			this.xssfHelper.setCell(row, dbCluster.getMasterUsername());
-			this.xssfHelper.setCell(row, dbCluster.getMultiAZ().toString());
-			this.xssfHelper.setCell(row, dbCluster.getPercentProgress());
-			this.xssfHelper.setCell(row, dbCluster.getPort().toString());
-			this.xssfHelper.setCell(row, dbCluster.getPreferredBackupWindow());
-			this.xssfHelper.setCell(row, dbCluster.getPreferredMaintenanceWindow());
-			this.xssfHelper.setCell(row, dbCluster.getReaderEndpoint());
+			this.xssfHelper.setCell(row, dbCluster.hostedZoneId());
+			this.xssfHelper.setCell(row, dbCluster.iamDatabaseAuthenticationEnabled().toString());
+			this.xssfHelper.setCell(row, dbCluster.kmsKeyId());
+			this.xssfHelper.setCell(row, dbCluster.latestRestorableTime().toString());
+			this.xssfHelper.setCell(row, dbCluster.masterUsername());
+			this.xssfHelper.setCell(row, dbCluster.multiAZ().toString());
+			this.xssfHelper.setCell(row, dbCluster.percentProgress());
+			this.xssfHelper.setCell(row, dbCluster.port().toString());
+			this.xssfHelper.setCell(row, dbCluster.preferredBackupWindow());
+			this.xssfHelper.setCell(row, dbCluster.preferredMaintenanceWindow());
+			this.xssfHelper.setCell(row, dbCluster.readerEndpoint());
 			
 			StringBuffer rrif = new StringBuffer();
-			List<String> readReplicaIdentifiers = dbCluster.getReadReplicaIdentifiers();
+			List<String> readReplicaIdentifiers = dbCluster.readReplicaIdentifiers();
 			for(String readReplicaIdentifier : readReplicaIdentifiers) {
 				if(rrif.length() > 0) rrif.append("\n");
 				rrif.append(readReplicaIdentifier);
 			}
 			this.xssfHelper.setCell(row, rrif.toString());
-			this.xssfHelper.setCell(row, dbCluster.getReplicationSourceIdentifier());
-			this.xssfHelper.setCell(row, dbCluster.getStatus());
-			this.xssfHelper.setCell(row, dbCluster.getStorageEncrypted().toString());
+			this.xssfHelper.setCell(row, dbCluster.replicationSourceIdentifier());
+			this.xssfHelper.setCell(row, dbCluster.status());
+			this.xssfHelper.setCell(row, dbCluster.storageEncrypted().toString());
 			
 			StringBuffer vsgs = new StringBuffer();
-			List<VpcSecurityGroupMembership> vpcSecurityGroupMemberships = dbCluster.getVpcSecurityGroups();
+			List<VpcSecurityGroupMembership> vpcSecurityGroupMemberships = dbCluster.vpcSecurityGroups();
 			for(VpcSecurityGroupMembership vpcSecurityGroupMembership : vpcSecurityGroupMemberships) {
 				if(vsgs.length() > 0) vsgs.append("\n");
-				vsgs.append(vpcSecurityGroupMembership.getVpcSecurityGroupId());
+				vsgs.append(vpcSecurityGroupMembership.vpcSecurityGroupId());
 				vsgs.append(" (");
-				vsgs.append(vpcSecurityGroupMembership.getStatus());
+				vsgs.append(vpcSecurityGroupMembership.status());
 				vsgs.append(")");
 			}
 			this.xssfHelper.setCell(row, vsgs.toString());
 			
 			StringBuffer dcms = new StringBuffer();
-			List<DBClusterMember> dbClusterMembers = dbCluster.getDBClusterMembers();
+			List<DBClusterMember> dbClusterMembers = dbCluster.dbClusterMembers();
 			for (DBClusterMember dbClusterMember : dbClusterMembers) {
 				if(dcms.length() > 0) dcms.append("\n");
 				dcms.append("DBInstanceidentifier=");
-				dcms.append(dbClusterMember.getDBInstanceIdentifier());
+				dcms.append(dbClusterMember.dbInstanceIdentifier());
 				dcms.append(", IsClusterWriter=");
-				dcms.append(dbClusterMember.getIsClusterWriter().toString());
+				dcms.append(dbClusterMember.isClusterWriter().toString());
 				dcms.append(", DBClusterParameterGroupStatus=");
-				dcms.append(dbClusterMember.getDBClusterParameterGroupStatus());
+				dcms.append(dbClusterMember.dbClusterParameterGroupStatus());
 				dcms.append(", PromotionTier");
-				dcms.append(dbClusterMember.getPromotionTier().toString());
+				dcms.append(dbClusterMember.promotionTier().toString());
 			}
 			this.xssfHelper.setLeftRightThinCell(row, dcms.toString());
 
@@ -2468,8 +2465,8 @@ public class AWSExporter
 	
 	private void makeRDSInstance() {
 		
-		DescribeDBInstancesResult describeDBInstancesResult = this.amazonClients.AmazonRDS.describeDBInstances();
-		List<DBInstance> dbInstances = describeDBInstancesResult.getDBInstances();
+		DescribeDbInstancesResponse describeDBInstancesResult = this.amazonClients.rdsClient.describeDBInstances();
+		List<DBInstance> dbInstances = describeDBInstancesResult.dbInstances();
 		for (DBInstance dbInstance : dbInstances) {
 			this.makeRDSDBInstances(dbInstance);
 		}
@@ -2482,104 +2479,104 @@ public class AWSExporter
 		
 		row = this.xssfHelper.createRow(this.rdsInstanceSheet, 1);
 		this.xssfHelper.setLeftThinCell(row, Integer.toString(row.getRowNum() - 1));
-		this.xssfHelper.setCell(row, dbInstance.getDBClusterIdentifier() == null ? "Instance" : "Cluster Member");
-		this.xssfHelper.setCell(row, dbInstance.getDBClusterIdentifier());
-		this.xssfHelper.setCell(row, dbInstance.getDBInstanceIdentifier());
-		this.xssfHelper.setCell(row, dbInstance.getDBInstanceClass());
-		this.xssfHelper.setCell(row, dbInstance.getDbInstancePort().toString());
-		this.xssfHelper.setCell(row, dbInstance.getDBInstanceStatus());
-		this.xssfHelper.setCell(row, dbInstance.getAvailabilityZone());
-		this.xssfHelper.setCell(row, dbInstance.getDBSubnetGroup().getDBSubnetGroupName());
+		this.xssfHelper.setCell(row, dbInstance.dbClusterIdentifier() == null ? "Instance" : "Cluster Member");
+		this.xssfHelper.setCell(row, dbInstance.dbClusterIdentifier());
+		this.xssfHelper.setCell(row, dbInstance.dbInstanceIdentifier());
+		this.xssfHelper.setCell(row, dbInstance.dbInstanceClass());
+		this.xssfHelper.setCell(row, dbInstance.dbInstancePort().toString());
+		this.xssfHelper.setCell(row, dbInstance.dbInstanceStatus());
+		this.xssfHelper.setCell(row, dbInstance.availabilityZone());
+		this.xssfHelper.setCell(row, dbInstance.dbSubnetGroup().dbSubnetGroupName());
 		
 		StringBuffer dbsgms = new StringBuffer();
-		List<DBSecurityGroupMembership> dbSecurityGroups = dbInstance.getDBSecurityGroups();
+		List<DBSecurityGroupMembership> dbSecurityGroups = dbInstance.dbSecurityGroups();
 		for (DBSecurityGroupMembership dbSecurityGroupMembership : dbSecurityGroups) {
 			if(dbsgms.length() > 0) dbsgms.append("\n");
-			dbsgms.append(dbSecurityGroupMembership.getDBSecurityGroupName());
+			dbsgms.append(dbSecurityGroupMembership.dbSecurityGroupName());
 			dbsgms.append(" (");
-			dbsgms.append(dbSecurityGroupMembership.getStatus());
+			dbsgms.append(dbSecurityGroupMembership.status());
 			dbsgms.append(")");
 		}
 		
 		this.xssfHelper.setCell(row, dbsgms.toString());
 		
 		StringBuffer dbpgs = new StringBuffer();
-		List<DBParameterGroupStatus> dbParameterGroupStatList = dbInstance.getDBParameterGroups();
+		List<DBParameterGroupStatus> dbParameterGroupStatList = dbInstance.dbParameterGroups();
 		for (DBParameterGroupStatus dbParameterGroupStatus : dbParameterGroupStatList) {
 			if(dbpgs.length() > 0) dbpgs.append("\n");
-			dbpgs.append(dbParameterGroupStatus.getDBParameterGroupName());
+			dbpgs.append(dbParameterGroupStatus.dbParameterGroupName());
 			dbpgs.append(" (");
-			dbpgs.append(dbParameterGroupStatus.getParameterApplyStatus());
+			dbpgs.append(dbParameterGroupStatus.parameterApplyStatus());
 			dbpgs.append(")");
 		}
 		
 		this.xssfHelper.setCell(row, dbpgs.toString());
-		this.xssfHelper.setCell(row, dbInstance.getDBName());
-		this.xssfHelper.setCell(row, dbInstance.getCharacterSetName());
+		this.xssfHelper.setCell(row, dbInstance.dbName());
+		this.xssfHelper.setCell(row, dbInstance.characterSetName());
 
-		this.xssfHelper.setCell(row, dbInstance.getCACertificateIdentifier());
+		this.xssfHelper.setCell(row, dbInstance.caCertificateIdentifier());
 		
-		this.xssfHelper.setCell(row, dbInstance.getAutoMinorVersionUpgrade().toString());
-		this.xssfHelper.setCell(row, dbInstance.getBackupRetentionPeriod().toString());
+		this.xssfHelper.setCell(row, dbInstance.autoMinorVersionUpgrade().toString());
+		this.xssfHelper.setCell(row, dbInstance.backupRetentionPeriod().toString());
 
-		this.xssfHelper.setCell(row, dbInstance.getCopyTagsToSnapshot().toString());
+		this.xssfHelper.setCell(row, dbInstance.copyTagsToSnapshot().toString());
 
-		this.xssfHelper.setCell(row, dbInstance.getDbiResourceId());
-		this.xssfHelper.setCell(row, dbInstance.getAllocatedStorage().toString());
-		this.xssfHelper.setCell(row, dbInstance.getDBInstanceArn());
+		this.xssfHelper.setCell(row, dbInstance.dbiResourceId());
+		this.xssfHelper.setCell(row, dbInstance.allocatedStorage().toString());
+		this.xssfHelper.setCell(row, dbInstance.dbInstanceArn());
 		
 		StringBuffer dmss = new StringBuffer();
-		List<DomainMembership> domainMemberships = dbInstance.getDomainMemberships();
+		List<DomainMembership> domainMemberships = dbInstance.domainMemberships();
 		for (DomainMembership domainMembership : domainMemberships) {
 			if(dmss.length() > 0) dmss.append("\n");
 			dmss.append("Domain=");
-			dmss.append(domainMembership.getDomain());
+			dmss.append(domainMembership.domain());
 			dmss.append(", FQDN=");
-			dmss.append(domainMembership.getFQDN());
+			dmss.append(domainMembership.fqdn());
 			dmss.append(", IAMRole=");
-			dmss.append(domainMembership.getIAMRoleName());
+			dmss.append(domainMembership.iamRoleName());
 			dmss.append(", Status=");
-			dmss.append(domainMembership.getStatus());
+			dmss.append(domainMembership.status());
 		}
 		this.xssfHelper.setCell(row, dmss.toString());
 		
 		StringBuffer ecle = new StringBuffer();
-		List<String> enabledCloudwatchLogsExports = dbInstance.getEnabledCloudwatchLogsExports();
+		List<String> enabledCloudwatchLogsExports = dbInstance.enabledCloudwatchLogsExports();
 		for (String enabledCloudwatchLogsExport : enabledCloudwatchLogsExports) {
 			if(ecle.length() > 0) ecle.append("\n");
 			ecle.append(enabledCloudwatchLogsExport);
 		}
 		this.xssfHelper.setCell(row, ecle.toString());
 		
-		Endpoint endpoint = dbInstance.getEndpoint();
-		this.xssfHelper.setCell(row, endpoint.getAddress());
-		this.xssfHelper.setCell(row, endpoint.getHostedZoneId());
-		this.xssfHelper.setCell(row, endpoint.getPort().toString());
-		this.xssfHelper.setCell(row, dbInstance.getEngine());
-		this.xssfHelper.setCell(row, dbInstance.getEngineVersion());
-		this.xssfHelper.setCell(row, dbInstance.getEnhancedMonitoringResourceArn());
-		this.xssfHelper.setCell(row, dbInstance.getIAMDatabaseAuthenticationEnabled().toString());
-		this.xssfHelper.setCell(row, dbInstance.getInstanceCreateTime().toString());
-		this.xssfHelper.setCell(row, dbInstance.getIops() == null ? "" : dbInstance.getIops().toString());
-		this.xssfHelper.setCell(row, dbInstance.getKmsKeyId());
-		this.xssfHelper.setCell(row, dbInstance.getLatestRestorableTime() == null ? "" : dbInstance.getLatestRestorableTime().toString());
-		this.xssfHelper.setCell(row, dbInstance.getLicenseModel());
-		this.xssfHelper.setCell(row, dbInstance.getMasterUsername());
-		this.xssfHelper.setCell(row, dbInstance.getMonitoringInterval() == null ? "" : dbInstance.getMonitoringInterval().toString());
-		this.xssfHelper.setCell(row, dbInstance.getMonitoringRoleArn());
-		this.xssfHelper.setCell(row, dbInstance.getMultiAZ().toString());
-		this.xssfHelper.setCell(row, dbInstance.getOptionGroupMemberships().toString());
-		this.xssfHelper.setCell(row, dbInstance.getPerformanceInsightsEnabled().toString());
-		this.xssfHelper.setCell(row, dbInstance.getPerformanceInsightsKMSKeyId());
-		this.xssfHelper.setCell(row, dbInstance.getPerformanceInsightsRetentionPeriod() == null ? "" : dbInstance.getPerformanceInsightsRetentionPeriod().toString());
-		this.xssfHelper.setCell(row, dbInstance.getPreferredBackupWindow());
-		this.xssfHelper.setCell(row, dbInstance.getPreferredMaintenanceWindow());
-		this.xssfHelper.setCell(row, dbInstance.getProcessorFeatures().toString());
-		this.xssfHelper.setCell(row, dbInstance.getPromotionTier() == null ? "" : dbInstance.getPromotionTier().toString());
-		this.xssfHelper.setCell(row, dbInstance.getPubliclyAccessible().toString());
+		Endpoint endpoint = dbInstance.endpoint();
+		this.xssfHelper.setCell(row, endpoint.address());
+		this.xssfHelper.setCell(row, endpoint.hostedZoneId());
+		this.xssfHelper.setCell(row, endpoint.port().toString());
+		this.xssfHelper.setCell(row, dbInstance.engine());
+		this.xssfHelper.setCell(row, dbInstance.engineVersion());
+		this.xssfHelper.setCell(row, dbInstance.enhancedMonitoringResourceArn());
+		this.xssfHelper.setCell(row, dbInstance.iamDatabaseAuthenticationEnabled().toString());
+		this.xssfHelper.setCell(row, dbInstance.instanceCreateTime().toString());
+		this.xssfHelper.setCell(row, dbInstance.iops() == null ? "" : dbInstance.iops().toString());
+		this.xssfHelper.setCell(row, dbInstance.kmsKeyId());
+		this.xssfHelper.setCell(row, dbInstance.latestRestorableTime() == null ? "" : dbInstance.latestRestorableTime().toString());
+		this.xssfHelper.setCell(row, dbInstance.licenseModel());
+		this.xssfHelper.setCell(row, dbInstance.masterUsername());
+		this.xssfHelper.setCell(row, dbInstance.monitoringInterval() == null ? "" : dbInstance.monitoringInterval().toString());
+		this.xssfHelper.setCell(row, dbInstance.monitoringRoleArn());
+		this.xssfHelper.setCell(row, dbInstance.multiAZ().toString());
+		this.xssfHelper.setCell(row, dbInstance.optionGroupMemberships().toString());
+		this.xssfHelper.setCell(row, dbInstance.performanceInsightsEnabled().toString());
+		this.xssfHelper.setCell(row, dbInstance.performanceInsightsKMSKeyId());
+		this.xssfHelper.setCell(row, dbInstance.performanceInsightsRetentionPeriod() == null ? "" : dbInstance.performanceInsightsRetentionPeriod().toString());
+		this.xssfHelper.setCell(row, dbInstance.preferredBackupWindow());
+		this.xssfHelper.setCell(row, dbInstance.preferredMaintenanceWindow());
+		this.xssfHelper.setCell(row, dbInstance.processorFeatures().toString());
+		this.xssfHelper.setCell(row, dbInstance.promotionTier() == null ? "" : dbInstance.promotionTier().toString());
+		this.xssfHelper.setCell(row, dbInstance.publiclyAccessible().toString());
 		
 		StringBuffer rdcis = new StringBuffer();
-		List<String> readReplicaDBClusterIdentifiers = dbInstance.getReadReplicaDBClusterIdentifiers();
+		List<String> readReplicaDBClusterIdentifiers = dbInstance.readReplicaDBClusterIdentifiers();
 		for(String readReplicaDBClusterIdentifier : readReplicaDBClusterIdentifiers) {
 			if(rdcis.length() > 0) rdcis.append("\n");
 			rdcis.append(readReplicaDBClusterIdentifier);
@@ -2587,28 +2584,28 @@ public class AWSExporter
 		this.xssfHelper.setCell(row, rdcis.toString());
 		
 		StringBuffer rdiis = new StringBuffer();
-		List<String> readReplicaDBInstanceIdentifiers = dbInstance.getReadReplicaDBInstanceIdentifiers();
+		List<String> readReplicaDBInstanceIdentifiers = dbInstance.readReplicaDBInstanceIdentifiers();
 		for(String readReplicaDBInstanceIdentifier : readReplicaDBInstanceIdentifiers) {
 			if(rdiis.length() > 0) rdiis.append("\n");
 			rdiis.append(readReplicaDBInstanceIdentifier);
 		}
 		
 		this.xssfHelper.setCell(row, rdiis.toString());
-		this.xssfHelper.setCell(row, dbInstance.getReadReplicaSourceDBInstanceIdentifier());
-		this.xssfHelper.setCell(row, dbInstance.getSecondaryAvailabilityZone());
-		this.xssfHelper.setCell(row, dbInstance.getStatusInfos().toString());
-		this.xssfHelper.setCell(row, dbInstance.getStorageEncrypted().toString());
-		this.xssfHelper.setCell(row, dbInstance.getStorageType());
-		this.xssfHelper.setCell(row, dbInstance.getTdeCredentialArn());
-		this.xssfHelper.setCell(row, dbInstance.getTimezone());
+		this.xssfHelper.setCell(row, dbInstance.readReplicaSourceDBInstanceIdentifier());
+		this.xssfHelper.setCell(row, dbInstance.secondaryAvailabilityZone());
+		this.xssfHelper.setCell(row, dbInstance.statusInfos().toString());
+		this.xssfHelper.setCell(row, dbInstance.storageEncrypted().toString());
+		this.xssfHelper.setCell(row, dbInstance.storageType());
+		this.xssfHelper.setCell(row, dbInstance.tdeCredentialArn());
+		this.xssfHelper.setCell(row, dbInstance.timezone());
 		
 		StringBuffer vsgs = new StringBuffer();
-		List<VpcSecurityGroupMembership> vpcSecurityGroupMemberships = dbInstance.getVpcSecurityGroups();
+		List<VpcSecurityGroupMembership> vpcSecurityGroupMemberships = dbInstance.vpcSecurityGroups();
 		for(VpcSecurityGroupMembership vpcSecurityGroupMembership : vpcSecurityGroupMemberships) {
 			if(vsgs.length() > 0) vsgs.append("\n");
-			vsgs.append(vpcSecurityGroupMembership.getVpcSecurityGroupId());
+			vsgs.append(vpcSecurityGroupMembership.vpcSecurityGroupId());
 			vsgs.append(" (");
-			vsgs.append(vpcSecurityGroupMembership.getStatus());
+			vsgs.append(vpcSecurityGroupMembership.status());
 			vsgs.append(")");
 		}
 		this.xssfHelper.setRightThinCell(row, vsgs.toString());
@@ -2618,40 +2615,40 @@ public class AWSExporter
 	private void makeEBS() {
 		XSSFRow row = null;
     
-		List<Volume> volumes = this.amazonClients.AmazonEC2.describeVolumes().getVolumes();
+		List<Volume> volumes = this.amazonClients.ec2Client.describeVolumes().volumes();
 		for (Volume volume : volumes) {
 			row = this.xssfHelper.createRow(this.ebsSheet, 1);
 			this.xssfHelper.setLeftThinCell(row, Integer.toString(row.getRowNum() - 1));
-			this.xssfHelper.setCell(row, this.region.getName());
-			this.xssfHelper.setCell(row, getNameTagValue(volume.getTags()));
-			this.xssfHelper.setCell(row, volume.getVolumeId());
-			this.xssfHelper.setCell(row, volume.getVolumeType());
-			this.xssfHelper.setCell(row, volume.getSize().toString());
-			this.xssfHelper.setCell(row, volume.getIops() == null ? "-" : volume.getIops().toString());
-			this.xssfHelper.setCell(row, volume.getAvailabilityZone());
-			this.xssfHelper.setCell(row, volume.getSnapshotId());
+			this.xssfHelper.setCell(row, this.region.id());
+			this.xssfHelper.setCell(row, getNameTagValue(volume.tags()));
+			this.xssfHelper.setCell(row, volume.volumeId());
+			this.xssfHelper.setCell(row, this.getEnumName(volume.volumeType()));
+			this.xssfHelper.setCell(row, volume.size().toString());
+			this.xssfHelper.setCell(row, volume.iops() == null ? "-" : volume.iops().toString());
+			this.xssfHelper.setCell(row, volume.availabilityZone());
+			this.xssfHelper.setCell(row, volume.snapshotId());
       
 			StringBuffer volumeAttachmentBuffer = new StringBuffer();
-			List<VolumeAttachment> volumeAttachments = volume.getAttachments();
+			List<VolumeAttachment> volumeAttachments = volume.attachments();
 			for (VolumeAttachment volumeAttachment : volumeAttachments) {
-				com.amazonaws.services.ec2.model.Instance instance = (com.amazonaws.services.ec2.model.Instance)((Reservation)this.amazonClients.AmazonEC2.describeInstances(new DescribeInstancesRequest().withInstanceIds(new String[] { volumeAttachment.getInstanceId() })).getReservations().get(0)).getInstances().get(0);
+				Instance instance = ((Reservation)this.amazonClients.ec2Client.describeInstances(DescribeInstancesRequest.builder().instanceIds(new String[] { volumeAttachment.instanceId() }).build()).reservations().get(0)).instances().get(0);
 				if (volumeAttachmentBuffer.length() > 0) {
 					volumeAttachmentBuffer.append("\n");
 				}
-				volumeAttachmentBuffer.append(volumeAttachment.getInstanceId());
+				volumeAttachmentBuffer.append(volumeAttachment.instanceId());
 				volumeAttachmentBuffer.append("(");
-				volumeAttachmentBuffer.append(getNameTagValue(instance.getTags()));
+				volumeAttachmentBuffer.append(getNameTagValue(instance.tags()));
 				volumeAttachmentBuffer.append("):");
-				volumeAttachmentBuffer.append(volumeAttachment.getDevice());
+				volumeAttachmentBuffer.append(volumeAttachment.device());
 				volumeAttachmentBuffer.append("(");
-				volumeAttachmentBuffer.append(volumeAttachment.getState());
+				volumeAttachmentBuffer.append(volumeAttachment.state());
 				volumeAttachmentBuffer.append(")");
 			}
 			this.xssfHelper.setCell(row, volumeAttachmentBuffer.toString());
       
-			this.xssfHelper.setCell(row, volume.getEncrypted().booleanValue() ? "Ecrypted" : "Not Encrypted");
-			this.xssfHelper.setCell(row, volume.getKmsKeyId());
-			this.xssfHelper.setRightThinCell(row, this.getAllTagValue(volume.getTags()));
+			this.xssfHelper.setCell(row, volume.encrypted().booleanValue() ? "Ecrypted" : "Not Encrypted");
+			this.xssfHelper.setCell(row, volume.kmsKeyId());
+			this.xssfHelper.setRightThinCell(row, this.getAllTagValue(volume.tags()));
 		}
 	}
   
@@ -2659,39 +2656,39 @@ public class AWSExporter
 	private void makeClassicELB() {
 		XSSFRow row = null;
     
-		List<LoadBalancerDescription> loadBalancerDescriptions = this.amazonClients.AmazonElasticLoadBalancing.describeLoadBalancers().getLoadBalancerDescriptions();
+		List<LoadBalancerDescription> loadBalancerDescriptions = this.amazonClients.elasticLoadBalancingClient.describeLoadBalancers().loadBalancerDescriptions();
 		for (LoadBalancerDescription loadBalancerDescription : loadBalancerDescriptions) {
 			row = this.xssfHelper.createRow(this.classicElbSheet, 1);
 			int startRowNum = row.getRowNum();
 			this.xssfHelper.setLeftThinCell(row, Integer.toString(row.getRowNum() - 1));
-			this.xssfHelper.setCell(row, this.region.getName());
-			this.xssfHelper.setCell(row, loadBalancerDescription.getVPCId());
+			this.xssfHelper.setCell(row, this.region.id());
+			this.xssfHelper.setCell(row, loadBalancerDescription.vpcId());
 			this.xssfHelper.setCell(row, "");
 			StringBuffer avzBuffer = new StringBuffer();
-			List<String> subnetIds = loadBalancerDescription.getSubnets();
+			List<String> subnetIds = loadBalancerDescription.subnets();
 			for (String subnetId : subnetIds) {
-				Subnet subnet = this.amazonClients.AmazonEC2.describeSubnets(new DescribeSubnetsRequest().withSubnetIds(new String[] { subnetId })).getSubnets().get(0);
+				Subnet subnet = this.amazonClients.ec2Client.describeSubnets(DescribeSubnetsRequest.builder().subnetIds(new String[] { subnetId }).build()).subnets().get(0);
 				if (avzBuffer.length() > 0) {
 					avzBuffer.append("\n");
 				}
-				avzBuffer.append(subnet.getAvailabilityZone());
+				avzBuffer.append(subnet.availabilityZone());
 				avzBuffer.append("(");
-				avzBuffer.append(subnet.getSubnetId());
+				avzBuffer.append(subnet.subnetId());
 				avzBuffer.append(")");
 			}
 			this.xssfHelper.setCell(row, avzBuffer.toString());
-			this.xssfHelper.setCell(row, loadBalancerDescription.getLoadBalancerName());
-			this.xssfHelper.setCell(row, loadBalancerDescription.getDNSName());
+			this.xssfHelper.setCell(row, loadBalancerDescription.loadBalancerName());
+			this.xssfHelper.setCell(row, loadBalancerDescription.dnsName());
       
 			StringBuffer instanceBuffer = new StringBuffer();
-			List<com.amazonaws.services.elasticloadbalancing.model.Instance> instances = loadBalancerDescription.getInstances();
-			for (com.amazonaws.services.elasticloadbalancing.model.Instance instance : instances) {
-				Reservation reservation = (Reservation)this.amazonClients.AmazonEC2.describeInstances(new DescribeInstancesRequest().withInstanceIds(new String[] { instance.getInstanceId() })).getReservations().get(0);
-				com.amazonaws.services.ec2.model.Instance ec2Instance = (com.amazonaws.services.ec2.model.Instance)reservation.getInstances().get(0);
+			List<software.amazon.awssdk.services.elasticloadbalancing.model.Instance> instances = loadBalancerDescription.instances();
+			for (software.amazon.awssdk.services.elasticloadbalancing.model.Instance instance : instances) {
+				Reservation reservation = (Reservation)this.amazonClients.ec2Client.describeInstances(DescribeInstancesRequest.builder().instanceIds(new String[] { instance.instanceId() }).build()).reservations().get(0);
+				Instance ec2Instance = reservation.instances().get(0);
 				if (instanceBuffer.length() > 0) {
 					instanceBuffer.append("\n");
 				}
-				instanceBuffer.append(ec2Instance.getInstanceId() + " [" + getNameTagValue(ec2Instance.getTags()) + "]");
+				instanceBuffer.append(ec2Instance.instanceId() + " [" + getNameTagValue(ec2Instance.tags()) + "]");
 			}
 
 			this.xssfHelper.setCell(row, instanceBuffer.toString());
@@ -2699,11 +2696,11 @@ public class AWSExporter
 			this.xssfHelper.setSubHeadCell(row, "Load Balancer Port");
 			this.xssfHelper.setSubHeadCell(row, "Instance Protocol");
 			this.xssfHelper.setSubHeadRightThinCell(row, "Instance Port");
-			this.xssfHelper.setRightThinCell(row, loadBalancerDescription.getHealthCheck().getTarget());
+			this.xssfHelper.setRightThinCell(row, loadBalancerDescription.healthCheck().target());
       
-			List<ListenerDescription> listenerDescriptions = loadBalancerDescription.getListenerDescriptions();
+			List<ListenerDescription> listenerDescriptions = loadBalancerDescription.listenerDescriptions();
 			for (ListenerDescription listenerDescription : listenerDescriptions) {
-				Listener listener = listenerDescription.getListener();
+				Listener listener = listenerDescription.listener();
         
 				row = this.xssfHelper.createRow(this.classicElbSheet, 1);
 				this.xssfHelper.setLeftThinCell(row, Integer.toString(row.getRowNum() - 1));
@@ -2714,10 +2711,10 @@ public class AWSExporter
 				this.xssfHelper.setCell(row, "");
 				this.xssfHelper.setCell(row, "");
 				this.xssfHelper.setCell(row, "");
-				this.xssfHelper.setLeftThinCell(row, listener.getProtocol());
-				this.xssfHelper.setCell(row, listener.getLoadBalancerPort().toString());
-				this.xssfHelper.setCell(row, listener.getInstanceProtocol());
-				this.xssfHelper.setRightThinCell(row, listener.getInstancePort().toString());
+				this.xssfHelper.setLeftThinCell(row, listener.protocol());
+				this.xssfHelper.setCell(row, listener.loadBalancerPort().toString());
+				this.xssfHelper.setCell(row, listener.instanceProtocol());
+				this.xssfHelper.setRightThinCell(row, listener.instancePort().toString());
 				this.xssfHelper.setRightThinCell(row, "");
 			}
 			if (startRowNum < row.getRowNum()) {
@@ -2738,47 +2735,47 @@ public class AWSExporter
 	private void makeOtherELB() {
 		XSSFRow row = null;
 	  	  
-		com.amazonaws.services.elasticloadbalancingv2.model.DescribeLoadBalancersResult describeLoadBalancersResult = this.amazonClients.AmazonElasticLoadBalancing2.describeLoadBalancers(new DescribeLoadBalancersRequest());
-		List<LoadBalancer> loadBalancers = describeLoadBalancersResult.getLoadBalancers();
+		DescribeLoadBalancersResponse describeLoadBalancersResult = this.amazonClients.elasticLoadBalancingV2Client.describeLoadBalancers();
+		List<LoadBalancer> loadBalancers = describeLoadBalancersResult.loadBalancers();
 		for (LoadBalancer loadBalancer : loadBalancers) {
 		  
 			row = this.xssfHelper.createRow(this.otherElbSheet, 1);
 			//int startRowNum = row.getRowNum();
 			this.xssfHelper.setLeftThinCell(row, Integer.toString(row.getRowNum() - 1));
-			this.xssfHelper.setCell(row, this.region.getName());
-			this.xssfHelper.setCell(row, loadBalancer.getVpcId());
+			this.xssfHelper.setCell(row, this.region.id());
+			this.xssfHelper.setCell(row, loadBalancer.vpcId());
 	      
 			StringBuffer azs = new StringBuffer();
-			List<AvailabilityZone> availabilityZones = loadBalancer.getAvailabilityZones();
+			List<AvailabilityZone> availabilityZones = loadBalancer.availabilityZones();
 			for (AvailabilityZone availabilityZone : availabilityZones) {
 				if(azs.length() > 0) azs.append("\n");
 				azs.append("Zone Name = ");
-				azs.append(availabilityZone.getZoneName());
+				azs.append(availabilityZone.zoneName());
 				azs.append("\n Subnet ID = ");
-				azs.append(availabilityZone.getSubnetId());
+				azs.append(availabilityZone.subnetId());
 			
 				StringBuffer lba = new StringBuffer();
-				List<LoadBalancerAddress> loadBalancerAddresses = availabilityZone.getLoadBalancerAddresses();
+				List<LoadBalancerAddress> loadBalancerAddresses = availabilityZone.loadBalancerAddresses();
 				if(loadBalancerAddresses != null) {
 					for(LoadBalancerAddress loadBalancerAddress : loadBalancerAddresses) {
 						lba.append("\nIp : ");
-						lba.append(loadBalancerAddress.getIpAddress());
+						lba.append(loadBalancerAddress.ipAddress());
 					}
 				}
 				azs.append(lba.toString() + "");
 			}
 	      
 			this.xssfHelper.setCell(row, azs.toString());
-			this.xssfHelper.setCell(row, loadBalancer.getType());
-			this.xssfHelper.setCell(row, loadBalancer.getScheme());
-			this.xssfHelper.setCell(row, loadBalancer.getIpAddressType());
-			this.xssfHelper.setCell(row, loadBalancer.getLoadBalancerName());
-			this.xssfHelper.setCell(row, loadBalancer.getCanonicalHostedZoneId());
-			String stsReason = loadBalancer.getState().getReason();
-			this.xssfHelper.setCell(row, loadBalancer.getState().getCode() + (stsReason == null ? "" : "(" + stsReason + ")"));
+			this.xssfHelper.setCell(row, this.getEnumName(loadBalancer.type()));
+			this.xssfHelper.setCell(row, this.getEnumName(loadBalancer.scheme()));
+			this.xssfHelper.setCell(row, this.getEnumName(loadBalancer.ipAddressType()));
+			this.xssfHelper.setCell(row, loadBalancer.loadBalancerName());
+			this.xssfHelper.setCell(row, loadBalancer.canonicalHostedZoneId());
+			String stsReason = loadBalancer.state().reason();
+			this.xssfHelper.setCell(row, loadBalancer.state().code() + (stsReason == null ? "" : "(" + stsReason + ")"));
 	      
 			StringBuffer sgs = new StringBuffer();
-			List<String> securityGroups = loadBalancer.getSecurityGroups();
+			List<String> securityGroups = loadBalancer.securityGroups();
 			if(securityGroups != null) {
 				for(String securityGroup : securityGroups) {
 					sgs.append("\n");
@@ -2787,24 +2784,24 @@ public class AWSExporter
 			}
 
 			this.xssfHelper.setCell(row, sgs.toString() + "");
-			this.xssfHelper.setCell(row, loadBalancer.getDNSName());
+			this.xssfHelper.setCell(row, loadBalancer.dnsName());
 			this.xssfHelper.setCell(row, "");
 			this.xssfHelper.setCell(row, "");
-			this.xssfHelper.setCell(row, loadBalancer.getLoadBalancerArn());
+			this.xssfHelper.setCell(row, loadBalancer.loadBalancerArn());
 	      
 			this.otherElbSheet.addMergedRegion(new CellRangeAddress(row.getRowNum(), row.getRowNum(), 11, 13));
 	      
 			StringBuffer tsb = new StringBuffer();
 	      
-			DescribeTagsResult describeTagsResult = this.amazonClients.AmazonElasticLoadBalancing2.describeTags(new DescribeTagsRequest().withResourceArns(loadBalancer.getLoadBalancerArn()));
-			List<TagDescription> tagDescriptions = describeTagsResult.getTagDescriptions();
+			DescribeTagsResponse describeTagsResult = this.amazonClients.elasticLoadBalancingV2Client.describeTags(DescribeTagsRequest.builder().resourceArns(loadBalancer.loadBalancerArn()).build());
+			List<TagDescription> tagDescriptions = describeTagsResult.tagDescriptions();
 			for(TagDescription tagDescription : tagDescriptions) {
-				for(com.amazonaws.services.elasticloadbalancingv2.model.Tag tag : tagDescription.getTags()) {
+				for(software.amazon.awssdk.services.elasticloadbalancingv2.model.Tag tag : tagDescription.tags()) {
 					if(tsb.length() > 0) tsb.append("\n");
 					tsb.append("Key=");
-					tsb.append(tag.getKey());
+					tsb.append(tag.key());
 					tsb.append(", Value=");
-					tsb.append(tag.getValue());
+					tsb.append(tag.value());
 				}  
 			}
 	      
@@ -2834,52 +2831,52 @@ public class AWSExporter
 	    	this.otherElbSheet.addMergedRegion(new CellRangeAddress(row.getRowNum(), row.getRowNum(), 8, 15));
 	    	
 	    	// Listener Data Row
-	    	DescribeListenersResult describeListenersResult = this.amazonClients.AmazonElasticLoadBalancing2.describeListeners(new DescribeListenersRequest().withLoadBalancerArn(loadBalancer.getLoadBalancerArn()));
+	    	DescribeListenersResponse describeListenersResult = this.amazonClients.elasticLoadBalancingV2Client.describeListeners(DescribeListenersRequest.builder().loadBalancerArn(loadBalancer.loadBalancerArn()).build());
 	      
-	    	List<com.amazonaws.services.elasticloadbalancingv2.model.Listener> listeners = describeListenersResult.getListeners();
-	    	for (com.amazonaws.services.elasticloadbalancingv2.model.Listener listener : listeners) {
+	    	List<software.amazon.awssdk.services.elasticloadbalancingv2.model.Listener> listeners = describeListenersResult.listeners();
+	    	for (software.amazon.awssdk.services.elasticloadbalancingv2.model.Listener listener : listeners) {
 	    	
 	    		row = this.xssfHelper.createRow(this.otherElbSheet, 1);
 	    		this.xssfHelper.setLeftThinCell(row, Integer.toString(row.getRowNum() - 1));
-	    		this.xssfHelper.setSubHeadCell(row, listener.getProtocol());
-	    		this.xssfHelper.setSubHeadCell(row, listener.getPort().toString());
+	    		this.xssfHelper.setSubHeadCell(row, this.getEnumName(listener.protocol()));
+	    		this.xssfHelper.setSubHeadCell(row, listener.port().toString());
 
-	    		if("network".equals(loadBalancer.getType())) {
-	    			List<Action> actions = listener.getDefaultActions();
+	    		if("network".equals(this.getEnumName(loadBalancer.type()))) {
+	    			List<Action> actions = listener.defaultActions();
 	    			if(actions != null) {
 	    				this.makeOtherELBTargetGroupActionHeader("Default");
 	    				this.makeOtherELBActions(actions);
 	    			}
 	    		}
 	    	
-	    		if("application".equals(loadBalancer.getType())) {
-	    			DescribeRulesResult describeRulesResult = this.amazonClients.AmazonElasticLoadBalancing2.describeRules(new DescribeRulesRequest().withListenerArn(listener.getListenerArn()));
-	    			List<Rule> rules = describeRulesResult.getRules();
+	    		if("application".equals(this.getEnumName(loadBalancer.type()))) {
+	    			DescribeRulesResponse describeRulesResult = this.amazonClients.elasticLoadBalancingV2Client.describeRules(DescribeRulesRequest.builder().listenerArn(listener.listenerArn()).build());
+	    			List<Rule> rules = describeRulesResult.rules();
 	    			for (Rule rule : rules) {
 	    				this.makeOtherELBRules(rule);
 	    				this.makeOtherELBTargetGroupActionHeader("Rule");
-	    				this.makeOtherELBActions(rule.getActions());
+	    				this.makeOtherELBActions(rule.actions());
 	    			}
 	    		}
 	    	
-	    		this.xssfHelper.setSubHeadCell(row, listener.getSslPolicy());
+	    		this.xssfHelper.setSubHeadCell(row, listener.sslPolicy());
 	    	
 	    		StringBuffer scer = new StringBuffer();
-	    		List<Certificate> certificates = listener.getCertificates();
+	    		List<Certificate> certificates = listener.certificates();
 	    		if(certificates != null) {
 	    			for(Certificate certificate : certificates) {
 	    				if(scer.length() > 0) scer.append("\n");
 	    				scer.append("Certificate ARN=");
-	    				scer.append(certificate.getCertificateArn());
+	    				scer.append(certificate.certificateArn());
 	    				scer.append(", isDefault=");
-	    				scer.append(certificate.getIsDefault());
+	    				scer.append(certificate.isDefault());
 	    			}
 	    		}
 	    		this.xssfHelper.setSubHeadCell(row, scer.toString() + "");
 	    		this.xssfHelper.setSubHeadCell(row, "");
 	    		this.xssfHelper.setSubHeadCell(row, "");
 	    		this.xssfHelper.setSubHeadCell(row, "");
-	    		this.xssfHelper.setSubHeadCell(row, listener.getListenerArn());
+	    		this.xssfHelper.setSubHeadCell(row, listener.listenerArn());
 	    		this.xssfHelper.setSubHeadCell(row, "");
 	    		this.xssfHelper.setSubHeadCell(row, "");
 	    		this.xssfHelper.setSubHeadCell(row, "");
@@ -2921,14 +2918,14 @@ public class AWSExporter
 		this.otherElbSheet.addMergedRegion(new CellRangeAddress(row.getRowNum(), row.getRowNum(), 6, 15));
       
 		StringBuffer ruleCs = new StringBuffer();
-		List<RuleCondition> ruleConditions = rule.getConditions();
+		List<RuleCondition> ruleConditions = rule.conditions();
 		for (RuleCondition ruleCondition : ruleConditions) {
 		  
-			ruleCs.append(ruleCondition.getField());
+			ruleCs.append(ruleCondition.field());
 			ruleCs.append("=");
 		  
 			StringBuffer fieldVs = new StringBuffer();
-			List<String> fieldValues = ruleCondition.getValues();
+			List<String> fieldValues = ruleCondition.values();
 			for(String fieldValue : fieldValues) {
 				if(fieldVs.length() > 0) fieldVs.append(", ");
 				fieldVs.append(fieldValue);  
@@ -2939,12 +2936,12 @@ public class AWSExporter
 	  
 		row = this.xssfHelper.createRow(this.otherElbSheet, 1);
 		this.xssfHelper.setLeftThinCell(row, Integer.toString(row.getRowNum() - 1));
-		this.xssfHelper.setCell(row, rule.getIsDefault().toString());
-		this.xssfHelper.setCell(row, rule.getPriority());
+		this.xssfHelper.setCell(row, rule.isDefault().toString());
+		this.xssfHelper.setCell(row, rule.priority());
 		this.xssfHelper.setCell(row, ruleCs.toString());
 		this.xssfHelper.setCell(row, "");
 		this.xssfHelper.setCell(row, "");
-		this.xssfHelper.setCell(row, rule.getRuleArn());
+		this.xssfHelper.setCell(row, rule.ruleArn());
 		this.xssfHelper.setCell(row, "");
 		this.xssfHelper.setCell(row, "");
 		this.xssfHelper.setCell(row, "");
@@ -2964,27 +2961,27 @@ public class AWSExporter
 		
 	    for(Action action : actions) {	    		    
 		    // Listener Target Group Start
-	    	DescribeTargetGroupsResult describeTargetGroupsResult = this.amazonClients.AmazonElasticLoadBalancing2.describeTargetGroups(new DescribeTargetGroupsRequest().withTargetGroupArns(action.getTargetGroupArn()));
-	    	List<TargetGroup> targetGroups = describeTargetGroupsResult.getTargetGroups();
+	    	DescribeTargetGroupsResponse describeTargetGroupsResult = this.amazonClients.elasticLoadBalancingV2Client.describeTargetGroups(DescribeTargetGroupsRequest.builder().targetGroupArns(action.targetGroupArn()).build());
+	    	List<TargetGroup> targetGroups = describeTargetGroupsResult.targetGroups();
 	    	for(TargetGroup targetGroup : targetGroups) {
 
   	    	this.makeOtherELBTargetGroupHeader();
   	    	
 	    		StringBuffer tga = new StringBuffer();
-	    		DescribeTargetGroupAttributesResult describeTargetGroupAttributesResult = this.amazonClients.AmazonElasticLoadBalancing2.describeTargetGroupAttributes(new DescribeTargetGroupAttributesRequest().withTargetGroupArn(targetGroup.getTargetGroupArn()));
-	    		List<TargetGroupAttribute> targetGroupAttributes = describeTargetGroupAttributesResult.getAttributes();
+	    		DescribeTargetGroupAttributesResponse describeTargetGroupAttributesResult = this.amazonClients.elasticLoadBalancingV2Client.describeTargetGroupAttributes(DescribeTargetGroupAttributesRequest.builder().targetGroupArn(targetGroup.targetGroupArn()).build());
+	    		List<TargetGroupAttribute> targetGroupAttributes = describeTargetGroupAttributesResult.attributes();
 	    		for(TargetGroupAttribute targetGroupAttribute : targetGroupAttributes) {
 	    			if(tga.length() > 0) tga.append("\n");
-	    			tga.append(targetGroupAttribute.getKey());
+	    			tga.append(targetGroupAttribute.key());
 	    			tga.append("=");
-	    			tga.append(targetGroupAttribute.getValue());
+	    			tga.append(targetGroupAttribute.value());
 	    		}
 	    		
 	    		this.makeOtherELBTargetGroup(action, targetGroup, tga.toString());	    	    		
 	    		
 	    		this.makeOtherELBTargetHealthHeader();
-	    		DescribeTargetHealthResult describeTargetHealthResult = this.amazonClients.AmazonElasticLoadBalancing2.describeTargetHealth(new DescribeTargetHealthRequest().withTargetGroupArn(targetGroup.getTargetGroupArn()));
-	    		List<TargetHealthDescription> targetHealthDescriptions = describeTargetHealthResult.getTargetHealthDescriptions();
+	    		DescribeTargetHealthResponse describeTargetHealthResult = this.amazonClients.elasticLoadBalancingV2Client.describeTargetHealth(DescribeTargetHealthRequest.builder().targetGroupArn(targetGroup.targetGroupArn()).build());
+	    		List<TargetHealthDescription> targetHealthDescriptions = describeTargetHealthResult.targetHealthDescriptions();
 	    		for(TargetHealthDescription targetHealthDescription : targetHealthDescriptions) {
 	    			this.makeOtherELBTargetHealth(targetHealthDescription);
 	    		}
@@ -3037,18 +3034,18 @@ public class AWSExporter
   
 	private void makeOtherELBTargetHealth(TargetHealthDescription targetHealthDescription) {
 	  
-		TargetDescription targetDescription = targetHealthDescription.getTarget();
-		TargetHealth targetHealth = targetHealthDescription.getTargetHealth();
+		TargetDescription targetDescription = targetHealthDescription.target();
+		TargetHealth targetHealth = targetHealthDescription.targetHealth();
 		
 		XSSFRow row = this.xssfHelper.createRow(this.otherElbSheet, 1);
 		this.xssfHelper.setLeftThinCell(row, Integer.toString(row.getRowNum() - 1));
-		this.xssfHelper.setCell(row, targetDescription.getAvailabilityZone());
-		this.xssfHelper.setCell(row, targetDescription.getId());
-		this.xssfHelper.setCell(row, targetDescription.getPort().toString());
-		this.xssfHelper.setCell(row, targetHealthDescription.getHealthCheckPort());
-		this.xssfHelper.setCell(row, targetHealth == null ? "" : targetHealth.getState());
-		this.xssfHelper.setCell(row, targetHealth == null ? "" : targetHealth.getReason());
-		this.xssfHelper.setCell(row, targetHealth == null ? "" : targetHealth.getDescription());
+		this.xssfHelper.setCell(row, targetDescription.availabilityZone());
+		this.xssfHelper.setCell(row, targetDescription.id());
+		this.xssfHelper.setCell(row, targetDescription.port().toString());
+		this.xssfHelper.setCell(row, targetHealthDescription.healthCheckPort());
+		this.xssfHelper.setCell(row, targetHealth == null ? "" : this.getEnumName(targetHealth.state()));
+		this.xssfHelper.setCell(row, targetHealth == null ? "" : this.getEnumName(targetHealth.reason()));
+		this.xssfHelper.setCell(row, targetHealth == null ? "" : targetHealth.description());
 		this.xssfHelper.setCell(row, "");
 		this.xssfHelper.setCell(row, "");
 		this.xssfHelper.setCell(row, "");
@@ -3085,206 +3082,208 @@ public class AWSExporter
 
 		row = this.xssfHelper.createRow(this.otherElbSheet, 1);
 		this.xssfHelper.setLeftThinCell(row, Integer.toString(row.getRowNum() - 1));
-		this.xssfHelper.setCell(row, action.getOrder() == null ? "" : action.getOrder().toString());
-		this.xssfHelper.setCell(row, action.getType());
-		this.xssfHelper.setCell(row, targetGroup.getTargetGroupName());
-		this.xssfHelper.setCell(row, targetGroup.getTargetType());
-		this.xssfHelper.setCell(row, targetGroup.getProtocol());
-		this.xssfHelper.setCell(row, targetGroup.getPort().toString());
-		this.xssfHelper.setCell(row, targetGroup.getHealthCheckProtocol());
-		this.xssfHelper.setCell(row, targetGroup.getHealthCheckPort());
-		this.xssfHelper.setCell(row, targetGroup.getHealthCheckPath());
-		this.xssfHelper.setCell(row, targetGroup.getHealthCheckIntervalSeconds().toString());
-		this.xssfHelper.setCell(row, targetGroup.getHealthCheckTimeoutSeconds().toString());
-		this.xssfHelper.setCell(row, targetGroup.getHealthyThresholdCount().toString());
-		this.xssfHelper.setCell(row, targetGroup.getUnhealthyThresholdCount().toString());
-		this.xssfHelper.setCell(row, targetGroup.getTargetGroupArn());
+		this.xssfHelper.setCell(row, action.order() == null ? "" : action.order().toString());
+		this.xssfHelper.setCell(row, this.getEnumName(action.type()));
+		this.xssfHelper.setCell(row, targetGroup.targetGroupName());
+		this.xssfHelper.setCell(row, this.getEnumName(targetGroup.targetType()));
+		this.xssfHelper.setCell(row, this.getEnumName(targetGroup.protocol()));
+		this.xssfHelper.setCell(row, targetGroup.port().toString());
+		this.xssfHelper.setCell(row, this.getEnumName(targetGroup.healthCheckProtocol()));
+		this.xssfHelper.setCell(row, targetGroup.healthCheckPort());
+		this.xssfHelper.setCell(row, targetGroup.healthCheckPath());
+		this.xssfHelper.setCell(row, targetGroup.healthCheckIntervalSeconds().toString());
+		this.xssfHelper.setCell(row, targetGroup.healthCheckTimeoutSeconds().toString());
+		this.xssfHelper.setCell(row, targetGroup.healthyThresholdCount().toString());
+		this.xssfHelper.setCell(row, targetGroup.unhealthyThresholdCount().toString());
+		this.xssfHelper.setCell(row, targetGroup.targetGroupArn());
 		this.xssfHelper.setCell(row, targetGroupAttributes);
 	}
 
 	
 	private void makeEC2Instance() {
 		XSSFRow row = null;
-		List<Reservation> reservations = this.amazonClients.AmazonEC2.describeInstances().getReservations();
+		List<Reservation> reservations = this.amazonClients.ec2Client.describeInstances().reservations();
 		for (Reservation reservation : reservations) {
-			List<com.amazonaws.services.ec2.model.Instance> instances = reservation.getInstances();
-			for (com.amazonaws.services.ec2.model.Instance instance : instances) {
-				Subnet subnet = (Subnet) this.amazonClients.AmazonEC2
+			List<Instance> instances = reservation.instances();
+			for (Instance instance : instances) {
+				Subnet subnet = null;
+				if(instance.subnetId() != null) {
+					subnet = this.amazonClients.ec2Client
 						.describeSubnets(
-								new DescribeSubnetsRequest().withSubnetIds(new String[] { instance.getSubnetId() }))
-						.getSubnets().get(0);
+								DescribeSubnetsRequest.builder().subnetIds(instance.subnetId()).build())
+						.subnets().get(0);
+				}
 
 				row = this.xssfHelper.createRow(this.ec2InstanceSheet, 1);
 				this.xssfHelper.setLeftThinCell(row, Integer.toString(row.getRowNum() - 1));
-				this.xssfHelper.setCell(row, getNameTagValue(instance.getTags()));
-				this.xssfHelper.setCell(row, instance.getInstanceId());
-				this.xssfHelper.setCell(row, instance.getInstanceType());
-				this.xssfHelper.setCell(row, subnet.getAvailabilityZone());
-				this.xssfHelper.setCell(row, instance.getPrivateIpAddress());
-				this.xssfHelper.setCell(row, instance.getPublicIpAddress());
-				this.xssfHelper.setCell(row, instance.getPrivateDnsName());
-				this.xssfHelper.setCell(row, instance.getPublicDnsName());
+				this.xssfHelper.setCell(row, getNameTagValue(instance.tags()));
+				this.xssfHelper.setCell(row, instance.instanceId());
+				this.xssfHelper.setCell(row, this.getEnumName(instance.instanceType()));
+				this.xssfHelper.setCell(row, subnet == null ? "" : subnet.availabilityZone());
+				this.xssfHelper.setCell(row, instance.privateIpAddress());
+				this.xssfHelper.setCell(row, instance.publicIpAddress());
+				this.xssfHelper.setCell(row, instance.privateDnsName());
+				this.xssfHelper.setCell(row, instance.publicDnsName());
 
 				StringBuffer securityGroups = new StringBuffer();
-				List<GroupIdentifier> groupIdentifiers = instance.getSecurityGroups();
+				List<GroupIdentifier> groupIdentifiers = instance.securityGroups();
 				for (GroupIdentifier groupIdentifier : groupIdentifiers) {
 					if (securityGroups.length() > 0) {
 						securityGroups.append("\n");
 					}
-					securityGroups.append(groupIdentifier.getGroupName());
+					securityGroups.append(groupIdentifier.groupName());
 					securityGroups.append(" (");
-					securityGroups.append(groupIdentifier.getGroupId());
+					securityGroups.append(groupIdentifier.groupId());
 					securityGroups.append(")");
 				}
 				this.xssfHelper.setCell(row, securityGroups.toString());
 
-				Date launchTime = instance.getLaunchTime();
-				this.xssfHelper.setCell(row, formatDate.format(launchTime));
+				this.xssfHelper.setCell(row, formatDate.format(instance.launchTime()));
 
-				InstanceState instanceState = instance.getState();
+				InstanceState instanceState = instance.state();
 				this.xssfHelper.setCell(row,
-						instanceState == null ? "" : instanceState.getCode() + "(" + instanceState.getName() + ")");
+						instanceState == null ? "" : instanceState.code() + "(" + instanceState.name() + ")");
 
-				StateReason stateReason = instance.getStateReason();
+				StateReason stateReason = instance.stateReason();
 				this.xssfHelper.setCell(row,
-						stateReason == null ? "" : stateReason.getCode() + "(" + stateReason.getMessage() + ")");
-				this.xssfHelper.setCell(row, instance.getStateTransitionReason());
+						stateReason == null ? "" : stateReason.code() + "(" + stateReason.message() + ")");
+				this.xssfHelper.setCell(row, instance.stateTransitionReason());
 
-				Monitoring monitoring = instance.getMonitoring();
-				this.xssfHelper.setCell(row, monitoring == null ? "" : monitoring.getState());
+				Monitoring monitoring = instance.monitoring();
+				this.xssfHelper.setCell(row, monitoring == null ? "" : this.getEnumName(monitoring.state()));
 
 				this.xssfHelper.setCell(row, Boolean
-						.toString(instance.getSourceDestCheck() == null ? false : instance.getSourceDestCheck()));
-				this.xssfHelper.setCell(row, instance.getSpotInstanceRequestId());
-				this.xssfHelper.setCell(row, instance.getSriovNetSupport());
+						.toString(instance.sourceDestCheck() == null ? false : instance.sourceDestCheck()));
+				this.xssfHelper.setCell(row, instance.spotInstanceRequestId());
+				this.xssfHelper.setCell(row, instance.sriovNetSupport());
 
-				this.xssfHelper.setCell(row, instance.getVirtualizationType());
-				this.xssfHelper.setCell(row, instance.getPlatform());
-				this.xssfHelper.setCell(row, instance.getArchitecture());
-				this.xssfHelper.setCell(row, instance.getKernelId());
+				this.xssfHelper.setCell(row, this.getEnumName(instance.virtualizationType()));
+				this.xssfHelper.setCell(row, this.getEnumName(instance.platform()));
+				this.xssfHelper.setCell(row, this.getEnumName(instance.architecture()));
+				this.xssfHelper.setCell(row, instance.kernelId());
 				this.xssfHelper.setCell(row,
-						instance.getEnaSupport() == null ? "" : Boolean.toString(instance.getEnaSupport()));
-				this.xssfHelper.setCell(row, instance.getHypervisor());
-				this.xssfHelper.setCell(row, instance.getClientToken());
-				this.xssfHelper.setCell(row, Integer.toString(instance.getAmiLaunchIndex()));
-				this.xssfHelper.setCell(row, instance.getImageId());
-				this.xssfHelper.setCell(row, instance.getInstanceLifecycle());
-				this.xssfHelper.setCell(row, instance.getKeyName());
+						instance.enaSupport() == null ? "" : Boolean.toString(instance.enaSupport()));
+				this.xssfHelper.setCell(row, this.getEnumName(instance.hypervisor()));
+				this.xssfHelper.setCell(row, instance.clientToken());
+				this.xssfHelper.setCell(row, Integer.toString(instance.amiLaunchIndex()));
+				this.xssfHelper.setCell(row, instance.imageId());
+				this.xssfHelper.setCell(row, this.getEnumName(instance.instanceLifecycle()));
+				this.xssfHelper.setCell(row, instance.keyName());
 
-				CpuOptions cpuOptions = instance.getCpuOptions();
+				CpuOptions cpuOptions = instance.cpuOptions();
 				this.xssfHelper.setCell(row,
 						cpuOptions == null ? ""
-								: "Core : " + cpuOptions.getCoreCount() + "\nThreads Per Core : "
-										+ cpuOptions.getThreadsPerCore());
+								: "Core : " + cpuOptions.coreCount() + "\nThreads Per Core : "
+										+ cpuOptions.threadsPerCore());
 
 				StringBuffer gpuAssociation = new StringBuffer();
-				List<ElasticGpuAssociation> elasticGpuAssociations = instance.getElasticGpuAssociations();
+				List<ElasticGpuAssociation> elasticGpuAssociations = instance.elasticGpuAssociations();
 				for (ElasticGpuAssociation elasticGpuAssociation : elasticGpuAssociations) {
 					if (gpuAssociation.length() > 0) {
 						gpuAssociation.append("\n");
 					}
-					gpuAssociation.append("AssociationID : " + elasticGpuAssociation.getElasticGpuAssociationId());
-					gpuAssociation.append(", GpuID : " + elasticGpuAssociation.getElasticGpuId());
+					gpuAssociation.append("AssociationID : " + elasticGpuAssociation.elasticGpuAssociationId());
+					gpuAssociation.append(", GpuID : " + elasticGpuAssociation.elasticGpuId());
 					gpuAssociation
-							.append(", AssociationTime : " + elasticGpuAssociation.getElasticGpuAssociationTime());
+							.append(", AssociationTime : " + elasticGpuAssociation.elasticGpuAssociationTime());
 					gpuAssociation
-							.append(", AssociationState : " + elasticGpuAssociation.getElasticGpuAssociationState());
+							.append(", AssociationState : " + elasticGpuAssociation.elasticGpuAssociationState());
 				}
 				this.xssfHelper.setCell(row, gpuAssociation.toString());
 
-				this.xssfHelper.setCell(row, Boolean.toString(instance.getEbsOptimized()));
-				this.xssfHelper.setCell(row, instance.getRamdiskId());
-				this.xssfHelper.setCell(row, instance.getRootDeviceName());
-				this.xssfHelper.setCell(row, instance.getRootDeviceType());
+				this.xssfHelper.setCell(row, Boolean.toString(instance.ebsOptimized()));
+				this.xssfHelper.setCell(row, instance.ramdiskId());
+				this.xssfHelper.setCell(row, instance.rootDeviceName());
+				this.xssfHelper.setCell(row, this.getEnumName(instance.rootDeviceType()));
 
 				StringBuffer blockDeviceMapping = new StringBuffer();
-				List<InstanceBlockDeviceMapping> instanceBlockDeviceMappings = instance.getBlockDeviceMappings();
+				List<InstanceBlockDeviceMapping> instanceBlockDeviceMappings = instance.blockDeviceMappings();
 				for (InstanceBlockDeviceMapping instanceBlockDeviceMapping : instanceBlockDeviceMappings) {
 					if (blockDeviceMapping.length() > 0) {
 						blockDeviceMapping.append("\n");
 					}
-					blockDeviceMapping.append("DeviceName : " + instanceBlockDeviceMapping.getDeviceName());
-					EbsInstanceBlockDevice ebsInstanceBlockDevice = instanceBlockDeviceMapping.getEbs();
+					blockDeviceMapping.append("DeviceName : " + instanceBlockDeviceMapping.deviceName());
+					EbsInstanceBlockDevice ebsInstanceBlockDevice = instanceBlockDeviceMapping.ebs();
 					if (ebsInstanceBlockDevice != null) {
-						blockDeviceMapping.append(", VolumeId : " + ebsInstanceBlockDevice.getVolumeId());
+						blockDeviceMapping.append(", VolumeId : " + ebsInstanceBlockDevice.volumeId());
 						blockDeviceMapping
-								.append(", Attach Time : " + formatDate.format(ebsInstanceBlockDevice.getAttachTime()));
+								.append(", Attach Time : " + formatDate.format(ebsInstanceBlockDevice.attachTime()));
 						blockDeviceMapping.append(", DeleteOnTermination : "
-								+ Boolean.toString(ebsInstanceBlockDevice.getDeleteOnTermination()));
-						blockDeviceMapping.append(", Status : " + ebsInstanceBlockDevice.getStatus());
+								+ Boolean.toString(ebsInstanceBlockDevice.deleteOnTermination()));
+						blockDeviceMapping.append(", Status : " + ebsInstanceBlockDevice.status());
 					}
 				}
 				this.xssfHelper.setCell(row, blockDeviceMapping.toString());
 
 				StringBuffer networkInterfaces = new StringBuffer();
-				List<InstanceNetworkInterface> instanceNetworkInterfaces = instance.getNetworkInterfaces();
+				List<InstanceNetworkInterface> instanceNetworkInterfaces = instance.networkInterfaces();
 				for (InstanceNetworkInterface instanceNetworkInterface : instanceNetworkInterfaces) {
 					if (networkInterfaces.length() > 0) {
 						networkInterfaces.append("\n");
 					}
 					networkInterfaces
-							.append("NetworkInterfaceid : " + instanceNetworkInterface.getNetworkInterfaceId());
-					networkInterfaces.append(", OwnerId : " + instanceNetworkInterface.getOwnerId());
-					networkInterfaces.append(", VpcId : " + instanceNetworkInterface.getVpcId());
-					networkInterfaces.append(", SubnetId : " + instanceNetworkInterface.getSubnetId());
-					networkInterfaces.append(", Status : " + instanceNetworkInterface.getStatus());
-					networkInterfaces.append(", SourceDestCheck : " + instanceNetworkInterface.getSourceDestCheck());
-					networkInterfaces.append(", Mac : " + instanceNetworkInterface.getMacAddress());
+							.append("NetworkInterfaceid : " + instanceNetworkInterface.networkInterfaceId());
+					networkInterfaces.append(", OwnerId : " + instanceNetworkInterface.ownerId());
+					networkInterfaces.append(", VpcId : " + instanceNetworkInterface.vpcId());
+					networkInterfaces.append(", SubnetId : " + instanceNetworkInterface.subnetId());
+					networkInterfaces.append(", Status : " + instanceNetworkInterface.status());
+					networkInterfaces.append(", SourceDestCheck : " + instanceNetworkInterface.sourceDestCheck());
+					networkInterfaces.append(", Mac : " + instanceNetworkInterface.macAddress());
 					networkInterfaces
-							.append(", Private Ip Address : " + instanceNetworkInterface.getPrivateIpAddress());
-					networkInterfaces.append(", Private Dns Name : " + instanceNetworkInterface.getPrivateDnsName());
+							.append(", Private Ip Address : " + instanceNetworkInterface.privateIpAddress());
+					networkInterfaces.append(", Private Dns Name : " + instanceNetworkInterface.privateDnsName());
 
 					List<InstancePrivateIpAddress> instancePrivateIpAddresses = instanceNetworkInterface
-							.getPrivateIpAddresses();
+							.privateIpAddresses();
 					networkInterfaces.append(", Private Ips [");
 					for (InstancePrivateIpAddress instancePrivateIpAddress : instancePrivateIpAddresses) {
-						networkInterfaces.append("[ Primary : " + instancePrivateIpAddress.getPrimary());
-						networkInterfaces.append(", Ip : " + instancePrivateIpAddress.getPrivateIpAddress());
-						networkInterfaces.append(", Dns Name : " + instancePrivateIpAddress.getPrivateDnsName());
+						networkInterfaces.append("[ Primary : " + instancePrivateIpAddress.primary());
+						networkInterfaces.append(", Ip : " + instancePrivateIpAddress.privateIpAddress());
+						networkInterfaces.append(", Dns Name : " + instancePrivateIpAddress.privateDnsName());
 						networkInterfaces.append("], ");
 					}
 					networkInterfaces.append("]");
 
-					List<InstanceIpv6Address> instanceIpv6Addresses = instanceNetworkInterface.getIpv6Addresses();
+					List<InstanceIpv6Address> instanceIpv6Addresses = instanceNetworkInterface.ipv6Addresses();
 					networkInterfaces.append(", Ipv6s [");
 					for (InstanceIpv6Address instanceIpv6Address : instanceIpv6Addresses) {
-						networkInterfaces.append(instanceIpv6Address.getIpv6Address() + ", ");
+						networkInterfaces.append(instanceIpv6Address.ipv6Address() + ", ");
 					}
 					networkInterfaces.append("]");
 
 					InstanceNetworkInterfaceAssociation instanceNetworkInterfaceAssociation = instanceNetworkInterface
-							.getAssociation();
+							.association();
 					if (instanceNetworkInterfaceAssociation != null) {
 						networkInterfaces.append("Association [");
-						networkInterfaces.append("IpOwnerId : " + instanceNetworkInterfaceAssociation.getIpOwnerId());
-						networkInterfaces.append(", PublicIP : " + instanceNetworkInterfaceAssociation.getPublicIp());
+						networkInterfaces.append("IpOwnerId : " + instanceNetworkInterfaceAssociation.ipOwnerId());
+						networkInterfaces.append(", PublicIP : " + instanceNetworkInterfaceAssociation.publicIp());
 						networkInterfaces
-								.append(", PublicDnsName : " + instanceNetworkInterfaceAssociation.getPublicDnsName());
+								.append(", PublicDnsName : " + instanceNetworkInterfaceAssociation.publicDnsName());
 						networkInterfaces.append("]");
 					}
 
 					InstanceNetworkInterfaceAttachment instanceNetworkInterfaceAttachment = instanceNetworkInterface
-							.getAttachment();
+							.attachment();
 					if (instanceNetworkInterfaceAttachment != null) {
 						networkInterfaces.append(", Attachment [");
 						networkInterfaces
-								.append("AttachmentId : " + instanceNetworkInterfaceAttachment.getAttachmentId());
+								.append("AttachmentId : " + instanceNetworkInterfaceAttachment.attachmentId());
 						networkInterfaces.append(", AttachTime : "
-								+ formatDate.format(instanceNetworkInterfaceAttachment.getAttachTime()));
+								+ formatDate.format(instanceNetworkInterfaceAttachment.attachTime()));
 						networkInterfaces.append(", DeleteOnTermination : "
-								+ Boolean.toString(instanceNetworkInterfaceAttachment.getDeleteOnTermination()));
+								+ Boolean.toString(instanceNetworkInterfaceAttachment.deleteOnTermination()));
 						networkInterfaces.append(", DeviceIndex : "
-								+ Integer.toString(instanceNetworkInterfaceAttachment.getDeviceIndex()));
-						networkInterfaces.append(", Status : " + instanceNetworkInterfaceAttachment.getStatus());
+								+ Integer.toString(instanceNetworkInterfaceAttachment.deviceIndex()));
+						networkInterfaces.append(", Status : " + instanceNetworkInterfaceAttachment.status());
 						networkInterfaces.append("]");
 					}
 
-					networkInterfaces.append(", Description : " + instanceNetworkInterface.getDescription());
-					List<GroupIdentifier> ngroupIdentifiers = instanceNetworkInterface.getGroups();
+					networkInterfaces.append(", Description : " + instanceNetworkInterface.description());
+					List<GroupIdentifier> ngroupIdentifiers = instanceNetworkInterface.groups();
 					networkInterfaces.append(", Groups [");
 					for (GroupIdentifier ngroupIdentifier : ngroupIdentifiers) {
 						networkInterfaces
-								.append(ngroupIdentifier.getGroupId() + "(" + ngroupIdentifier.getGroupName() + ")");
+								.append(ngroupIdentifier.groupId() + "(" + ngroupIdentifier.groupName() + ")");
 						networkInterfaces.append(", ");
 					}
 					networkInterfaces.append("]");
@@ -3292,30 +3291,30 @@ public class AWSExporter
 				}
 				this.xssfHelper.setCell(row, networkInterfaces.toString());
 
-				Placement placement = instance.getPlacement();
+				Placement placement = instance.placement();
 				this.xssfHelper.setCell(row,
 						placement == null ? ""
-								: "Affinify : " + placement.getAffinity() + "\nAvailabilityZone : "
-										+ placement.getAvailabilityZone() + "\nGroupName : " + placement.getGroupName()
-										+ "\nHostId : " + placement.getHostId() + "\nSpreadDomain : "
-										+ placement.getSpreadDomain() + "\nTenancy : " + placement.getTenancy());
+								: "Affinify : " + placement.affinity() + "\nAvailabilityZone : "
+										+ placement.availabilityZone() + "\nGroupName : " + placement.groupName()
+										+ "\nHostId : " + placement.hostId() + "\nSpreadDomain : "
+										+ placement.spreadDomain() + "\nTenancy : " + placement.tenancy());
 
 				StringBuffer productCds = new StringBuffer();
-				List<ProductCode> productCodes = instance.getProductCodes();
+				List<ProductCode> productCodes = instance.productCodes();
 				for (ProductCode productCode : productCodes) {
 					if (productCds.length() > 0) {
 						productCds.append("\n");
 					}
-					productCds.append("ID : " + productCode.getProductCodeId());
-					productCds.append(", TYPE : " + productCode.getProductCodeType());
+					productCds.append("ID : " + productCode.productCodeId());
+					productCds.append(", TYPE : " + productCode.productCodeType());
 				}
 				this.xssfHelper.setCell(row, productCds.toString());
 
-				IamInstanceProfile iamInstanceProfile = instance.getIamInstanceProfile();
+				IamInstanceProfile iamInstanceProfile = instance.iamInstanceProfile();
 				this.xssfHelper.setCell(row, iamInstanceProfile == null ? ""
-						: "ID : " + iamInstanceProfile.getId() + ", ARN : " + iamInstanceProfile.getArn());
+						: "ID : " + iamInstanceProfile.id() + ", ARN : " + iamInstanceProfile.arn());
 
-				this.xssfHelper.setRightThinCell(row, this.getAllTagValue(instance.getTags()));
+				this.xssfHelper.setRightThinCell(row, this.getAllTagValue(instance.tags()));
 			}
 		}
 
@@ -3326,19 +3325,19 @@ public class AWSExporter
 
 		int securityGroupStartRowNum = this.securityGroupSheet.getLastRowNum();
 
-		List<SecurityGroup> securityGroups = this.amazonClients.AmazonEC2.describeSecurityGroups().getSecurityGroups();
+		List<SecurityGroup> securityGroups = this.amazonClients.ec2Client.describeSecurityGroups().securityGroups();
 		for (SecurityGroup securityGroup : securityGroups) {
 			row = this.xssfHelper.createRow(this.securityGroupSheet, 1);
 			this.xssfHelper.setLeftThinCell(row, Integer.toString(row.getRowNum() - 1));
-			this.xssfHelper.setCell(row, this.region.getName());
-			this.xssfHelper.setCell(row, securityGroup.getVpcId());
-			this.xssfHelper.setBrownBoldLeftThinCell(row, securityGroup.getGroupId() + "["
-					+ securityGroup.getGroupName() + "] - " + securityGroup.getDescription());
+			this.xssfHelper.setCell(row, this.region.id());
+			this.xssfHelper.setCell(row, securityGroup.vpcId());
+			this.xssfHelper.setBrownBoldLeftThinCell(row, securityGroup.groupId() + "["
+					+ securityGroup.groupName() + "] - " + securityGroup.description());
 			this.xssfHelper.setCell(row, "");
 			this.xssfHelper.setCell(row, "");
 			this.xssfHelper.setCell(row, "");
 			this.xssfHelper.setCell(row, "");
-			this.xssfHelper.setBrownBoldLeftThinCell(row, this.getAllTagValue(securityGroup.getTags()));
+			this.xssfHelper.setBrownBoldLeftThinCell(row, this.getAllTagValue(securityGroup.tags()));
 			this.xssfHelper.setCell(row, "");
 			this.xssfHelper.setCell(row, "");
 			this.xssfHelper.setCell(row, "");
@@ -3380,8 +3379,8 @@ public class AWSExporter
 			this.xssfHelper.setSecondSubHeadCell(row, "Source");
 			this.xssfHelper.setSecondSubHeadRightThinCell(row, "Description");
 
-			List<IpPermission> inbounds = securityGroup.getIpPermissions();
-			List<IpPermission> outbounds = securityGroup.getIpPermissionsEgress();
+			List<IpPermission> inbounds = securityGroup.ipPermissions();
+			List<IpPermission> outbounds = securityGroup.ipPermissionsEgress();
 
 			int inboundSize = getIpPermissionSize(inbounds);
 			int outboundSize = getIpPermissionSize(outbounds);
@@ -3421,10 +3420,10 @@ public class AWSExporter
 	private int getIpPermissionSize(List<IpPermission> ipPermissions) {
 		int IpPermissionsSize = 0;
 		for (IpPermission ipPermission : ipPermissions) {
-			IpPermissionsSize += ipPermission.getPrefixListIds().size();
-			IpPermissionsSize += ipPermission.getIpv4Ranges().size();
-			IpPermissionsSize += ipPermission.getIpv6Ranges().size();
-			IpPermissionsSize += ipPermission.getUserIdGroupPairs().size();
+			IpPermissionsSize += ipPermission.prefixListIds().size();
+			IpPermissionsSize += ipPermission.ipRanges().size();
+			IpPermissionsSize += ipPermission.ipv6Ranges().size();
+			IpPermissionsSize += ipPermission.userIdGroupPairs().size();
 		}
 		return IpPermissionsSize;
 	}
@@ -3526,15 +3525,15 @@ public class AWSExporter
 			boolean isEngress) {
 		XSSFRow row = this.securityGroupSheet.getRow(rowNum);
 
-		this.xssfHelper.setCell(row, 3 + (isEngress ? 5 : 0), getSecurityGroupRuleType(ipPermission.getIpProtocol(),
-				ipPermission.getFromPort(), ipPermission.getToPort()));
+		this.xssfHelper.setCell(row, 3 + (isEngress ? 5 : 0), getSecurityGroupRuleType(ipPermission.ipProtocol(),
+				ipPermission.fromPort(), ipPermission.toPort()));
 		this.xssfHelper.setCell(row, 4 + (isEngress ? 5 : 0),
-				("-1".equals(ipPermission.getIpProtocol())) || (("icmp".equals(ipPermission.getIpProtocol()))
-						&& (ipPermission.getFromPort() != null) && (ipPermission.getFromPort().intValue() == -1))
+				("-1".equals(ipPermission.ipProtocol())) || (("icmp".equals(ipPermission.ipProtocol()))
+						&& (ipPermission.fromPort() != null) && (ipPermission.fromPort().intValue() == -1))
 								? "All"
-								: ipPermission.getIpProtocol().toUpperCase());
+								: ipPermission.ipProtocol().toUpperCase());
 		this.xssfHelper.setCell(row, 5 + (isEngress ? 5 : 0),
-				getPortRange(ipPermission.getFromPort(), ipPermission.getToPort()));
+				getPortRange(ipPermission.fromPort(), ipPermission.toPort()));
 		this.xssfHelper.setCell(row, 6 + (isEngress ? 5 : 0), source);
 		this.xssfHelper.setCell(row, 7 + (isEngress ? 5 : 0), description);
 
@@ -3555,28 +3554,28 @@ public class AWSExporter
 		int rowNum = 0;
 		for (IpPermission ipPermission : ipPermissions) {
 
-			List<PrefixListId> prefixListIds = ipPermission.getPrefixListIds();
+			List<PrefixListId> prefixListIds = ipPermission.prefixListIds();
 			for (PrefixListId prefixListId : prefixListIds) {
-				row = getIpPermissionCom(ipPermission, startRowNum + rowNum, prefixListId.getPrefixListId(),
-						prefixListId.getDescription(), isEngress);
+				row = getIpPermissionCom(ipPermission, startRowNum + rowNum, prefixListId.prefixListId(),
+						prefixListId.description(), isEngress);
 				rowNum++;
 			}
-			List<IpRange> ipRanges = ipPermission.getIpv4Ranges();
+			List<IpRange> ipRanges = ipPermission.ipRanges();
 			for (IpRange ipRange : ipRanges) {
-				row = getIpPermissionCom(ipPermission, startRowNum + rowNum, ipRange.getCidrIp(),
-						ipRange.getDescription(), isEngress);
+				row = getIpPermissionCom(ipPermission, startRowNum + rowNum, ipRange.cidrIp(),
+						ipRange.description(), isEngress);
 				rowNum++;
 			}
-			List<Ipv6Range> ipv6Ranges = ipPermission.getIpv6Ranges();
+			List<Ipv6Range> ipv6Ranges = ipPermission.ipv6Ranges();
 			for (Ipv6Range ipv6Range : ipv6Ranges) {
-				row = getIpPermissionCom(ipPermission, startRowNum + rowNum, ipv6Range.getCidrIpv6(),
-						ipv6Range.getDescription(), isEngress);
+				row = getIpPermissionCom(ipPermission, startRowNum + rowNum, ipv6Range.cidrIpv6(),
+						ipv6Range.description(), isEngress);
 				rowNum++;
 			}
-			List<UserIdGroupPair> userIdGroupPairs = ipPermission.getUserIdGroupPairs();
+			List<UserIdGroupPair> userIdGroupPairs = ipPermission.userIdGroupPairs();
 			for (UserIdGroupPair userIdGroupPair : userIdGroupPairs) {
 				row = getIpPermissionCom(ipPermission, startRowNum + rowNum,
-						getUserIdGroupPair(userIdGroupPair.getGroupId()), userIdGroupPair.getDescription(), isEngress);
+						getUserIdGroupPair(userIdGroupPair.groupId()), userIdGroupPair.description(), isEngress);
 				rowNum++;
 			}
 		}
@@ -3586,9 +3585,9 @@ public class AWSExporter
 	private String getSGName(String GroupId) {
 		String sgName = "";
 		try {
-			DescribeSecurityGroupsResult describeSecurityGroupsResult = this.amazonClients.AmazonEC2
-					.describeSecurityGroups(new DescribeSecurityGroupsRequest().withGroupIds(new String[] { GroupId }));
-			sgName = ((SecurityGroup) describeSecurityGroupsResult.getSecurityGroups().get(0)).getGroupName();
+			DescribeSecurityGroupsResponse describeSecurityGroupsResult = this.amazonClients.ec2Client
+					.describeSecurityGroups(DescribeSecurityGroupsRequest.builder().groupIds(new String[] { GroupId }).build());
+			sgName = ((SecurityGroup) describeSecurityGroupsResult.securityGroups().get(0)).groupName();
 		} catch (Exception localException) {
 		}
 		return sgName;
@@ -3597,30 +3596,30 @@ public class AWSExporter
 	
 	private void makeInternetGateway() {
 		XSSFRow row = null;
-		List<InternetGateway> internetGateways = this.amazonClients.AmazonEC2
-				.describeInternetGateways(new DescribeInternetGatewaysRequest()).getInternetGateways();
+		List<InternetGateway> internetGateways = this.amazonClients.ec2Client
+				.describeInternetGateways().internetGateways();
 		for (int iIGW = 0; iIGW < internetGateways.size(); iIGW++) {
-			InternetGateway internetGateway = (InternetGateway) internetGateways.get(iIGW);
+			InternetGateway internetGateway = internetGateways.get(iIGW);
 
 			row = this.xssfHelper.createRow(this.internetGatewaySheet, 1);
 			this.xssfHelper.setLeftThinCell(row, Integer.toString(row.getRowNum() - 1));
-			this.xssfHelper.setCell(row, this.region.getName());
+			this.xssfHelper.setCell(row, this.region.id());
 
 			StringBuffer vpcBuffer = new StringBuffer();
-			List<InternetGatewayAttachment> internetGatewayAttachments = internetGateway.getAttachments();
+			List<InternetGatewayAttachment> internetGatewayAttachments = internetGateway.attachments();
 			for (InternetGatewayAttachment internetGatewayAttachment : internetGatewayAttachments) {
 				if (vpcBuffer.length() > 0) {
 					vpcBuffer.append("\n");
 				}
-				vpcBuffer.append(internetGatewayAttachment.getVpcId());
+				vpcBuffer.append(internetGatewayAttachment.vpcId());
 				vpcBuffer.append("(");
-				vpcBuffer.append(internetGatewayAttachment.getState());
+				vpcBuffer.append(internetGatewayAttachment.state());
 				vpcBuffer.append(")");
 			}
 			this.xssfHelper.setCell(row, vpcBuffer.toString());
-			this.xssfHelper.setCell(row, getNameTagValue(internetGateway.getTags()));
-			this.xssfHelper.setCell(row, internetGateway.getInternetGatewayId());
-			this.xssfHelper.setRightThinCell(row, this.getAllTagValue(internetGateway.getTags()));
+			this.xssfHelper.setCell(row, getNameTagValue(internetGateway.tags()));
+			this.xssfHelper.setCell(row, internetGateway.internetGatewayId());
+			this.xssfHelper.setRightThinCell(row, this.getAllTagValue(internetGateway.tags()));
 		}
 	}
 
@@ -3629,29 +3628,29 @@ public class AWSExporter
 		XSSFRow row = null;
 
 		HashMap<String, String> vpcMainRouteTables = new HashMap<String, String>();
-		List<RouteTable> routeTables = this.amazonClients.AmazonEC2.describeRouteTables().getRouteTables();
+		List<RouteTable> routeTables = this.amazonClients.ec2Client.describeRouteTables().routeTables();
 		for (int i = 0; i < routeTables.size(); i++) {
 			boolean isMain = false;
-			RouteTable routeTable = (RouteTable) routeTables.get(i);
+			RouteTable routeTable = routeTables.get(i);
 
-			List<RouteTableAssociation> routeTableAssociations = routeTable.getAssociations();
+			List<RouteTableAssociation> routeTableAssociations = routeTable.associations();
 			for (RouteTableAssociation routeTableAssociation : routeTableAssociations) {
-				if (routeTableAssociation.isMain().booleanValue()) {
+				if (routeTableAssociation.main().booleanValue()) {
 					isMain = true;
-					vpcMainRouteTables.put(routeTable.getVpcId(),
-							routeTable.getRouteTableId() + " | " + getNameTagValue(routeTable.getTags()));
+					vpcMainRouteTables.put(routeTable.vpcId(),
+							routeTable.routeTableId() + " | " + getNameTagValue(routeTable.tags()));
 				}
 			}
 			row = this.xssfHelper.createRow(this.routeTableSheet, 1);
 			int firstRowNum = row.getRowNum();
 			this.xssfHelper.setLeftThinCell(row, Integer.toString(row.getRowNum() - 1));
-			this.xssfHelper.setCell(row, this.region.getName());
-			this.xssfHelper.setCell(row, routeTable.getVpcId());
-			this.xssfHelper.setBrownBoldLeftThinCell(row, getNameTagValue(routeTable.getTags()));
-			this.xssfHelper.setCell(row, routeTable.getRouteTableId());
+			this.xssfHelper.setCell(row, this.region.id());
+			this.xssfHelper.setCell(row, routeTable.vpcId());
+			this.xssfHelper.setBrownBoldLeftThinCell(row, getNameTagValue(routeTable.tags()));
+			this.xssfHelper.setCell(row, routeTable.routeTableId());
 			this.xssfHelper.setLeftRightThinCell(row, isMain ? "YES" : "NO");
 			this.xssfHelper.setRightThinCell(row, "");
-			this.xssfHelper.setCell(row, this.getAllTagValue(routeTable.getTags()));
+			this.xssfHelper.setCell(row, this.getAllTagValue(routeTable.tags()));
 			this.xssfHelper.setRightThinCell(row, "");
 
 			this.routeTableSheet.addMergedRegion(new CellRangeAddress(row.getRowNum(), row.getRowNum(), 5, 6));
@@ -3681,29 +3680,29 @@ public class AWSExporter
 
 			List<Integer> rows = new ArrayList<Integer>();
 
-			List<Route> routes = routeTable.getRoutes();
+			List<Route> routes = routeTable.routes();
 			for (int iRoute = 0; iRoute < routes.size(); iRoute++) {
 				Route route = routes.get(iRoute);
 
 				String destination = "";
 				String target = "";
-				if (route.getDestinationCidrBlock() != null) {
-					destination = route.getDestinationCidrBlock();
-				} else if (route.getDestinationIpv6CidrBlock() != null) {
-					destination = route.getDestinationIpv6CidrBlock();
-				} else if (route.getDestinationPrefixListId() != null) {
-					destination = route.getDestinationPrefixListId();
+				if (route.destinationCidrBlock() != null) {
+					destination = route.destinationCidrBlock();
+				} else if (route.destinationIpv6CidrBlock() != null) {
+					destination = route.destinationIpv6CidrBlock();
+				} else if (route.destinationPrefixListId() != null) {
+					destination = route.destinationPrefixListId();
 				}
-				if (route.getEgressOnlyInternetGatewayId() != null) {
-					target = route.getEgressOnlyInternetGatewayId();
-				} else if (route.getGatewayId() != null) {
-					target = route.getGatewayId();
-				} else if (route.getNatGatewayId() != null) {
-					target = route.getNatGatewayId();
-				} else if (route.getNetworkInterfaceId() != null) {
-					target = route.getNetworkInterfaceId();
-				} else if (route.getVpcPeeringConnectionId() != null) {
-					target = route.getVpcPeeringConnectionId();
+				if (route.egressOnlyInternetGatewayId() != null) {
+					target = route.egressOnlyInternetGatewayId();
+				} else if (route.gatewayId() != null) {
+					target = route.gatewayId();
+				} else if (route.natGatewayId() != null) {
+					target = route.natGatewayId();
+				} else if (route.networkInterfaceId() != null) {
+					target = route.networkInterfaceId();
+				} else if (route.vpcPeeringConnectionId() != null) {
+					target = route.vpcPeeringConnectionId();
 				}
 				row = this.xssfHelper.createRow(this.routeTableSheet, 1);
 				this.xssfHelper.setLeftThinCell(row, "");
@@ -3711,8 +3710,8 @@ public class AWSExporter
 				this.xssfHelper.setCell(row, "");
 				this.xssfHelper.setLeftThinCell(row, destination);
 				this.xssfHelper.setCell(row, target);
-				this.xssfHelper.setCell(row, route.getState());
-				this.xssfHelper.setCell(row, route.getOrigin());
+				this.xssfHelper.setCell(row, this.getEnumName(route.state()));
+				this.xssfHelper.setCell(row, this.getEnumName(route.origin()));
 				this.xssfHelper.setLeftThinCell(row, "");
 				this.xssfHelper.setRightThinCell(row, "");
 
@@ -3724,13 +3723,13 @@ public class AWSExporter
 			for (int iAssoc = 0; iAssoc < routeTableAssociations.size(); iAssoc++) {
 				RouteTableAssociation routeTableAssociation = routeTableAssociations.get(iAssoc);
 
-				if (!routeTableAssociation.getMain()) {
-					List<Subnet> subnets = this.amazonClients.AmazonEC2.describeSubnets(new DescribeSubnetsRequest()
-							.withSubnetIds(new String[] { routeTableAssociation.getSubnetId() })).getSubnets();
+				if (!routeTableAssociation.main()) {
+					List<Subnet> subnets = this.amazonClients.ec2Client.describeSubnets(DescribeSubnetsRequest.builder()
+							.subnetIds(new String[] { routeTableAssociation.subnetId() }).build()).subnets();
 					for (int iSubnet = 0; iSubnet < subnets.size(); iSubnet++) {
-						Subnet subnet = (Subnet) subnets.get(iSubnet);
+						Subnet subnet = subnets.get(iSubnet);
 						if (rows.size() > iSubnetCnt) {
-							row = this.routeTableSheet.getRow(((Integer) rows.get(iSubnetCnt)).intValue());
+							row = this.routeTableSheet.getRow(rows.get(iSubnetCnt).intValue());
 						} else {
 							row = null;
 						}
@@ -3744,12 +3743,12 @@ public class AWSExporter
 							this.xssfHelper.setCell(row, "");
 							this.xssfHelper.setCell(row, "");
 							this.xssfHelper.setLeftThinCell(row,
-									subnet.getSubnetId() + " | " + getNameTagValue(subnet.getTags()));
-							this.xssfHelper.setRightThinCell(row, subnet.getCidrBlock());
+									subnet.subnetId() + " | " + getNameTagValue(subnet.tags()));
+							this.xssfHelper.setRightThinCell(row, subnet.cidrBlock());
 						} else {
 							row.getCell(row.getLastCellNum() - 2)
-									.setCellValue(subnet.getSubnetId() + " | " + getNameTagValue(subnet.getTags()));
-							row.getCell(row.getLastCellNum() - 1).setCellValue(subnet.getCidrBlock());
+									.setCellValue(subnet.subnetId() + " | " + getNameTagValue(subnet.tags()));
+							row.getCell(row.getLastCellNum() - 1).setCellValue(subnet.cidrBlock());
 						}
 						iSubnetCnt++;
 					}
@@ -3774,70 +3773,78 @@ public class AWSExporter
 	private void makeSubnet() {
 		XSSFRow row = null;
 
-		List<Subnet> subnets = this.amazonClients.AmazonEC2.describeSubnets().getSubnets();
+		List<Subnet> subnets = this.amazonClients.ec2Client.describeSubnets().subnets();
 		for (int iSubnet = 0; iSubnet < subnets.size(); iSubnet++) {
-			Subnet subnet = (Subnet) subnets.get(iSubnet);
+			Subnet subnet = subnets.get(iSubnet);
 
 			List<String> subnetList = new ArrayList<String>();
-			subnetList.add(subnet.getSubnetId());
+			subnetList.add(subnet.subnetId());
 
-			List<RouteTable> routeTables = this.amazonClients.AmazonEC2
-					.describeRouteTables(new DescribeRouteTablesRequest()
-							.withFilters(new Filter[] { new Filter("association.subnet-id", subnetList) }))
-					.getRouteTables();
-			List<NetworkAcl> networkAcls = this.amazonClients.AmazonEC2
-					.describeNetworkAcls(new DescribeNetworkAclsRequest()
-							.withFilters(new Filter[] { new Filter("association.subnet-id", subnetList) }))
-					.getNetworkAcls();
+			List<RouteTable> routeTables = this.amazonClients.ec2Client
+					.describeRouteTables(DescribeRouteTablesRequest.builder()
+							.filters(Filter.builder().name("association.subnet-id").values(subnetList).build())
+							.build())
+					.routeTables();
+			List<NetworkAcl> networkAcls = this.amazonClients.ec2Client
+					.describeNetworkAcls(
+							DescribeNetworkAclsRequest.builder()
+								.filters(Filter.builder().name("association.subnet-id").values(subnetList).build())
+								.build()
+					)
+					.networkAcls();
 
 			String routeTableInfo = "";
 			String networkAclInfo = "";
 			if (routeTables.size() > 0) {
-				RouteTable routeTable = (RouteTable) routeTables.get(0);
-				routeTableInfo = routeTable.getRouteTableId() + " | " + getNameTagValue(routeTable.getTags());
+				RouteTable routeTable = routeTables.get(0);
+				routeTableInfo = routeTable.routeTableId() + " | " + getNameTagValue(routeTable.tags());
 			}
 			if (networkAcls.size() > 0) {
 				NetworkAcl networkAcl = networkAcls.get(0);
-				networkAclInfo = networkAcl.getNetworkAclId();
+				networkAclInfo = networkAcl.networkAclId();
 			}
 			row = this.xssfHelper.createRow(this.subnetSheet, 1);
 			this.xssfHelper.setLeftThinCell(row, Integer.toString(row.getRowNum() - 1));
-			this.xssfHelper.setCell(row, this.region.getName());
-			this.xssfHelper.setCell(row, subnet.getVpcId());
-			this.xssfHelper.setCell(row, getNameTagValue(subnet.getTags()));
-			this.xssfHelper.setCell(row, subnet.getSubnetId());
-			this.xssfHelper.setCell(row, subnet.getCidrBlock());
-			this.xssfHelper.setCell(row, subnet.getAvailabilityZone());
+			this.xssfHelper.setCell(row, this.region.id());
+			this.xssfHelper.setCell(row, subnet.vpcId());
+			this.xssfHelper.setCell(row, getNameTagValue(subnet.tags()));
+			this.xssfHelper.setCell(row, subnet.subnetId());
+			this.xssfHelper.setCell(row, subnet.cidrBlock());
+			this.xssfHelper.setCell(row, subnet.availabilityZone());
 			this.xssfHelper.setCell(row, routeTableInfo);
 			this.xssfHelper.setCell(row, networkAclInfo);
 
-			this.xssfHelper.setCell(row, Boolean.toString(subnet.getAssignIpv6AddressOnCreation()));
-			this.xssfHelper.setCell(row, Integer.toString(subnet.getAvailableIpAddressCount()));
-			this.xssfHelper.setCell(row, Boolean.toString(subnet.getDefaultForAz()));
+			this.xssfHelper.setCell(row, Boolean.toString(subnet.assignIpv6AddressOnCreation()));
+			this.xssfHelper.setCell(row, Integer.toString(subnet.availableIpAddressCount()));
+			this.xssfHelper.setCell(row, Boolean.toString(subnet.defaultForAz()));
 
 			StringBuffer subnetIpv6Cidr = new StringBuffer();
 			List<SubnetIpv6CidrBlockAssociation> subnetIpv6CidrBlockAssociations = subnet
-					.getIpv6CidrBlockAssociationSet();
+					.ipv6CidrBlockAssociationSet();
 			for (SubnetIpv6CidrBlockAssociation subnetIpv6CidrBlockAssociation : subnetIpv6CidrBlockAssociations) {
-				subnetIpv6Cidr.append("AssociationId : " + subnetIpv6CidrBlockAssociation.getAssociationId());
+				subnetIpv6Cidr.append("AssociationId : " + subnetIpv6CidrBlockAssociation.associationId());
 				subnetIpv6Cidr.append("\n");
-				subnetIpv6Cidr.append("CIDR Block : " + subnetIpv6CidrBlockAssociation.getIpv6CidrBlock());
+				subnetIpv6Cidr.append("CIDR Block : " + subnetIpv6CidrBlockAssociation.ipv6CidrBlock());
 				subnetIpv6Cidr.append("\n");
-				SubnetCidrBlockState subnetCidrBlockState = subnetIpv6CidrBlockAssociation.getIpv6CidrBlockState();
+				SubnetCidrBlockState subnetCidrBlockState = subnetIpv6CidrBlockAssociation.ipv6CidrBlockState();
 				if (subnetCidrBlockState != null) {
-					subnetIpv6Cidr.append("State : " + subnetCidrBlockState.getState());
+					subnetIpv6Cidr.append("State : " + this.getEnumName(subnetCidrBlockState.state()));
 					subnetIpv6Cidr.append("\n");
-					subnetIpv6Cidr.append("Status Message : " + subnetCidrBlockState.getStatusMessage());
+					subnetIpv6Cidr.append("Status Message : " + subnetCidrBlockState.statusMessage());
 				}
 			}
 			this.xssfHelper.setCell(row, subnetIpv6Cidr.toString());
-			this.xssfHelper.setCell(row, Boolean.toString(subnet.getMapPublicIpOnLaunch()));
-			this.xssfHelper.setCell(row, subnet.getState());
-			this.xssfHelper.setCell(row, this.getAllTagValue(subnet.getTags()));
+			this.xssfHelper.setCell(row, Boolean.toString(subnet.mapPublicIpOnLaunch()));
+			this.xssfHelper.setCell(row, this.getEnumName(subnet.state()));
+			this.xssfHelper.setCell(row, this.getAllTagValue(subnet.tags()));
 
 			this.xssfHelper.setRightThinCell(row, "");
 
 		}
+	}
+	
+	private String getEnumName(Enum<?> enum1) {
+		return enum1 == null ? "" : enum1.name();
 	}
 
 }

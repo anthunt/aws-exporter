@@ -6,16 +6,16 @@ AWSExporter extracts configuration information about resources you create in AWS
 :wrench: Installation
 -------------
 
-Download [aws-exporter-2.0.3-RELEASE-full.jar](https://github.com/anthunt/aws-exporter/releases/download/2.0.3-RELEASE/aws-exporter-2.0.3-RELEASE-full.jar) to your local path and run install
+Download [aws-exporter-3.0.0-RELEASE-full.jar](https://github.com/anthunt/aws-exporter/releases/download/3.0.0-RELEASE/aws-exporter-3.0.0-RELEASE-full.jar) to your local path and run install
 ```
-$ java -jar aws-exporter-2.0.3-RELEASE-full.jar
+$ java -jar aws-exporter-3.0.0-RELEASE-full.jar
 ```
 
 :file_folder: Program Structure
 -------------
 <pre><code>
 Your path -
-          |- aws-exporter-2.0.3-RELEASE-full.jar
+          |- aws-exporter-3.0.0-RELEASE-full.jar
           |- startAWSExporter.bat (created at install)
           |- lib (created at install)
           |- conf (created when running startAWSExport.bat)
@@ -32,7 +32,7 @@ $ startAWSExporter.bat
 ```
 
 <p align="center">
-  <img src="https://github.com/anthunt/aws-exporter/blob/master/running.png?raw=true">
+  <img src="https://github.com/anthunt/aws-exporter/blob/3.x/running.png?raw=true">
 </p>
 
 :pencil: Output Excel File

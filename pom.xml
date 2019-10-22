@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>anthunt.aws</groupId>
   <artifactId>aws-exporter</artifactId>
-  <version>2.1.0-SNAPSHOT</version>
+  <version>3.0.0-RELEASE</version>
   
   <name>aws-exporter</name>
   
@@ -27,22 +27,13 @@
 
         <dependencies> 
 
-            <!-- https://mvnrepository.com/artifact/com.amazonaws/aws-java-sdk -->
-            <dependency>
-                <groupId>com.amazonaws</groupId>
-                <artifactId>aws-java-sdk</artifactId>
-                <version>${aws.sdk.version}</version>
-		        <exclusions>
-		        	<exclusion>
-		        		<groupId>org.apache.httpcomponents</groupId>
-						<artifactId>httpclient</artifactId>
-		        	</exclusion>
-		        	<exclusion>
-		        		<groupId>org.apache.httpcomponents</groupId>
-						<artifactId>httpcore</artifactId>
-		        	</exclusion>
-		        </exclusions>
-            </dependency>
+            <!-- https://mvnrepository.com/artifact/software.amazon.awssdk/aws-sdk-java -->
+			<dependency>
+			    <groupId>software.amazon.awssdk</groupId>
+			    <artifactId>aws-sdk-java</artifactId>
+			    <version>2.9.24</version>
+			</dependency>
+
 
 			<dependency>
 	        	<groupId>org.apache.poi</groupId>
@@ -95,12 +86,11 @@
 
     <dependencies>
 
-        <!-- https://mvnrepository.com/artifact/com.amazonaws/aws-java-sdk -->
-        <dependency>
-            <groupId>com.amazonaws</groupId>
-            <artifactId>aws-java-sdk</artifactId>
-            <scope>provided</scope>
-        </dependency>
+		<dependency>
+		    <groupId>software.amazon.awssdk</groupId>
+		    <artifactId>aws-sdk-java</artifactId>
+		    <scope>provided</scope>
+		</dependency>
 
         <dependency>
         	<groupId>org.apache.poi</groupId>

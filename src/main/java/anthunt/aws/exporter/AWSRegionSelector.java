@@ -1,18 +1,19 @@
 package anthunt.aws.exporter;
 
-import com.amazonaws.regions.Regions;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
+import software.amazon.awssdk.regions.Region;
+
 public class AWSRegionSelector
 {
   private static final String FAV_PROP_PREFIX = "favorite.";
-  private HashMap<Integer, List<Regions>> favRegions;
+  private HashMap<Integer, List<Region>> favRegions;
   private AWSExportStarter awsExportStarter;
-  private List<Regions> allRegions;
-  private List<Regions> selectedRegions;
+  private List<Region> allRegions;
+  private List<Region> selectedRegions;
   
   public AWSRegionSelector(AWSExportStarter awsExportStarter)
   {
@@ -21,9 +22,9 @@ public class AWSRegionSelector
     this.allRegions = new ArrayList<>();
     this.awsExportStarter = awsExportStarter;
     
-    Regions[] allRegions = Regions.values();
-    for (Regions regions : allRegions) {
-      this.allRegions.add(regions);
+    List<Region> allRegions = Region.regions();
+    for (Region region : allRegions) {
+      this.allRegions.add(region);
     }
     select();
   }
@@ -53,7 +54,7 @@ public class AWSRegionSelector
     if (favKeys.size() > 0)
     {
       System.out.println("-------------------------------------------------");
-      System.out.println("즐겨찾기 Region 선택");
+      System.out.println("Select Favorite Region");
       System.out.println("");
       
       iFav = 100;
@@ -64,7 +65,7 @@ public class AWSRegionSelector
         StringBuffer valueBuffer = new StringBuffer();
         String[] values = propValue.split(",");
         
-        List<Regions> fav = new ArrayList<>();
+        List<Region> fav = new ArrayList<>();
         for (String value : values)
         {
           value = value.trim();
@@ -72,7 +73,7 @@ public class AWSRegionSelector
             valueBuffer.append(", ");
           }
           valueBuffer.append(value);
-          fav.add(Regions.fromName(value));
+          fav.add(Region.of(value));
         }
         this.favRegions.put(Integer.valueOf(iFav), fav);
         System.out.println(valueBuffer.toString());
@@ -85,24 +86,25 @@ public class AWSRegionSelector
   {
     for (int i = 0; i < this.allRegions.size(); i++)
     {
-      Regions regions = (Regions)this.allRegions.get(i);
+      Region region = (Region)this.allRegions.get(i);
       if ((i + 1) % 2 == 0) {
-        System.out.println("[" + (i + 1) + "] " + regions.getName());
+        System.out.println("[" + (i + 1) + "] " + region.id());
       } else {
-        System.out.print(padRight("[" + (i + 1) + "] " + regions.getName(), 30, " "));
+        System.out.print(padRight("[" + (i + 1) + "] " + region.id(), 30, " "));
       }
     }
+    System.out.println("");
   }
   
   private void select()
   {
     System.out.println("");
     System.out.println("=================================================");
-    System.out.println("추출 Region을 선택하여 주십시요. 다중선택 가능 [콤마(,) 구분]");
+    System.out.println("Select an extraction region. Multiple selection possible [Comma(,)]");
     System.out.println("-------------------------------------------------");
-    System.out.println("[0] 즐겨찾기 추출 Region 생성");
+    System.out.println("[0] Create Favorite Extract Regions");
     System.out.println("-------------------------------------------------");
-    System.out.println("개별 Region 선택");
+    System.out.println("Select individual regions");
     System.out.println("");
     showRegions();
     findFavoriteRegions();
@@ -113,17 +115,17 @@ public class AWSRegionSelector
     selectInput();
     
     System.out.println("-------------------------------------------------");
-    System.out.println("선택된 Region [" + this.selectedRegions.size() + "개]");
+    System.out.println("Selected region [" + this.selectedRegions.size() + "ea]");
     System.out.println("-------------------------------------------------");
-    for (Regions regions : this.selectedRegions) {
-      System.out.println(regions.getName());
+    for (Region region : this.selectedRegions) {
+      System.out.println(region.id());
     }
     System.out.println("-------------------------------------------------");
   }
   
   private void makeFavRegions()
   {
-    System.out.println("즐겨찾기 Region 모음 생성");
+    System.out.println("Create Favorite Region Collection");
     String favName = setFavRegionsName();
     setFavRegions(favName);
   }
@@ -131,7 +133,7 @@ public class AWSRegionSelector
   private void setFavRegions(String favName)
   {
     System.out.println("=================================================");
-    System.out.println("즐겨찾기 Region을 선택하여 주십시요.");
+    System.out.println("Please select your favorite region.");
     System.out.println("-------------------------------------------------");
     showRegions();
     System.out.println("=================================================");
@@ -147,7 +149,7 @@ public class AWSRegionSelector
   {
     StringBuffer favBuffer = new StringBuffer();
     System.out.println("");
-    System.out.print("즐겨찾기 Region 선택 : ");
+    System.out.print("Select Favorite Region : ");
     String input = this.awsExportStarter.getScanner().nextLine();
     System.out.println("");
     if (input.length() > 0)
@@ -159,17 +161,17 @@ public class AWSRegionSelector
         {
           int selectedIdx = Integer.parseInt(selectedIndex.trim());
           if ((selectedIdx < 1) || (selectedIdx > this.allRegions.size())) {
-            throw new Exception("[" + selectedIdx + "] 는 지원하지 않는 선택 값 입니다..");
+            throw new Exception("[" + selectedIdx + "] is an optional value that is not supported..");
           }
           if (favBuffer.length() > 0) {
             favBuffer.append(",");
           }
-          favBuffer.append(((Regions)this.allRegions.get(selectedIdx - 1)).getName());
+          favBuffer.append(((Region)this.allRegions.get(selectedIdx - 1)).id());
         }
         catch (NumberFormatException e)
         {
           exceptionCount++;
-          System.out.println("[" + selectedIndex + "] 는 지원하지 않는 선택 값 입니다.");
+          System.out.println("[" + selectedIndex + "] is an optional value that is not supported.");
         }
         catch (Exception e)
         {
@@ -190,12 +192,12 @@ public class AWSRegionSelector
   
   private String setFavRegionsName()
   {
-    System.out.print("즐겨찾기 명(영문) : ");
+    System.out.print("Favorite Name(English) : ");
     String favName = this.awsExportStarter.getScanner().nextLine();
     System.out.println("");
     if ((favName == null) || ("".equals(favName.trim())))
     {
-      System.out.println("즐겨찾기 명을 입력하여 주십시요.");
+      System.out.println("Please enter your favorite name.");
       favName = setFavRegionsName();
     }
     return favName;
@@ -205,7 +207,7 @@ public class AWSRegionSelector
   {
     this.selectedRegions.clear();
     System.out.println("");
-    System.out.print("추출 Region 선택 : ");
+    System.out.print("Extract Region Selection : ");
     String input = this.awsExportStarter.getScanner().nextLine();
     System.out.println("");
     if (input.length() > 0)
@@ -234,14 +236,14 @@ public class AWSRegionSelector
             break;
           }
           if ((selectedIdx < 1) || (selectedIdx > this.allRegions.size())) {
-            throw new Exception("[" + selectedIdx + "] 는 지원하지 않는 선택 값 입니다.");
+            throw new Exception("[" + selectedIdx + "] is an optional value that is not supported.");
           }
           this.selectedRegions.add(this.allRegions.get(selectedIdx - 1));
         }
         catch (NumberFormatException e)
         {
           exceptionCount++;
-          System.out.println("[" + selectedIndex + "] 는 지원하지 않는 선택 값 입니다.");
+          System.out.println("[" + selectedIndex + "] is an optional value that is not supported.");
         }
         catch (Exception e)
         {
@@ -259,7 +261,7 @@ public class AWSRegionSelector
     }
   }
   
-  public List<Regions> getRegions()
+  public List<Region> getRegions()
   {
     return this.selectedRegions;
   }
