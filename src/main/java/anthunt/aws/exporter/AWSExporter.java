@@ -364,10 +364,8 @@ public class AWSExporter
   
 	private void make(Region region, String profileName) {
 		this.region = region;
-    
-		String typeName = this.amazonAccess.getAccessType().toUpperCase();
-    
-		this.fileName = ("[" + typeName + "][" + this.region.id() + "] AWSExport-" + this.executeTime + ".xlsx");
+        
+		this.fileName = ("[" + profileName + "][" + this.region.id() + "] AWSExport-" + this.executeTime + ".xlsx");
 		System.out.println("Start " + this.region.id() + " Export. OutputFile [" + this.fileName + "]");
     
 		initializeWorkbook();
