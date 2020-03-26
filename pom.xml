@@ -22,11 +22,7 @@
 	     <url>https://maven.pkg.github.com/anthunt/aws-exporter</url>
 	   </repository>
 	</distributionManagement>
-	
-	<profiles>
-		<profile><id>github</id></profile>
-	</profiles>
-	
+		
     <dependencyManagement>
 
         <dependencies> 
