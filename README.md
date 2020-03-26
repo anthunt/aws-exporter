@@ -1,6 +1,8 @@
 AWS Exporter Usage
 =============
 
+[![Build Status](https://travis-ci.org/anthunt/aws-exporter.svg?branch=master)](https://travis-ci.org/anthunt/aws-exporter.svg?branch=master)
+
 AWSExporter extracts configuration information about resources you create in AWS into an Excel file.
 
 :wrench: Installation
