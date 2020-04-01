@@ -35,7 +35,7 @@
     <server>
       <id>github</id>
       <username>anthunt</username>
-      <password>a70190c7ee9b259381bd0ec5adde0b4eec3766a7</password>
+      <password>$GITHUB_TOKEN</password>
     </server>
   </servers>
 </settings>
