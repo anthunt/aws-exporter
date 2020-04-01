@@ -34,7 +34,7 @@
   <servers>
     <server>
       <id>github</id>
-      <user>anthunt</user>
+      <username>anthunt</username>
       <password>5d4d4beaa916e596020cf32c671669766b7ebf51</password>
     </server>
   </servers>
