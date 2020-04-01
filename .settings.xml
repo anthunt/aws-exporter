@@ -20,7 +20,7 @@
         <repository>
           <id>github.package</id>
           <name>GitHub OWNER Apache Maven Packages</name>
-          <url>https://maven.pkg.github.com</url>
+          <url>https://maven.pkg.github.com/anthunt/aws-exporter</url>
         </repository>
       </repositories>
     </profile>
