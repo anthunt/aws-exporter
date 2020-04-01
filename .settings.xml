@@ -18,7 +18,7 @@
           <snapshots><enabled>true</enabled></snapshots>
         </repository>
         <repository>
-          <id>github</id>
+          <id>github.package</id>
           <name>GitHub OWNER Apache Maven Packages</name>
           <url>https://maven.pkg.github.com/anthunt</url>
         </repository>
@@ -26,9 +26,4 @@
     </profile>
   </profiles>
 
-  <servers>
-    <server>
-      <id>github</id>
-    </server>
-  </servers>
 </settings>
