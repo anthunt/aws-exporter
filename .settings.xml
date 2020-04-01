@@ -33,7 +33,12 @@
 
   <servers>
     <server>
-      <id>github</id>
+      <id>poi.helper</id>
+      <username>anthunt</username>
+      <password>_GITHUB_TOKEN</password>
+    </server>
+    <server>
+      <id>mvn.downloader</id>
       <username>anthunt</username>
       <password>_GITHUB_TOKEN</password>
     </server>
