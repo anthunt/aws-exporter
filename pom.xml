@@ -3,8 +3,18 @@
   <groupId>anthunt.aws</groupId>
   <artifactId>aws-exporter</artifactId>
   <version>3.0.0-RELEASE</version>
-  
   <name>aws-exporter</name>
+  <licenses>
+    <license>
+      <name>Apache License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+  <issueManagement>
+  	<system>github</system>
+  	<url>https://github.com/anthunt/poi-template-project/issues</url>
+  </issueManagement>
   
   <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
