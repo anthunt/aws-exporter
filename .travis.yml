@@ -2,5 +2,6 @@ language: java
 
 before_install:
   - sed "s/_GITHUB_TOKEN/$GITHUB_TOKEN/g" .settings.xml > $HOME/.m2/settings.xml
+  - cat $HOME/.m2/settings.xml
   
 install: mvn deploy -Pgithub -DskipTests=true -Dmaven.javadoc.skip=true -B -V
