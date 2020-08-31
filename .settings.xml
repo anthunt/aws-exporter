@@ -23,6 +23,11 @@
           <url>https://maven.pkg.github.com/anthunt/poi-helper</url>
         </repository>
         <repository>
+          <id>aws.exporter</id>
+          <name>aws exporter Repository</name>
+          <url>https://maven.pkg.github.com/anthunt/aws-exporter</url>
+        </repository>
+        <repository>
           <id>mvn.downloader</id>
           <name>mvn-artifact-downloader</name>
           <url>https://maven.pkg.github.com/anthunt/mvn-artifact-downloader</url>
@@ -34,6 +39,11 @@
   <servers>
     <server>
       <id>poi.helper</id>
+      <username>anthunt</username>
+      <password>_GITHUB_TOKEN</password>
+    </server>
+    <server>
+      <id>aws.exporter</id>
       <username>anthunt</username>
       <password>_GITHUB_TOKEN</password>
     </server>
