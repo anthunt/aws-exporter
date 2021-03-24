@@ -11,16 +11,16 @@ AWSExporter extracts configuration information about resources you create in AWS
 :wrench: Installation
 -------------
 
-Download [aws-exporter-3.0.0-RELEASE-full.jar](https://github.com/anthunt/aws-exporter/releases/download/3.0.0-RELEASE/aws-exporter-3.0.0-RELEASE-full.jar) to your local path and run install
+Download [aws-exporter-3.0.2-RELEASE-full.jar](https://github.com/anthunt/aws-exporter/releases/download/3.0.2-RELEASE/aws-exporter-3.0.2-RELEASE-full.jar) to your local path and run install
 ```
-$ java -jar aws-exporter-3.0.0-RELEASE-full.jar
+$ java -jar aws-exporter-3.0.2-RELEASE-full.jar
 ```
 
 :file_folder: Program Structure
 -------------
 <pre><code>
 Your path -
-          |- aws-exporter-3.0.0-RELEASE-full.jar
+          |- aws-exporter-3.0.2-RELEASE-full.jar
           |- startAWSExporter.bat (created at install)
           |- lib (created at install)
           |- conf (created when running startAWSExport.bat)
