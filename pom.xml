@@ -11,6 +11,7 @@
       <distribution>repo</distribution>
     </license>
   </licenses>
+	
   <issueManagement>
   	<system>github</system>
   	<url>https://github.com/anthunt/poi-template-project/issues</url>
