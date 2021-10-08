@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module org.jetbrains.idea.maven.project.MavenProjectsManager.isMavenModule="true" type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8">
+    <output url="file://$MODULE_DIR$/target/classes" />
+    <output-test url="file://$MODULE_DIR$/target/test-classes" />
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/main/resources" type="java-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/test/resources" type="java-test-resource" />
+      <excludeFolder url="file://$MODULE_DIR$/target" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:aws-sdk-java:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:acm:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:aws-json-protocol:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: com.fasterxml.jackson.core:jackson-core:2.9.9" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:protocol-core:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:sdk-core:2.9.24" level="project" />
+    <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.7.28" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.9.9" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.reactivestreams:reactive-streams:1.0.2" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:auth:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.eventstream:eventstream:1.0.1" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:http-client-spi:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:regions:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.9.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:annotations:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:utils:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:aws-core:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:apache-client:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:netty-nio-client:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: io.netty:netty-codec-http:4.1.41.Final" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: io.netty:netty-codec-http2:4.1.41.Final" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: io.netty:netty-codec:4.1.41.Final" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: io.netty:netty-transport:4.1.41.Final" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: io.netty:netty-resolver:4.1.41.Final" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: io.netty:netty-common:4.1.41.Final" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: io.netty:netty-buffer:4.1.41.Final" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: io.netty:netty-handler:4.1.41.Final" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: io.netty:netty-transport-native-epoll:linux-x86_64:4.1.41.Final" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: io.netty:netty-transport-native-unix-common:4.1.41.Final" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: com.typesafe.netty:netty-reactive-streams-http:2.0.3" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: com.typesafe.netty:netty-reactive-streams:2.0.3" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:acmpca:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:alexaforbusiness:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:amplify:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:apigateway:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:apigatewaymanagementapi:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:apigatewayv2:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:applicationautoscaling:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:applicationdiscovery:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:appmesh:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:appstream:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:appsync:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:athena:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:autoscaling:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:aws-query-protocol:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:autoscalingplans:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:backup:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:batch:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:budgets:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:chime:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:cloud9:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:clouddirectory:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:cloudformation:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:cloudfront:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:aws-xml-protocol:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:cloudhsm:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:cloudhsmv2:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:cloudsearch:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:cloudsearchdomain:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:cloudtrail:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:cloudwatch:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:cloudwatchevents:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:cloudwatchlogs:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:codebuild:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:codecommit:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:codedeploy:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:codepipeline:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:codestar:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:cognitoidentity:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:cognitoidentityprovider:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:cognitosync:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:comprehend:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:comprehendmedical:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:config:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:connect:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:costandusagereport:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:costexplorer:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:databasemigration:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:datapipeline:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:datasync:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:dax:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:devicefarm:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:directconnect:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:directory:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:dlm:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:docdb:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:dynamodb:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:ec2:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:ecr:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:ecs:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:efs:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:eks:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:elasticache:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:elasticbeanstalk:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:elasticloadbalancing:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:elasticloadbalancingv2:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:elasticsearch:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:elastictranscoder:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:emr:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:firehose:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:fms:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:fsx:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:gamelift:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:glacier:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:globalaccelerator:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:glue:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:greengrass:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:guardduty:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:health:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:iam:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:inspector:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:iot:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:iot1clickdevices:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:iot1clickprojects:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:iotanalytics:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:iotdataplane:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:iotjobsdataplane:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:kafka:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:kinesis:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:aws-cbor-protocol:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: com.fasterxml.jackson.dataformat:jackson-dataformat-cbor:2.9.9" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:kinesisanalytics:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:kinesisanalyticsv2:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:kinesisvideo:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:kinesisvideoarchivedmedia:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:kinesisvideomedia:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:kms:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:lambda:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:lexmodelbuilding:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:lexruntime:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:licensemanager:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:lightsail:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:machinelearning:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:macie:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:managedblockchain:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:marketplacecommerceanalytics:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:marketplaceentitlement:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:marketplacemetering:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:mediaconnect:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:mediaconvert:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:medialive:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:mediapackage:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:mediapackagevod:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:mediastore:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:mediastoredata:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:mediatailor:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:migrationhub:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:mobile:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:mq:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:mturk:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:neptune:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:opsworks:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:opsworkscm:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:organizations:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:pi:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:pinpoint:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:pinpointemail:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:pinpointsmsvoice:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:polly:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:pricing:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:quicksight:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:ram:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:rds:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:rdsdata:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:redshift:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:rekognition:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:resourcegroups:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:resourcegroupstaggingapi:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:robomaker:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:route53:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:route53domains:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:route53resolver:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:s3:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:s3control:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:sagemaker:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:sagemakerruntime:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:secretsmanager:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:securityhub:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:serverlessapplicationrepository:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:servicecatalog:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:servicediscovery:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:ses:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:sfn:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:shield:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:signer:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:sms:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:snowball:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:sns:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:sqs:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:ssm:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:storagegateway:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:sts:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:profiles:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:support:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:swf:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:textract:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:transcribe:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:transcribestreaming:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:transfer:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:translate:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:waf:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:workdocs:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:worklink:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:workmail:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:workspaces:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:xray:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:groundstation:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:iotthingsgraph:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:iotevents:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:ioteventsdata:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:personalizeruntime:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:personalize:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:personalizeevents:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:servicequotas:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:applicationinsights:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:ec2instanceconnect:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:eventbridge:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:lakeformation:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:forecast:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:forecastquery:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:qldb:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:qldbsession:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: software.amazon.awssdk:workmailmessageflow:2.9.24" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.poi:poi:3.14" level="project" />
+    <orderEntry type="library" name="Maven: commons-codec:commons-codec:1.10" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.poi:poi-ooxml:3.14" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: com.github.virtuald:curvesapi:1.03" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.poi:poi-ooxml-schemas:3.14" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.xmlbeans:xmlbeans:2.6.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: stax:stax-api:1.0.1" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.poi:poi-scratchpad:3.14" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.poi:poi-excelant:3.14" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.ant:ant:1.8.2" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.ant:ant-launcher:1.8.2" level="project" />
+    <orderEntry type="library" name="Maven: anthunt.poi:poi-helper:1.0.0-RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: anthunt.mvn:mvn-artifact-downloader:1.0.1-RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: org.eclipse.aether:aether-api:1.1.0" level="project" />
+    <orderEntry type="library" name="Maven: org.eclipse.aether:aether-spi:1.1.0" level="project" />
+    <orderEntry type="library" name="Maven: org.eclipse.aether:aether-util:1.1.0" level="project" />
+    <orderEntry type="library" name="Maven: org.eclipse.aether:aether-impl:1.1.0" level="project" />
+    <orderEntry type="library" name="Maven: org.eclipse.aether:aether-connector-basic:1.1.0" level="project" />
+    <orderEntry type="library" name="Maven: org.eclipse.aether:aether-transport-file:1.1.0" level="project" />
+    <orderEntry type="library" name="Maven: org.eclipse.aether:aether-transport-http:1.1.0" level="project" />
+    <orderEntry type="library" name="Maven: org.slf4j:jcl-over-slf4j:1.6.2" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.httpcomponents:httpclient:4.5.5" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.httpcomponents:httpcore:4.4.9" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.maven:maven-aether-provider:3.2.1" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.maven:maven-model:3.2.1" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.maven:maven-model-builder:3.2.1" level="project" />
+    <orderEntry type="library" name="Maven: org.codehaus.plexus:plexus-interpolation:1.19" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.maven:maven-repository-metadata:3.2.1" level="project" />
+    <orderEntry type="library" name="Maven: org.codehaus.plexus:plexus-component-annotations:1.5.5" level="project" />
+    <orderEntry type="library" name="Maven: org.codehaus.plexus:plexus-utils:3.0.17" level="project" />
+  </component>
+</module>
