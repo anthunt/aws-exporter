@@ -21,16 +21,22 @@
           <id>poi-helper</id>
           <name>Poi Helper Repository</name>
           <url>https://maven.pkg.github.com/anthunt/poi-helper</url>
+          <releases><enabled>true</enabled></releases>
+          <snapshots><enabled>true</enabled></snapshots>
         </repository>
         <repository>
           <id>aws-exporter</id>
           <name>aws exporter Repository</name>
           <url>https://maven.pkg.github.com/anthunt/aws-exporter</url>
+          <releases><enabled>true</enabled></releases>
+          <snapshots><enabled>true</enabled></snapshots>
         </repository>
         <repository>
           <id>mvn-artifact-downloader</id>
           <name>mvn-artifact-downloader</name>
           <url>https://maven.pkg.github.com/anthunt/mvn-artifact-downloader</url>
+          <releases><enabled>true</enabled></releases>
+          <snapshots><enabled>true</enabled></snapshots>
         </repository>
       </repositories>
     </profile>
