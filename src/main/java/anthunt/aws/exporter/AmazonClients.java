@@ -44,7 +44,7 @@ public class AmazonClients
 	public DirectConnectClient directConnectClient;
 	public DirectoryClient directoryClient;
 	public Route53Client route53Client;
-    
+
 	public AmazonClients(AmazonAccess amazonAccess, String profileName, Region region) {
 
 		/*
@@ -71,7 +71,7 @@ public class AmazonClients
 		StsClient stsClient = StsClient.builder()
 				.region(Region.of(sourceProfile.property("region").get()))
 				.credentialsProvider(StaticCredentialsProvider.create(awsBasicCredentials))
-		.build();
+				.build();
 
 		Scanner sc = null;
 		String tokenCode = "";
@@ -101,81 +101,81 @@ public class AmazonClients
 		);
 
 		initial(region, StaticCredentialsProvider.create(awsSessionCredentials)); //ProfileCredentialsProvider.create(profileName));
-    
+
 	}
-  
+
 	private void initial(Region region, AwsCredentialsProvider profileCredentialsProvider) {
-	    
-	    this.ec2Client = Ec2Client.builder()
-	    						  .region(region)
-	    						  .credentialsProvider(profileCredentialsProvider)
-	    						  .build();
-	    
-	    this.elastiCacheClient = ElastiCacheClient.builder()
-	    										  .region(region)
-	    										  .credentialsProvider(profileCredentialsProvider)
-	    										  .build();
-	    
-	    this.elasticLoadBalancingClient = ElasticLoadBalancingClient.builder()
-	    															.region(region)
-	    															.credentialsProvider(profileCredentialsProvider)
-	    															.build();
-	    
-	    this.elasticLoadBalancingV2Client = ElasticLoadBalancingV2Client.builder()
-	    															   .region(region)
-	    															   .credentialsProvider(profileCredentialsProvider)
-	    															   .build();
-	    
-	    this.rdsClient = RdsClient.builder()
-	    						  .region(region)
-	    						  .credentialsProvider(profileCredentialsProvider)
-	    						  .build();
-	    
-	    this.kmsClient = KmsClient.builder()
-	    					   .region(region)
-	    					   .credentialsProvider(profileCredentialsProvider)
-	    					   .build();
-	    
-	    this.acmClient = AcmClient.builder()
-	    									  .region(region)
-	    									  .credentialsProvider(profileCredentialsProvider)
-	    									  .build();
-	    
-	    this.s3Client = S3Client.builder()
-	    						.region(region)
-	    						.credentialsProvider(profileCredentialsProvider)
-	    						.build();
-	    
-	    this.lambdaClient = LambdaClient.builder()
-	    							 .region(region)
-	    							 .credentialsProvider(profileCredentialsProvider)
-	    							 .build();
-	    
-	    this.apiGatewayClient = ApiGatewayClient.builder()
-	    										.region(region)
-	    										.credentialsProvider(profileCredentialsProvider)
-	    										.build();
-	    
-	    this.iamClient = IamClient.builder()
-	    										 .region(region)
-	    										 .credentialsProvider(profileCredentialsProvider)
-	    										 .build();
-	    
-	    this.directConnectClient = DirectConnectClient.builder()
-	    											  .region(region)
-	    											  .credentialsProvider(profileCredentialsProvider)
-	    											  .build();
-	    
-	    this.directoryClient = DirectoryClient.builder()
-	    										  .region(region)
-	    										  .credentialsProvider(profileCredentialsProvider)
-	    										  .build();
-	    
-	    this.route53Client = Route53Client.builder()
-	    								  .region(region)
-	    								  .credentialsProvider(profileCredentialsProvider)
-	    								  .build();
-	    
+
+		this.ec2Client = Ec2Client.builder()
+				.region(region)
+				.credentialsProvider(profileCredentialsProvider)
+				.build();
+
+		this.elastiCacheClient = ElastiCacheClient.builder()
+				.region(region)
+				.credentialsProvider(profileCredentialsProvider)
+				.build();
+
+		this.elasticLoadBalancingClient = ElasticLoadBalancingClient.builder()
+				.region(region)
+				.credentialsProvider(profileCredentialsProvider)
+				.build();
+
+		this.elasticLoadBalancingV2Client = ElasticLoadBalancingV2Client.builder()
+				.region(region)
+				.credentialsProvider(profileCredentialsProvider)
+				.build();
+
+		this.rdsClient = RdsClient.builder()
+				.region(region)
+				.credentialsProvider(profileCredentialsProvider)
+				.build();
+
+		this.kmsClient = KmsClient.builder()
+				.region(region)
+				.credentialsProvider(profileCredentialsProvider)
+				.build();
+
+		this.acmClient = AcmClient.builder()
+				.region(region)
+				.credentialsProvider(profileCredentialsProvider)
+				.build();
+
+		this.s3Client = S3Client.builder()
+				.region(region)
+				.credentialsProvider(profileCredentialsProvider)
+				.build();
+
+		this.lambdaClient = LambdaClient.builder()
+				.region(region)
+				.credentialsProvider(profileCredentialsProvider)
+				.build();
+
+		this.apiGatewayClient = ApiGatewayClient.builder()
+				.region(region)
+				.credentialsProvider(profileCredentialsProvider)
+				.build();
+
+		this.iamClient = IamClient.builder()
+				.region(region)
+				.credentialsProvider(profileCredentialsProvider)
+				.build();
+
+		this.directConnectClient = DirectConnectClient.builder()
+				.region(region)
+				.credentialsProvider(profileCredentialsProvider)
+				.build();
+
+		this.directoryClient = DirectoryClient.builder()
+				.region(region)
+				.credentialsProvider(profileCredentialsProvider)
+				.build();
+
+		this.route53Client = Route53Client.builder()
+				.region(region)
+				.credentialsProvider(profileCredentialsProvider)
+				.build();
+
 	}
-  
+
 }

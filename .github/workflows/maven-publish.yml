@@ -35,9 +35,16 @@ jobs:
         path: ${{ github.workspace }}/target/*.jar
     
     - name: Generate changelog
-      id: change_log
+      id: Changelog
       uses: heinrichreimer/action-github-changelog-generator@v2.2
       with:
+        # Target GitHub repo in the form of organization/repository.
+        repo: anthunt/aws-exporter
+        # Username of the owner of target GitHub repo.
+        user: anthunt
+        # Name of project on GitHub.
+        project: aws-exporter
+        # To make more than 50 requests per hour your GitHub token is required.
         token: ${{ secrets.GITHUB_TOKEN }}
     
     - name: release
@@ -49,7 +56,7 @@ jobs:
         release_name: Release ${{ github.ref }}
         tag_name: ${{ github.ref }}
         body: |
-          ${{ steps.change_log.outputs.changelog }}
+          ${{ steps.Changelog.outputs.changelog }}
       env:
         GITHUB_TOKEN: ${{ github.token }}
     
