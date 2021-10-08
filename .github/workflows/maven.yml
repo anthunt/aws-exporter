@@ -30,4 +30,3 @@ jobs:
       with:
         name: aws-exporter-3.0.2-RELEASE-full.jar
         path: target
-    - name: Upload Artifact
