@@ -3,8 +3,7 @@
 AWS Exporter Usage
 =============
 
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/e4830b435cab41079e36fdc8f1b86143)](https://app.codacy.com/manual/anthunt01/aws-exporter?utm_source=github.com&utm_medium=referral&utm_content=anthunt/aws-exporter&utm_campaign=Badge_Grade_Dashboard)
-[![Build Status](https://travis-ci.org/anthunt/aws-exporter.svg?branch=master)](https://travis-ci.org/anthunt/aws-exporter)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/f30922fcbdbc4babaf3bc4b483d4b262)](https://www.codacy.com/gh/anthunt/aws-exporter/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=anthunt/aws-exporter&amp;utm_campaign=Badge_Grade)
 ![Maven Package](https://github.com/anthunt/aws-exporter/workflows/Maven%20Package/badge.svg)
 ![Java CI with Maven](https://github.com/anthunt/aws-exporter/workflows/Java%20CI%20with%20Maven/badge.svg)
 
