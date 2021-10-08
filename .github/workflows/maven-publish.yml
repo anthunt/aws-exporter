@@ -4,8 +4,9 @@
 name: Maven Package
 
 on:
-  release:
-    types: [created]
+  push:
+    tags:
+      - '*'
 
 jobs:
   build:
@@ -13,21 +14,48 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    
     - uses: actions/checkout@v2
+    
     - name: Set up JDK 1.8
-      uses: actions/setup-java@v1
+      uses: actions/setup-java@v2
       with:
-        java-version: 1.8
-        server-id: github # Value of the distributionManagement/repository/id field of the pom.xml
-        settings-path: ${{ github.workspace }} # location for the settings.xml file
-
-    - name: Pre Settings for build
-      run: sed "s/_GITHUB_TOKEN/${{ github.token }}/g" .settings.xml > ${{ github.workspace }}/settings.xml
-
+        java-version: 8
+        distribution: 'adopt'
+        
     - name: Build with Maven
-      run: mvn -B package --file pom.xml
+      run: mvn -s .settings.xml -B package --file pom.xml
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
 
-    - name: Publish to GitHub Packages Apache Maven
-      run: mvn deploy -s $GITHUB_WORKSPACE/settings.xml -Pgithub -DskipTests=true -Dmaven.javadoc.skip=true -B -V
+    - name: Upload a Build Artifact
+      uses: actions/upload-artifact@v2.2.4
+      with:
+        path: ${{ github.workspace }}/target/*.jar
+    
+    - name: release
+      uses: actions/create-release@v1
+      id: create_release
+      with:
+        draft: false
+        prerelease: false
+        release_name: Release ${{ github.ref }}
+        tag_name: ${{ github.ref }}
+        body_path: CHANGELOG.md
       env:
         GITHUB_TOKEN: ${{ github.token }}
+    
+    - name: Make zip
+      run: zip --junk-paths aws-exporter-${{ github.ref }} target/*.jar
+      
+    - name: Upload Release Artifact
+      uses: actions/upload-release-asset@v1.0.2
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./aws-exporter-${{ github.ref }}.zip
+        asset_name: aws-exporter-${{ github.ref }}.zip
+        asset_content_type: application/zip
+    
