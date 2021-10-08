@@ -26,8 +26,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-    - name: Upload Artifact
     - uses: actions/upload-artifact@v2.1.4
+    - name: Upload Artifact
       with:
         name: aws-exporter-3.0.2-RELEASE-full.jar
         path: target
