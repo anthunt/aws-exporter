@@ -39,7 +39,7 @@
   <servers>
     <server>
       <id>github</id>
-      <username>${env.USER_NAME}</username>
+      <username>anthunt</username>
       <password>${env.ACCESS_TOKEN}</password>
     </server>
   </servers>
