@@ -55,7 +55,8 @@ jobs:
         prerelease: false
         release_name: Release ${{ github.ref }}
         tag_name: ${{ github.ref }}
-        body_path: ${{ steps.Changelog.outputs.changelog }}
+        body: |
+          ${{ steps.Changelog.outputs.changelog }}
       env:
         GITHUB_TOKEN: ${{ github.token }}
     
