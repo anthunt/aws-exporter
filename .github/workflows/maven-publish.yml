@@ -46,22 +46,31 @@ jobs:
         project: aws-exporter
         # To make more than 50 requests per hour your GitHub token is required.
         token: ${{ secrets.GITHUB_TOKEN }}
-    
+
+    - name: Get Tag Name
+        id: tag
+        uses: ashley-taylor/regex-property-action@v1.2
+        with:
+          value: ${{ github.ref }}
+          regex: ".*/"
+          flags: "" # Optional, defaults to "g"
+          replacement: ""
+
     - name: release
       uses: actions/create-release@v1
       id: create_release
       with:
         draft: false
         prerelease: false
-        release_name: Release ${{ github.ref }}
-        tag_name: ${{ github.ref }}
+        release_name: Release ${{ steps.tag.outputs.value }}
+        tag_name: ${{ steps.tag.outputs.value }}
         body: |
           ${{ steps.Changelog.outputs.changelog }}
       env:
         GITHUB_TOKEN: ${{ github.token }}
     
     - name: Make zip
-      run: zip --junk-paths aws-exporter-${{ github.ref }} target/*.jar
+      run: zip --junk-paths aws-exporter-${{ steps.tag.outputs.value }} target/*.jar
       
     - name: Upload Release Artifact
       uses: actions/upload-release-asset@v1.0.2
@@ -69,7 +78,7 @@ jobs:
         GITHUB_TOKEN: ${{ github.token }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./aws-exporter-${{ github.ref }}.zip
-        asset_name: aws-exporter-${{ github.ref }}.zip
+        asset_path: ./aws-exporter-${{ steps.tag.outputs.value }}.zip
+        asset_name: aws-exporter-${{ steps.tag.outputs.value }}.zip
         asset_content_type: application/zip
     
