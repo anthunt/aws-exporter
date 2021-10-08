@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0
@@ -17,6 +18,14 @@
           <releases><enabled>true</enabled></releases>
           <snapshots><enabled>true</enabled></snapshots>
         </repository>
+        <repository>
+            <id>github</id>
+            <url>https://maven.pkg.github.com/anthunt/*</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+        <!--
         <repository>
           <id>poi-helper</id>
           <name>Poi Helper Repository</name>
@@ -38,6 +47,7 @@
           <releases><enabled>true</enabled></releases>
           <snapshots><enabled>true</enabled></snapshots>
         </repository> 
+        -->
       </repositories>
     </profile>
   </profiles>
