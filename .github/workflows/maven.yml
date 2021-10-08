@@ -24,3 +24,4 @@ jobs:
       run: mvn -s .settings.xml --batch-mode deploy --file pom.xml
       env:
         ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+
