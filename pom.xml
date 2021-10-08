@@ -21,8 +21,8 @@
         <java.version>1.8</java.version>
         <aws.sdk.version>1.11.359</aws.sdk.version>
         <poi.version>3.14</poi.version>
-        <poi-helper.version>1.0.0-release</poi-helper.version>
-        <mvn-artifact-downloader.version>1.0.1-release</mvn-artifact-downloader.version>
+        <poi-helper.version>1.0.0-RELEASE</poi-helper.version>
+        <mvn-artifact-downloader.version>1.0.1-RELEASE</mvn-artifact-downloader.version>
     </properties>
 
 	<distributionManagement>
