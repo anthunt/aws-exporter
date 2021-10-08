@@ -23,5 +23,4 @@ jobs:
     - name: Build with Maven
       run: mvn -s $GITHUB_WORKSPACE/.settings.xml --batch-mode deploy --file pom.xml
       env:
-        USER_NAME: ${{ secrets.USER_NAME }}
         ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
