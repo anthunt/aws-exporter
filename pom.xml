@@ -25,7 +25,7 @@
         <mvn-artifact-downloader.version>1.0.1-RELEASE</mvn-artifact-downloader.version>
     </properties>
 
-	<distributionManagement>
+
 		<repositories>
 			   <repository>
 			     <id>github</id>
@@ -43,7 +43,7 @@
 			     <url>https://maven.pkg.github.com/anthunt/mvn-artifact-downloader</url>
 			   </repository>
 		</repositories>
-	</distributionManagement>
+
 		
     <dependencyManagement>
 
