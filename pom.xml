@@ -25,24 +25,26 @@
         <mvn-artifact-downloader.version>1.0.1-RELEASE</mvn-artifact-downloader.version>
     </properties>
 
-
-		<repositories>
-			   <repository>
-			     <id>github</id>
-			     <name>GitHub OWNER Apache Maven Packages</name>
-			     <url>https://maven.pkg.github.com/anthunt/aws-exporter</url>
-			   </repository>
-			   <repository>
-			     <id>github</id>
-			     <name>Poi Helper Repository</name>
-			     <url>https://maven.pkg.github.com/anthunt/poi-helper</url>
-			   </repository>
-			   <repository>
-			     <id>github</id>
-			     <name>mvn-artifact-downloader</name>
-			     <url>https://maven.pkg.github.com/anthunt/mvn-artifact-downloader</url>
-			   </repository>
-		</repositories>
+	<distributionManagement>
+	   <repository>
+	     <id>aws-exporter</id>
+	     <name>GitHub OWNER Apache Maven Packages</name>
+	     <url>https://maven.pkg.github.com/anthunt/aws-exporter</url>
+	   </repository>
+	</distributionManagement>
+	
+	<repositories>
+	   <repository>
+	     <id>poi-helper</id>
+	     <name>Poi Helper Repository</name>
+	     <url>https://maven.pkg.github.com/anthunt/poi-helper</url>
+	   </repository>
+	   <repository>
+	     <id>mvn-artifact-downloader</id>
+	     <name>mvn-artifact-downloader</name>
+	     <url>https://maven.pkg.github.com/anthunt/mvn-artifact-downloader</url>
+	   </repository>
+	</repositories>
 
 		
     <dependencyManagement>
