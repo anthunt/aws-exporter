@@ -31,6 +31,16 @@
 	     <name>GitHub OWNER Apache Maven Packages</name>
 	     <url>https://maven.pkg.github.com/anthunt/aws-exporter</url>
 	   </repository>
+	   <repository>
+	     <id>github</id>
+             <name>Poi Helper Repository</name>
+             <url>https://maven.pkg.github.com/anthunt/poi-helper</url>
+	   </repository>
+	   <repository>
+	     <id>github</id>
+	     <name>mvn-artifact-downloader</name>
+	     <url>https://maven.pkg.github.com/anthunt/mvn-artifact-downloader</url>
+	   </repository>
 	</distributionManagement>
 		
     <dependencyManagement>
