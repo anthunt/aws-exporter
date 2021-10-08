@@ -48,13 +48,13 @@ jobs:
         token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Get Tag Name
-        id: tag
-        uses: ashley-taylor/regex-property-action@v1.2
-        with:
-          value: ${{ github.ref }}
-          regex: ".*/"
-          flags: "" # Optional, defaults to "g"
-          replacement: ""
+      id: tag
+      uses: ashley-taylor/regex-property-action@v1.2
+      with:
+        value: ${{ github.ref }}
+        regex: ".*/"
+        flags: "" # Optional, defaults to "g"
+        replacement: ""
 
     - name: release
       uses: actions/create-release@v1
