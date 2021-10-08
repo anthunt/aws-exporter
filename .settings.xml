@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0
@@ -18,20 +19,35 @@
           <snapshots><enabled>true</enabled></snapshots>
         </repository>
         <repository>
-          <id>github</id>
+            <id>github</id>
+            <url>https://maven.pkg.github.com/anthunt/*</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+        <!--
+        <repository>
+          <id>poi-helper</id>
           <name>Poi Helper Repository</name>
           <url>https://maven.pkg.github.com/anthunt/poi-helper</url>
+          <releases><enabled>true</enabled></releases>
+          <snapshots><enabled>true</enabled></snapshots>
         </repository>
         <repository>
-          <id>github</id>
+          <id>aws-exporter</id>
           <name>aws exporter Repository</name>
           <url>https://maven.pkg.github.com/anthunt/aws-exporter</url>
+          <releases><enabled>true</enabled></releases>
+          <snapshots><enabled>true</enabled></snapshots>
         </repository>
         <repository>
-          <id>github</id>
+          <id>mvn-artifact-downloader</id>
           <name>mvn-artifact-downloader</name>
           <url>https://maven.pkg.github.com/anthunt/mvn-artifact-downloader</url>
-        </repository>
+          <releases><enabled>true</enabled></releases>
+          <snapshots><enabled>true</enabled></snapshots>
+        </repository> 
+        -->
       </repositories>
     </profile>
   </profiles>
@@ -40,7 +56,7 @@
     <server>
       <id>github</id>
       <username>anthunt</username>
-      <password>_GITHUB_TOKEN</password>
+      <password>${env.ACCESS_TOKEN}</password>
     </server>
   </servers>
 </settings>
