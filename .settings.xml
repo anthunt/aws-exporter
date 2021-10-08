@@ -37,7 +37,7 @@
           <url>https://maven.pkg.github.com/anthunt/mvn-artifact-downloader</url>
           <releases><enabled>true</enabled></releases>
           <snapshots><enabled>true</enabled></snapshots>
-        </repository>
+        </repository> 
       </repositories>
     </profile>
   </profiles>
