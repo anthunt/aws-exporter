@@ -1,3 +1,4 @@
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/fb769497a5f4499caaf80ebe18635381)](https://app.codacy.com/gh/anthunt/aws-exporter?utm_source=github.com&utm_medium=referral&utm_content=anthunt/aws-exporter&utm_campaign=Badge_Grade_Settings)
 [![Gitpod ready-to-code](https://img.shields.io/badge/Gitpod-ready--to--code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/anthunt/aws-exporter)
 
 AWS Exporter Usage
