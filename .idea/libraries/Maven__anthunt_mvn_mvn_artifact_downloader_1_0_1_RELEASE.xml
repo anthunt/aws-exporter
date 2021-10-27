@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: anthunt.mvn:mvn-artifact-downloader:1.0.1-RELEASE">
+    <CLASSES>
+      <root url="jar://D:/Data/.m2/repository/anthunt/mvn/mvn-artifact-downloader/1.0.1-RELEASE/mvn-artifact-downloader-1.0.1-RELEASE.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://D:/Data/.m2/repository/anthunt/mvn/mvn-artifact-downloader/1.0.1-RELEASE/mvn-artifact-downloader-1.0.1-RELEASE-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://D:/Data/.m2/repository/anthunt/mvn/mvn-artifact-downloader/1.0.1-RELEASE/mvn-artifact-downloader-1.0.1-RELEASE-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
