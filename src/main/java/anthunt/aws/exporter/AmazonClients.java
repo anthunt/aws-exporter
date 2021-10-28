@@ -3,6 +3,10 @@ package anthunt.aws.exporter;
 import anthunt.aws.exporter.model.AmazonAccess;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import software.amazon.awssdk.auth.credentials.*;
+import software.amazon.awssdk.core.client.config.ClientOverrideConfiguration;
+import software.amazon.awssdk.http.SdkHttpClient;
+import software.amazon.awssdk.http.apache.ApacheHttpClient;
+import software.amazon.awssdk.http.apache.ProxyConfiguration;
 import software.amazon.awssdk.profiles.Profile;
 import software.amazon.awssdk.profiles.ProfileFile;
 import software.amazon.awssdk.regions.Region;
@@ -23,7 +27,10 @@ import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.sts.StsClient;
 import software.amazon.awssdk.services.sts.model.AssumeRoleRequest;
 import software.amazon.awssdk.services.sts.model.Credentials;
+import software.amazon.awssdk.services.sts.model.GetSessionTokenRequest;
 
+import java.net.URI;
+import java.time.Duration;
 import java.util.Optional;
 import java.util.Scanner;
 import java.util.function.Supplier;
@@ -47,13 +54,19 @@ public class AmazonClients
 
 	public AmazonClients(AmazonAccess amazonAccess, String profileName, Region region) {
 
-		/*
-		ClientConfiguration config = new ClientConfiguration();
-		if (amazonAccess.isUseProxy().booleanValue()) {
-			config.setProxyHost(amazonAccess.getProxyHost());
-			config.setProxyPort(amazonAccess.getProxyPort().intValue());
+		URI proxy = null;
+		if(amazonAccess.isUseProxy()) {
+			proxy = URI.create(amazonAccess.getProxyHost() + ":" + amazonAccess.getProxyPort().intValue());
 		}
-    	*/
+
+		final SdkHttpClient httpClient = ApacheHttpClient.builder()
+				.socketTimeout(Duration.ofSeconds(20))
+				.connectionTimeout(Duration.ofSeconds(5))
+				.proxyConfiguration(ProxyConfiguration.builder()
+						.endpoint(proxy)
+						.useSystemPropertyValues(amazonAccess.isUseProxy().booleanValue())
+						.build())
+				.build();
 
 		Supplier<ProfileFile> defaultProfileFileLoader = ProfileFile::defaultProfileFile;
 		ProfileFile profileFile = defaultProfileFileLoader.get();
@@ -61,38 +74,52 @@ public class AmazonClients
 		Profile profile = profileFile.profile(profileName).get();
 		String source_profile = profile.property("source_profile").get();
 
-		Profile sourceProfile = profileFile.profile(source_profile).get();
-
-		AwsBasicCredentials awsBasicCredentials = AwsBasicCredentials.create(
-				sourceProfile.property("aws_access_key_id").get(),
-				sourceProfile.property("aws_secret_access_key").get()
-		);
+		boolean isAssume = source_profile.equals("") ? false : true;
+		String stsProfileName = !isAssume ? profileName : source_profile;
 
 		StsClient stsClient = StsClient.builder()
-				.region(Region.of(sourceProfile.property("region").get()))
-				.credentialsProvider(StaticCredentialsProvider.create(awsBasicCredentials))
+				.httpClient(httpClient)
+				.credentialsProvider(ProfileCredentialsProvider.create(stsProfileName))
 				.build();
 
-		Scanner sc = null;
-		String tokenCode = "";
-		try {
-			sc = new Scanner(System.in);
-			System.out.print("MFA code : ");
-			while (!sc.hasNextLine()) {
-				sc.next();
-			}
-			tokenCode = sc.nextLine();
-		} catch (Exception skip) {}
-		System.out.println("TokenCode = " + tokenCode);
+		String stsMFASerial = profile.property("mfa_serial").get();
 
-		Credentials credentials = stsClient.assumeRole(
-				AssumeRoleRequest.builder()
-						.roleArn(profile.property("role_arn").get())
-						.roleSessionName(profileName)
-						.serialNumber(profile.property("mfa_serial").get())
-						.tokenCode(tokenCode)
-						.build()
-		).credentials();
+		boolean useMFA = !stsMFASerial.equals("");
+
+		String tokenCode = "";
+		if(useMFA) {
+			Scanner sc = null;
+			try {
+				sc = new Scanner(System.in);
+				System.out.print("MFA code : ");
+				while (!sc.hasNextLine()) {
+					sc.next();
+				}
+				tokenCode = sc.nextLine();
+			} catch (Exception skip) {
+			}
+			System.out.println("TokenCode = " + tokenCode);
+		}
+
+		Credentials credentials = null;
+
+		if(!isAssume) {
+			credentials = stsClient.getSessionToken(
+					GetSessionTokenRequest.builder()
+							.serialNumber(useMFA ? profile.property("mfa_serial").get() : null)
+							.tokenCode(useMFA ? tokenCode : null)
+							.build()
+			).credentials();
+		} else {
+			credentials = stsClient.assumeRole(
+					AssumeRoleRequest.builder()
+							.roleArn(profile.property("role_arn").get())
+							.roleSessionName(profileName)
+							.serialNumber(useMFA ? profile.property("mfa_serial").get() : null)
+							.tokenCode(useMFA ? tokenCode : null)
+							.build()
+			).credentials();
+		}
 
 		AwsSessionCredentials awsSessionCredentials = AwsSessionCredentials.create(
 				credentials.accessKeyId(),
@@ -100,7 +127,7 @@ public class AmazonClients
 				credentials.sessionToken()
 		);
 
-		initial(region, StaticCredentialsProvider.create(awsSessionCredentials)); //ProfileCredentialsProvider.create(profileName));
+		initial(region, StaticCredentialsProvider.create(awsSessionCredentials));
 
 	}
 
