@@ -14,11 +14,6 @@
     <remote-repository>
       <option name="id" value="github" />
       <option name="name" value="github" />
-      <option name="url" value="https://maven.pkg.github.com/OWNER/*" />
-    </remote-repository>
-    <remote-repository>
-      <option name="id" value="github" />
-      <option name="name" value="github" />
       <option name="url" value="https://maven.pkg.github.com/anthunt/mvn-artifact-downloader" />
     </remote-repository>
     <remote-repository>
