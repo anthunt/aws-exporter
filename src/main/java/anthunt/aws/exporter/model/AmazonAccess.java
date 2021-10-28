@@ -2,7 +2,7 @@ package anthunt.aws.exporter.model;
 
 public class AmazonAccess
 {
-	private Boolean useProxy = false;
+	private Boolean useProxy;
 	private String proxyHost;
 	private Integer proxyPort;
   
@@ -10,7 +10,7 @@ public class AmazonAccess
 	  	  
 	public Boolean isUseProxy()
 	{
-	    return this.useProxy == null ? false : this.useProxy;
+	    return this.useProxy;
 	}
 	  
 	public void setUseProxy(Boolean useProxy)

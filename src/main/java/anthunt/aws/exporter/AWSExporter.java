@@ -2055,18 +2055,29 @@ public class AWSExporter
 					for(LifecycleRule rule : rules) {
 						AbortIncompleteMultipartUpload abortIncompleteMultipartUpload = rule.abortIncompleteMultipartUpload();
 						if(lcs.length() > 0) lcs.append("\n\n");
-						
-						lcs.append("AbortInCompleteMultipartUpload=");
-						lcs.append(Integer.toString(abortIncompleteMultipartUpload.daysAfterInitiation()));
-						lcs.append("\nExpirationDate=");
-						lcs.append(rule.expiration().date().toString());
-						lcs.append("\nExpirationInDays=");
-						lcs.append(Integer.toString(rule.expiration().days()));
-						lcs.append("\nID=");
+
+						if(abortIncompleteMultipartUpload != null) {
+							lcs.append("AbortInCompleteMultipartUpload=");
+							lcs.append(Integer.toString(abortIncompleteMultipartUpload.daysAfterInitiation()));
+							lcs.append("\n");
+						}
+
+						if(rule.expiration() != null) {
+							lcs.append("ExpirationDate=");
+							lcs.append(rule.expiration().date().toString());
+							lcs.append("\n");
+							lcs.append("ExpirationInDays=");
+							lcs.append(Integer.toString(rule.expiration().days()));
+							lcs.append("\n");
+						}
+
+						lcs.append("ID=");
 						lcs.append(rule.id());
-						lcs.append("\nNonCurrentVersionExpirationInDays=");
-						lcs.append(Integer.toString(rule.noncurrentVersionExpiration().noncurrentDays()));
-						
+						if(rule.noncurrentVersionExpiration() != null) {
+							lcs.append("\n");
+							lcs.append("NonCurrentVersionExpirationInDays=");
+							lcs.append(Integer.toString(rule.noncurrentVersionExpiration().noncurrentDays()));
+						}
 						lcs.append("\nNoncurrentVersionTransition");
 						List<NoncurrentVersionTransition> noncurrentVersionTransitions = rule.noncurrentVersionTransitions();
 						for(NoncurrentVersionTransition noncurrentVersionTransition : noncurrentVersionTransitions) {
@@ -2082,8 +2093,10 @@ public class AWSExporter
 						lcs.append("\nTransitions");
 						List<Transition> transitions = rule.transitions();
 						for(Transition transition : transitions) {
-							lcs.append("\nDate=");
-							lcs.append(transition.date().toString());
+							if(transition.date() != null) {
+								lcs.append("\nDate=");
+								lcs.append(transition.date().toString());
+							}
 							lcs.append("\nDays=");
 							lcs.append(Integer.toString(transition.days()));
 							lcs.append("\nStorageClass=");
@@ -2293,7 +2306,7 @@ public class AWSExporter
 					this.xssfHelper.setCell(row, replicationGroup.replicationGroupId());
 					this.xssfHelper.setCell(row, cacheCluster.engine());
 					this.xssfHelper.setCell(row, cacheCluster.engineVersion());
-					this.xssfHelper.setCell(row, nodeGroup.primaryEndpoint().address() + ":" + nodeGroup.primaryEndpoint().port());
+					this.xssfHelper.setCell(row, nodeGroup.primaryEndpoint() ==null ? "" : nodeGroup.primaryEndpoint().address() + ":" + nodeGroup.primaryEndpoint().port());
 					this.xssfHelper.setCell(row, cacheCluster.cacheParameterGroup().cacheParameterGroupName() + "(" + cacheCluster.cacheParameterGroup().parameterApplyStatus() + ")");
 					this.xssfHelper.setCell(row, cacheCluster.cacheSubnetGroupName());
           
@@ -2315,7 +2328,7 @@ public class AWSExporter
 					this.xssfHelper.setCell(row, nodeGroupMember.preferredAvailabilityZone());
 					this.xssfHelper.setCell(row, nodeGroupMember.currentRole());
 					this.xssfHelper.setCell(row, cacheCluster.cacheNodeType());
-					this.xssfHelper.setRightThinCell(row, nodeGroupMember.readEndpoint().address() + ":" + nodeGroupMember.readEndpoint().port());
+					this.xssfHelper.setRightThinCell(row, nodeGroupMember.readEndpoint() == null ? "" : nodeGroupMember.readEndpoint().address() + ":" + nodeGroupMember.readEndpoint().port());
 				}
 			}
       

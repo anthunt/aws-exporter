@@ -74,10 +74,10 @@ public class AWSExportStarter
     throws FileNotFoundException, IOException
   {
     loadProperties();
-    showAccessList();
     if (this.amazonAccess == null) {
       makeAccess();
     }
+    showAccessList();
   }
   
   private void loadProperties()
@@ -133,21 +133,29 @@ public class AWSExportStarter
       
       List<String> keyIndex = new ArrayList<>();
       
-      System.out.println("==============================");
+      System.out.println("======================================================================");
       System.out.println("Profile List");
-      System.out.println("==============================");
+      System.out.println("======================================================================");
       
       Set<String> keySet = profileMap.keySet();
       Iterator<String> keys = keySet.iterator();
+      int iCnt = 1;
       while(keys.hasNext()) {
     	  String profileName = keys.next();
     	  keyIndex.add(profileName);
-    	  System.out.print(keyIndex.size() + ". " + profileName);
-          System.out.println("");
+
+          if(iCnt % 3 == 0) {
+            System.out.print(keyIndex.size() + ". " + profileName);
+            System.out.println("");
+          } else {
+            System.out.print(AWSRegionSelector.padRight(keyIndex.size() + ". " + profileName, 25, " "));
+          }
+          iCnt++;
       }
-      System.out.println("------------------------------");
+      if(iCnt%3 != 1) System.out.println("");
+      System.out.println("----------------------------------------------------------------------");
       System.out.println("99. Exit");
-      System.out.println("==============================");
+      System.out.println("======================================================================");
       System.out.println("");
       
       checkSelectAccessList(keyIndex);

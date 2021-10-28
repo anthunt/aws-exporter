@@ -1,9 +1,7 @@
 package anthunt.aws.exporter;
 
 import anthunt.aws.exporter.model.AmazonAccess;
-import org.apache.http.impl.client.BasicCredentialsProvider;
 import software.amazon.awssdk.auth.credentials.*;
-import software.amazon.awssdk.core.client.config.ClientOverrideConfiguration;
 import software.amazon.awssdk.http.SdkHttpClient;
 import software.amazon.awssdk.http.apache.ApacheHttpClient;
 import software.amazon.awssdk.http.apache.ProxyConfiguration;
@@ -55,24 +53,31 @@ public class AmazonClients
 	public AmazonClients(AmazonAccess amazonAccess, String profileName, Region region) {
 
 		URI proxy = null;
+		SdkHttpClient httpClient = null;
+
 		if(amazonAccess.isUseProxy()) {
 			proxy = URI.create(amazonAccess.getProxyHost() + ":" + amazonAccess.getProxyPort().intValue());
+			httpClient = ApacheHttpClient.builder()
+					.socketTimeout(Duration.ofSeconds(20))
+					.connectionTimeout(Duration.ofSeconds(5))
+					.proxyConfiguration(ProxyConfiguration.builder()
+							.endpoint(proxy)
+							.useSystemPropertyValues(amazonAccess.isUseProxy().booleanValue())
+							.build())
+					.build();
+		} else {
+			httpClient = ApacheHttpClient.builder()
+					.socketTimeout(Duration.ofSeconds(20))
+					.connectionTimeout(Duration.ofSeconds(5))
+					.build();
 		}
-
-		final SdkHttpClient httpClient = ApacheHttpClient.builder()
-				.socketTimeout(Duration.ofSeconds(20))
-				.connectionTimeout(Duration.ofSeconds(5))
-				.proxyConfiguration(ProxyConfiguration.builder()
-						.endpoint(proxy)
-						.useSystemPropertyValues(amazonAccess.isUseProxy().booleanValue())
-						.build())
-				.build();
 
 		Supplier<ProfileFile> defaultProfileFileLoader = ProfileFile::defaultProfileFile;
 		ProfileFile profileFile = defaultProfileFileLoader.get();
 
 		Profile profile = profileFile.profile(profileName).get();
-		String source_profile = profile.property("source_profile").get();
+		Optional<String> source_prof = profile.property("source_profile");
+		String source_profile = source_prof.isPresent() ? source_prof.get() : "";
 
 		boolean isAssume = source_profile.equals("") ? false : true;
 		String stsProfileName = !isAssume ? profileName : source_profile;
@@ -82,7 +87,9 @@ public class AmazonClients
 				.credentialsProvider(ProfileCredentialsProvider.create(stsProfileName))
 				.build();
 
-		String stsMFASerial = profile.property("mfa_serial").get();
+		Optional<String> mfa_serial = profile.property("mfa_serial");
+
+		String stsMFASerial = mfa_serial.isPresent() ? mfa_serial.get() : "";
 
 		boolean useMFA = !stsMFASerial.equals("");
 
@@ -98,7 +105,6 @@ public class AmazonClients
 				tokenCode = sc.nextLine();
 			} catch (Exception skip) {
 			}
-			System.out.println("TokenCode = " + tokenCode);
 		}
 
 		Credentials credentials = null;
