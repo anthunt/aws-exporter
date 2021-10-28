@@ -105,142 +105,145 @@
 			<groupId>software.amazon.awssdk</groupId>
 			<artifactId>apache-client</artifactId>
 			<version>2.17.68</version>
+			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>software.amazon.awssdk</groupId>
 			<artifactId>sts</artifactId>
 			<version>2.17.68</version>
+			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>software.amazon.awssdk</groupId>
 			<artifactId>acm</artifactId>
 			<version>2.17.68</version>
+			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>software.amazon.awssdk</groupId>
 			<artifactId>apigateway</artifactId>
 			<version>2.17.68</version>
+			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>software.amazon.awssdk</groupId>
 			<artifactId>directconnect</artifactId>
 			<version>2.17.68</version>
+			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>software.amazon.awssdk</groupId>
 			<artifactId>directory</artifactId>
 			<version>2.17.68</version>
+			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>software.amazon.awssdk</groupId>
 			<artifactId>ec2</artifactId>
 			<version>2.17.68</version>
+			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>software.amazon.awssdk</groupId>
 			<artifactId>elasticache</artifactId>
 			<version>2.17.68</version>
+			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>software.amazon.awssdk</groupId>
 			<artifactId>elasticloadbalancing</artifactId>
 			<version>2.17.68</version>
+			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>software.amazon.awssdk</groupId>
 			<artifactId>elasticloadbalancingv2</artifactId>
 			<version>2.17.68</version>
+			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>software.amazon.awssdk</groupId>
 			<artifactId>iam</artifactId>
 			<version>2.17.68</version>
+			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>software.amazon.awssdk</groupId>
 			<artifactId>kms</artifactId>
 			<version>2.17.68</version>
+			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>software.amazon.awssdk</groupId>
 			<artifactId>lambda</artifactId>
 			<version>2.17.68</version>
+			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>software.amazon.awssdk</groupId>
 			<artifactId>rds</artifactId>
 			<version>2.17.68</version>
+			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>software.amazon.awssdk</groupId>
 			<artifactId>route53</artifactId>
 			<version>2.17.68</version>
+			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>software.amazon.awssdk</groupId>
 			<artifactId>s3</artifactId>
 			<version>2.17.68</version>
+			<scope>provided</scope>
 		</dependency>
-
-<!--		<dependency>-->
-<!--			<groupId>software.amazon.awssdk</groupId>-->
-<!--			<artifactId>aws-core</artifactId>-->
-<!--			<version>2.17.68</version>-->
-<!--		</dependency>-->
-
-<!--		<dependency>-->
-<!--			<groupId>software.amazon.awssdk</groupId>-->
-<!--			<artifactId>apache-client</artifactId>-->
-<!--			<version>2.17.68</version>-->
-<!--		</dependency>-->
-
 
 		<dependency>
         	<groupId>org.apache.poi</groupId>
         	<artifactId>poi</artifactId>
-<!--            <scope>provided</scope>-->
+            <scope>provided</scope>
         </dependency>
         
         <dependency>
         	<groupId>org.apache.poi</groupId>
         	<artifactId>poi-ooxml</artifactId>
-<!--            <scope>provided</scope>-->
+            <scope>provided</scope>
         </dependency>
         
         <!-- https://mvnrepository.com/artifact/org.apache.poi/poi-ooxml-schemas -->
 		<dependency>
 		    <groupId>org.apache.poi</groupId>
 		    <artifactId>poi-ooxml-schemas</artifactId>
-<!--            <scope>provided</scope>-->
+            <scope>provided</scope>
 		</dependency>
 		
 		<!-- https://mvnrepository.com/artifact/org.apache.poi/poi-scratchpad -->
 		<dependency>
 		    <groupId>org.apache.poi</groupId>
 		    <artifactId>poi-scratchpad</artifactId>
-<!--            <scope>provided</scope>-->
+            <scope>provided</scope>
 		</dependency>
 		
 		<!-- https://mvnrepository.com/artifact/org.apache.poi/poi-excelant -->
 		<dependency>
 		    <groupId>org.apache.poi</groupId>
 		    <artifactId>poi-excelant</artifactId>
-<!--            <scope>provided</scope>-->
+            <scope>provided</scope>
 		</dependency>
 
 		<dependency>

@@ -1009,11 +1009,15 @@ public class AWSExporter
 			row = this.xssfHelper.createRow(this.vpcSheet, 1);
 			this.xssfHelper.setLeftThinCell(row, Integer.toString(i + 1));
 			this.xssfHelper.setCell(row, this.region.id());
-			  
-			  
 			this.xssfHelper.setCell(row, getNameTagValue(vpc.tags()));
 			this.xssfHelper.setCell(row, vpc.vpcId());
-			this.xssfHelper.setCell(row, vpc.cidrBlock());
+
+			StringBuffer cidrs = new StringBuffer();
+			for(VpcCidrBlockAssociation vpcCidrBlockAssociation : vpc.cidrBlockAssociationSet()) {
+				if(cidrs.length() > 0) cidrs.append("\n");
+				cidrs.append(vpcCidrBlockAssociation.cidrBlock());
+			}
+			this.xssfHelper.setCell(row, cidrs.toString());
 			this.xssfHelper.setCell(row, vpc.dhcpOptionsId());
 			this.xssfHelper.setCell(row, this.getEnumName(vpc.instanceTenancy()));
 			
@@ -1048,6 +1052,7 @@ public class AWSExporter
 					  vpcCidr.append("\n");
 					  vpcCidr.append("Status Message : " + vpcCidrBlockState.statusMessage());
 				  }
+				  vpcCidr.append("\n");
 			}
 			this.xssfHelper.setCell(row, vpcCidr.toString());
 			  
@@ -1148,14 +1153,6 @@ public class AWSExporter
 		
 		this.routeTableSheet.addMergedRegion(new CellRangeAddress(row.getRowNum(), row.getRowNum(), 5, 6));
 		this.routeTableSheet.addMergedRegion(new CellRangeAddress(row.getRowNum(), row.getRowNum(), 7, 8));
-    
-		row = this.xssfHelper.createRow(this.internetGatewaySheet, 1);
-		this.xssfHelper.setHeadLeftThinCell(row, "No.");
-		this.xssfHelper.setHeadCell(row, "Region");
-		this.xssfHelper.setHeadCell(row, "VPC ID");
-		this.xssfHelper.setHeadCell(row, "Name");
-		this.xssfHelper.setHeadCell(row, "InternetGateway ID");
-		this.xssfHelper.setHeadRightThinCell(row, "Tags");
     
 		row = this.xssfHelper.createRow(this.internetGatewaySheet, 1);
 		this.xssfHelper.setHeadLeftThinCell(row, "No.");
