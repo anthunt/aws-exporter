@@ -12,7 +12,7 @@ AWSExporter extracts configuration information about resources you create in AWS
 :wrench: Installation
 -------------
 
-Download [aws-exporter-3.0.4-RELEASE-full.jar](https://github.com/anthunt/aws-exporter/releases/download/3.0.0-RELEASE/aws-exporter-3.0.0-RELEASE-full.jar) to your local path and run install
+Download [aws-exporter-3.0.4-RELEASE-full.jar](https://github.com/anthunt/aws-exporter/releases/download/3.0.0-RELEASE/aws-exporter-3.0.4-RELEASE-full.jar) to your local path and run install
 ```
 $ java -jar aws-exporter-3.0.4-RELEASE-full.jar
 ```
