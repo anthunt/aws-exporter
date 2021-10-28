@@ -5,8 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b9d525a6-1b15-4655-83a5-0ae5b456c4c1" name="Default Changelist" comment="update">
-      <change afterPath="$PROJECT_DIR$/exports/[SNICBD-DMZ][ap-northeast-2] AWSExport-20211028150737.xlsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/conf/awsExporter.data" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/conf/env.bat" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/exports/[GPORTAL-DMZ][ap-northeast-2] AWSExport-20211028115512.xlsx" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/exports/[GPORTAL-DMZ][ap-northeast-2] AWSExport-20211028115658.xlsx" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/exports/[GPORTAL-DMZ][ap-northeast-2] AWSExport-20211028142820.xlsx" beforeDir="false" />
@@ -16,8 +18,6 @@
       <change beforePath="$PROJECT_DIR$/exports/[GPORTAL-PROD][ap-northeast-2] AWSExport-20211028143745.xlsx" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/exports/[SNI-CBD][ap-northeast-2] AWSExport-20211028113546.xlsx" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/exports/[SNIFM-DEV][ap-northeast-2] AWSExport-20211028115350.xlsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/anthunt/aws/exporter/AWSExporter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/anthunt/aws/exporter/AWSExporter.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -159,7 +159,14 @@
       <option name="project" value="LOCAL" />
       <updated>1635400350820</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="update">
+      <created>1635401535910</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1635401535910</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
