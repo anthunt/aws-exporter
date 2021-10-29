@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>anthunt.aws</groupId>
   <artifactId>aws-exporter</artifactId>
-  <version>3.0.4-RELEASE</version>
+  <version>3.0.5-RELEASE</version>
   <name>aws-exporter</name>
   <licenses>
     <license>
@@ -20,8 +20,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.8</java.version>
         <aws.sdk.version>2.9.24</aws.sdk.version>
-        <poi.version>3.14</poi.version>
-        <poi-helper.version>1.0.0-RELEASE</poi-helper.version>
+        <poi.version>4.1.2</poi.version>
+        <poi-helper.version>2.0.1-RELEASE</poi-helper.version>
         <mvn-artifact-downloader.version>1.0.1-RELEASE</mvn-artifact-downloader.version>
     </properties>
 

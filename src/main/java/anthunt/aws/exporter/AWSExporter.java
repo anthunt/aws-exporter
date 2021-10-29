@@ -365,7 +365,43 @@ public class AWSExporter
 		}
 		return tagValues.toString();
 	}
-  
+
+	private static String rightPadding(String input, char ch, int L) {
+		String result = String.format("%" + (-L) + "s", input).replace(' ', ch);
+		return result;
+	}
+
+	private int progressPosition = 0;
+	private void printProgress(String message) {
+		this.progressPosition++;
+		message = this.rightPadding(message, ' ', 50);
+		this.printProgressBar(Long.parseLong(Long.toString(progressPosition*100/(this.workbook.getNumberOfSheets() + 1)*100)) / 100, message);
+	}
+
+	private void printProgressBar(long currentPosition, String message) {
+		System.out.print(this.progressBar(100, currentPosition, 0, 100, message));
+		System.out.print("\r");
+		try {
+			Thread.sleep(100);
+		} catch (InterruptedException skip) {}
+		if(currentPosition == 100) {
+			System.out.println("\n");
+		}
+	}
+
+	private String progressBar(int progressBarSize, long currentPosition, long startPositoin, long finishPosition, String message) {
+		String bar = "";
+		int nPositions = progressBarSize;
+		char pb = '-'; //'?';
+		char stat = '#'; //'?';
+		for (int p = 0; p < nPositions; p++) {
+			bar += pb;
+		}
+		int ststus = (int) (100 * (currentPosition - startPositoin) / (finishPosition - startPositoin));
+		int move = (nPositions * ststus) / 100;
+		return "|" + bar.substring(0, move).replace(pb, stat) + bar.substring(move, bar.length()) + "|" + ststus + "%| " + message;
+	}
+
 	private void make(Region region, String profileName) {
 		this.region = region;
         
@@ -380,40 +416,48 @@ public class AWSExporter
     
 		makeSheetListHeader();
 		System.out.println("Excel workbook sheet generation and subject line generation complete [" + this.workbook.getNumberOfSheets() + " ea Sheet]");
-		
-		try { makeSubnet(); System.out.println("Subnets Export complete"); } catch (Exception e) { System.out.println("Subnets Export failure - [" + e.getMessage() + "]"); e.printStackTrace(); }
+
+		this.progressPosition = 0;
+
+		System.out.println("\n");
+
+		try { makeSubnet(); printProgress("Subnets Export complete"); } catch (Exception e) { System.out.println("Subnets Export failure - [" + e.getMessage() + "]"); e.printStackTrace(); }
 		
 		HashMap<String, String> vpcMainRouteTables = null;
-		try { vpcMainRouteTables = makeRouteTable(); System.out.println("RouteTable Export complete"); } catch (Exception e) { System.out.println("RouteTable Export failure - [" + e.getMessage() + "]"); e.printStackTrace(); }
-		try { makeVPC(vpcMainRouteTables); System.out.println("VPC Export complete"); } catch (Exception e) { System.out.println("VPC Export failure - [" + e.getMessage() + "]"); e.printStackTrace(); }
-		try { makeVPCPeering(); System.out.println("VPC Export complete"); } catch (Exception e) { System.out.println("VPC Export failure - [" + e.getMessage() + "]"); e.printStackTrace(); }
-		try { makeInternetGateway(); System.out.println("InternetGateway Export complete"); } catch (Exception e) { System.out.println("InternetGateway Export failure - [" + e.getMessage() + "]"); e.printStackTrace(); }
-		try { makeEgressInternetGateway(); System.out.println("InternetGateway Export complete"); } catch (Exception e) { System.out.println("InternetGateway Export failure - [" + e.getMessage() + "]"); e.printStackTrace(); }
-		try { makeNATGateway(); System.out.println("EgressOnlyInternetGateway Export complete"); } catch (Exception e) { System.out.println("EgressOnlyInternetGateway Export failure - [" + e.getMessage() + "]"); e.printStackTrace(); }
-		try { makeCustomerGateway(); System.out.println("CustomerGateway Export complete"); } catch (Exception e) { System.out.println("CustomerGateway Export failure - [" + e.getMessage() + "]"); e.printStackTrace(); }
-		try { makeVPNGateway(); System.out.println("VPNGateway Export complete"); } catch (Exception e) { System.out.println("VPNGateway Export failure - [" + e.getMessage() + "]"); e.printStackTrace(); }
-		try { makeVPNConnection(); System.out.println("VPNConnection Export complete"); } catch (Exception e) { System.out.println("VPNConnection Export failure - [" + e.getMessage() + "]"); e.printStackTrace(); }		
-		try { makeSecurityGroup(); System.out.println("SecurityGroup Export complete"); } catch (Exception e) { System.out.println("SecurityGroup Export failure - [" + e.getMessage() + "]"); e.printStackTrace(); }
-		try { makeEC2Instance(); System.out.println("EC2Instances Export complete"); } catch (Exception e) { System.out.println("EC2Instances Export failure - [" + e.getMessage() + "]"); e.printStackTrace(); }
-		try { makeEBS(); System.out.println("EBS Export complete"); } catch (Exception e) { System.out.println("EBS Export failure - [" + e.getMessage() + "]"); e.printStackTrace(); }
-		try { makeClassicELB(); System.out.println("Classic ELB Export complete"); } catch (Exception e) { System.out.println("Classic ELB Export failure - [" + e.getMessage() + "]"); e.printStackTrace(); }
-		try { makeOtherELB(); System.out.println("Other ELB Export complete"); } catch (Exception e) { System.out.println("Other ELB Export failure - [" + e.getMessage() + "]"); e.printStackTrace(); }
-		try { makeElasticCache(); System.out.println("ElasticCache Export complete"); } catch (Exception e) { System.out.println("ElasticCache Export failure - [" + e.getMessage() + "]"); e.printStackTrace(); }
-		try { makeRDSCluster(); System.out.println("RDS Clusters Export complete"); } catch (Exception e) { System.out.println("RDS Clusters Export failure - [" + e.getMessage() + "]"); e.printStackTrace(); }
-		try { makeRDSInstance(); System.out.println("RDS Instances Export complete"); } catch (Exception e) { System.out.println("RDS Instances Export failure - [" + e.getMessage() + "]"); e.printStackTrace(); }
-		try { makeKMS(); System.out.println("KMS Export complete"); } catch (Exception e) { System.out.println("KMS Export failure - [" + e.getMessage() + "]"); e.printStackTrace(); }
-		try { makeACM(); System.out.println("ACM Export complete"); } catch (Exception e) { System.out.println("ACM Export failure - [" + e.getMessage() + "]"); e.printStackTrace(); }
-		try { makeS3(); System.out.println("S3 Export complete"); } catch (Exception e) { System.out.println("S3 Export failure - [" + e.getMessage() + "]"); e.printStackTrace(); }
+		try { vpcMainRouteTables = makeRouteTable(); printProgress("RouteTable Export complete"); } catch (Exception e) { System.out.println("RouteTable Export failure - [" + e.getMessage() + "]"); e.printStackTrace(); }
+		try { makeVPC(vpcMainRouteTables); printProgress("VPC Export complete"); } catch (Exception e) { System.out.println("VPC Export failure - [" + e.getMessage() + "]"); e.printStackTrace(); }
+		try { makeVPCPeering(); printProgress("VPC Export complete"); } catch (Exception e) { System.out.println("VPC Export failure - [" + e.getMessage() + "]"); e.printStackTrace(); }
+		try { makeInternetGateway(); printProgress("InternetGateway Export complete"); } catch (Exception e) { System.out.println("InternetGateway Export failure - [" + e.getMessage() + "]"); e.printStackTrace(); }
+		try { makeEgressInternetGateway(); printProgress("InternetGateway Export complete"); } catch (Exception e) { System.out.println("InternetGateway Export failure - [" + e.getMessage() + "]"); e.printStackTrace(); }
+		try { makeNATGateway(); printProgress("EgressOnlyInternetGateway Export complete"); } catch (Exception e) { System.out.println("EgressOnlyInternetGateway Export failure - [" + e.getMessage() + "]"); e.printStackTrace(); }
+		try { makeCustomerGateway(); printProgress("CustomerGateway Export complete"); } catch (Exception e) { System.out.println("CustomerGateway Export failure - [" + e.getMessage() + "]"); e.printStackTrace(); }
+		try { makeVPNGateway(); printProgress("VPNGateway Export complete"); } catch (Exception e) { System.out.println("VPNGateway Export failure - [" + e.getMessage() + "]"); e.printStackTrace(); }
+		try { makeVPNConnection(); printProgress("VPNConnection Export complete"); } catch (Exception e) { System.out.println("VPNConnection Export failure - [" + e.getMessage() + "]"); e.printStackTrace(); }
+		try { makeSecurityGroup(); printProgress("SecurityGroup Export complete"); } catch (Exception e) { System.out.println("SecurityGroup Export failure - [" + e.getMessage() + "]"); e.printStackTrace(); }
+		try { makeEC2Instance(); printProgress("EC2Instances Export complete"); } catch (Exception e) { System.out.println("EC2Instances Export failure - [" + e.getMessage() + "]"); e.printStackTrace(); }
+		try { makeEBS(); printProgress("EBS Export complete"); } catch (Exception e) { System.out.println("EBS Export failure - [" + e.getMessage() + "]"); e.printStackTrace(); }
+		try { makeClassicELB(); printProgress("Classic ELB Export complete"); } catch (Exception e) { System.out.println("Classic ELB Export failure - [" + e.getMessage() + "]"); e.printStackTrace(); }
+		try { makeOtherELB(); printProgress("Other ELB Export complete"); } catch (Exception e) { System.out.println("Other ELB Export failure - [" + e.getMessage() + "]"); e.printStackTrace(); }
+		try { makeElasticCache(); printProgress("ElasticCache Export complete"); } catch (Exception e) { System.out.println("ElasticCache Export failure - [" + e.getMessage() + "]"); e.printStackTrace(); }
+		try { makeRDSCluster(); printProgress("RDS Clusters Export complete"); } catch (Exception e) { System.out.println("RDS Clusters Export failure - [" + e.getMessage() + "]"); e.printStackTrace(); }
+		try { makeRDSInstance(); printProgress("RDS Instances Export complete"); } catch (Exception e) { System.out.println("RDS Instances Export failure - [" + e.getMessage() + "]"); e.printStackTrace(); }
+		try { makeKMS(); printProgress("KMS Export complete"); } catch (Exception e) { System.out.println("KMS Export failure - [" + e.getMessage() + "]"); e.printStackTrace(); }
+		try { makeACM(); printProgress("ACM Export complete"); } catch (Exception e) { System.out.println("ACM Export failure - [" + e.getMessage() + "]"); e.printStackTrace(); }
+		try { makeS3(); printProgress("S3 Export complete"); } catch (Exception e) { System.out.println("S3 Export failure - [" + e.getMessage() + "]"); e.printStackTrace(); }
 		
-		try { makeDirectConnection(); System.out.println("DirectConnect Export complete"); } catch (Exception e) { System.out.println("DirectConnect Export failure - [" + e.getMessage() + "]"); e.printStackTrace(); }
-		try { makeDirectLocation(); System.out.println("DirectLocation Export complete"); } catch (Exception e) { System.out.println("DirectLocation Export failure - [" + e.getMessage() + "]"); e.printStackTrace(); }
-		try { makeVirtualGateway(); System.out.println("VirtualGateway Export complete"); } catch (Exception e) { System.out.println("VirtualGateway Export failure - [" + e.getMessage() + "]"); e.printStackTrace(); }
-		try { makeVirtualInterface(); System.out.println("VirtualInterface Export complete"); } catch (Exception e) { System.out.println("VirtualInterface Export failure - [" + e.getMessage() + "]"); e.printStackTrace(); }
-		try { makeLag(); System.out.println("Lag Export complete"); } catch (Exception e) { System.out.println("Lag Export failure - [" + e.getMessage() + "]"); e.printStackTrace(); }
-		try { makeDirectConnectGateway(); System.out.println("DirectConnect Gateway Export complete"); } catch (Exception e) { System.out.println("DirectConnect Gateway Export failure - [" + e.getMessage() + "]"); e.printStackTrace(); }
+		try { makeDirectConnection(); printProgress("DirectConnect Export complete"); } catch (Exception e) { System.out.println("DirectConnect Export failure - [" + e.getMessage() + "]"); e.printStackTrace(); }
+		try { makeDirectLocation(); printProgress("DirectLocation Export complete"); } catch (Exception e) { System.out.println("DirectLocation Export failure - [" + e.getMessage() + "]"); e.printStackTrace(); }
+		try { makeVirtualGateway(); printProgress("VirtualGateway Export complete"); } catch (Exception e) { System.out.println("VirtualGateway Export failure - [" + e.getMessage() + "]"); e.printStackTrace(); }
+		try { makeVirtualInterface(); printProgress("VirtualInterface Export complete"); } catch (Exception e) { System.out.println("VirtualInterface Export failure - [" + e.getMessage() + "]"); e.printStackTrace(); }
+		try { makeLag(); printProgress("Lag Export complete"); } catch (Exception e) { System.out.println("Lag Export failure - [" + e.getMessage() + "]"); e.printStackTrace(); }
+		try { makeDirectConnectGateway(); printProgress("DirectConnect Gateway Export complete"); } catch (Exception e) { System.out.println("DirectConnect Gateway Export failure - [" + e.getMessage() + "]"); e.printStackTrace(); }
 		
-		try { makeDirectoryService(); System.out.println("Directory Service Export complete"); } catch (Exception e) { System.out.println("Directory Service Export failure - [" + e.getMessage() + "]"); e.printStackTrace(); }
-		
+		try { makeDirectoryService(); printProgress("Directory Service Export complete"); } catch (Exception e) { System.out.println("Directory Service Export failure - [" + e.getMessage() + "]"); e.printStackTrace(); }
+
+		printProgress("All resources are exported !");
+
+		System.out.println("");
+
 		this.xssfHelper.setAutoSizeColumn();
 	}
 	
