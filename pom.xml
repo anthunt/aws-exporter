@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>anthunt.aws</groupId>
   <artifactId>aws-exporter</artifactId>
-  <version>3.0.5-RELEASE</version>
+  <version>3.0.6-RELEASE</version>
   <name>aws-exporter</name>
   <licenses>
     <license>
@@ -44,6 +44,11 @@
 <!--			    <version>${aws.sdk.version}</version>-->
 <!--			</dependency>-->
 
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-simple</artifactId>
+				<version>1.7.32</version>
+			</dependency>
 
 			<dependency>
 	        	<groupId>org.apache.poi</groupId>
@@ -100,6 +105,11 @@
 <!--		    <artifactId>aws-sdk-java</artifactId>-->
 <!--&lt;!&ndash;		    <scope>provided</scope>&ndash;&gt;-->
 <!--		</dependency>-->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-simple</artifactId>
+			<scope>provided</scope>
+		</dependency>
 
 		<dependency>
 			<groupId>software.amazon.awssdk</groupId>
