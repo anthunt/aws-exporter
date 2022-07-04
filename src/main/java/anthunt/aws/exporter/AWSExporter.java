@@ -1997,9 +1997,9 @@ public class AWSExporter
 				
 				if(getBucketWebsiteResponse != null) {
 					RedirectAllRequestsTo redirectAllRequestsTo = getBucketWebsiteResponse.redirectAllRequestsTo();
-					this.xssfHelper.setCell(row, redirectAllRequestsTo.hostName());
+					this.xssfHelper.setCell(row, redirectAllRequestsTo == null ? "" : redirectAllRequestsTo.hostName());
 					this.xssfHelper.setCell(row, "");
-					this.xssfHelper.setCell(row, this.getEnumName(redirectAllRequestsTo.protocol()));
+					this.xssfHelper.setCell(row, redirectAllRequestsTo == null ? "" : this.getEnumName(redirectAllRequestsTo.protocol()));
 					this.xssfHelper.setCell(row, "");
 					this.xssfHelper.setCell(row, "");
 					
