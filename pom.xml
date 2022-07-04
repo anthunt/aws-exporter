@@ -20,7 +20,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.8</java.version>
         <aws.sdk.version>2.9.24</aws.sdk.version>
-        <poi.version>4.1.2</poi.version>
+        <poi.version>5.2.1</poi.version>
         <poi-helper.version>2.0.1-RELEASE</poi-helper.version>
         <mvn-artifact-downloader.version>1.0.1-RELEASE</mvn-artifact-downloader.version>
     </properties>
@@ -66,7 +66,7 @@
 			<dependency>
 			    <groupId>org.apache.poi</groupId>
 			    <artifactId>poi-ooxml-schemas</artifactId>
-			    <version>${poi.version}</version>
+			    <version>4.1.2</version>
 			</dependency>
 			
 			<!-- https://mvnrepository.com/artifact/org.apache.poi/poi-scratchpad -->
