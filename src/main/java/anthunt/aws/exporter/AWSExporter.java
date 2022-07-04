@@ -1992,8 +1992,8 @@ public class AWSExporter
 			
 			try {
 				GetBucketWebsiteResponse getBucketWebsiteResponse = this.amazonClients.s3Client.getBucketWebsite(GetBucketWebsiteRequest.builder().bucket(bucket.name()).build());
-				this.xssfHelper.setCell(row, getBucketWebsiteResponse == null ? "" : getBucketWebsiteResponse.errorDocument().key());
-				this.xssfHelper.setCell(row, getBucketWebsiteResponse == null ? "" : getBucketWebsiteResponse.indexDocument().suffix());
+				this.xssfHelper.setCell(row, getBucketWebsiteResponse == null ? "" : getBucketWebsiteResponse.errorDocument() == null ? "" : getBucketWebsiteResponse.errorDocument().key());
+				this.xssfHelper.setCell(row, getBucketWebsiteResponse == null ? "" : getBucketWebsiteResponse.indexDocument() == null ? "" : getBucketWebsiteResponse.indexDocument().suffix());
 				
 				if(getBucketWebsiteResponse != null) {
 					RedirectAllRequestsTo redirectAllRequestsTo = getBucketWebsiteResponse.redirectAllRequestsTo();
