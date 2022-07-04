@@ -18,10 +18,10 @@
   
   <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <java.version>1.8</java.version>
+        <java.version>11</java.version>
         <aws.sdk.version>2.9.24</aws.sdk.version>
         <poi.version>5.2.1</poi.version>
-        <poi-helper.version>2.0.1-RELEASE</poi-helper.version>
+        <poi-helper.version>2.1.1-RELEASE</poi-helper.version>
         <mvn-artifact-downloader.version>1.0.1-RELEASE</mvn-artifact-downloader.version>
     </properties>
 
@@ -275,7 +275,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.8.1</version>
+				<version>3.10.1</version>
 				<configuration>
 					<source>${java.version}</source>
 					<target>${java.version}</target>
