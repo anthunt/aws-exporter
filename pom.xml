@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>anthunt.aws</groupId>
   <artifactId>aws-exporter</artifactId>
-  <version>3.1.1-RELEASE</version>
+  <version>3.1.2-RELEASE</version>
   <name>aws-exporter</name>
   <licenses>
     <license>
@@ -50,6 +50,13 @@
 				<version>1.7.32</version>
 			</dependency>
 
+			<!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-to-slf4j -->
+			<dependency>
+				<groupId>org.apache.logging.log4j</groupId>
+				<artifactId>log4j-to-slf4j</artifactId>
+				<version>2.18.0</version>
+			</dependency>
+
 			<dependency>
 	        	<groupId>org.apache.poi</groupId>
 	        	<artifactId>poi</artifactId>
@@ -67,6 +74,12 @@
 			    <groupId>org.apache.poi</groupId>
 			    <artifactId>poi-ooxml-schemas</artifactId>
 			    <version>4.1.2</version>
+				<exclusions>
+					<exclusion>
+						<groupId>org.apache.xmlbeans</groupId>
+						<artifactId>xmlbeans</artifactId>
+					</exclusion>
+				</exclusions>
 			</dependency>
 			
 			<!-- https://mvnrepository.com/artifact/org.apache.poi/poi-scratchpad -->
