@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>anthunt.aws</groupId>
   <artifactId>aws-exporter</artifactId>
-  <version>3.1.0-RELEASE</version>
+  <version>3.1.1-RELEASE</version>
   <name>aws-exporter</name>
   <licenses>
     <license>
