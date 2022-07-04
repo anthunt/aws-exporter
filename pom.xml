@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>anthunt.aws</groupId>
   <artifactId>aws-exporter</artifactId>
-  <version>3.1.2-RELEASE</version>
+  <version>3.1.3-RELEASE</version>
   <name>aws-exporter</name>
   <licenses>
     <license>
@@ -95,18 +95,6 @@
 			    <artifactId>poi-excelant</artifactId>
 			    <version>${poi.version}</version>
 			</dependency>
-
-			<dependency>
-				<groupId>anthunt.poi</groupId>
-				<artifactId>poi-helper</artifactId>
-				<version>${poi-helper.version}</version>
-			</dependency>
-			
-			<dependency>
-				<groupId>anthunt.mvn</groupId>
-				<artifactId>mvn-artifact-downloader</artifactId>
-				<version>${mvn-artifact-downloader.version}</version>
-			</dependency>
         </dependencies>
 
     </dependencyManagement>
@@ -121,6 +109,12 @@
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-simple</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-to-slf4j</artifactId>
 			<scope>provided</scope>
 		</dependency>
 

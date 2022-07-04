@@ -22,9 +22,11 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b9d525a6-1b15-4655-83a5-0ae5b456c4c1" name="Default Changelist" comment="feature/update-3.1.1-RELEASE">
+    <list default="true" id="b9d525a6-1b15-4655-83a5-0ae5b456c4c1" name="Default Changelist" comment="feature/update-3.1.2-RELEASE">
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__anthunt_mvn_mvn_artifact_downloader_1_0_1_RELEASE.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws-exporter.iml" beforeDir="false" afterPath="$PROJECT_DIR$/aws-exporter.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -263,7 +265,14 @@
       <option name="project" value="LOCAL" />
       <updated>1656916448754</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="feature/update-3.1.2-RELEASE">
+      <created>1656918349854</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1656918349854</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -285,6 +294,7 @@
     <MESSAGE value="feature/update-jdk11" />
     <MESSAGE value="feature/update-3.1.0-RELEASE" />
     <MESSAGE value="feature/update-3.1.1-RELEASE" />
-    <option name="LAST_COMMIT_MESSAGE" value="feature/update-3.1.1-RELEASE" />
+    <MESSAGE value="feature/update-3.1.2-RELEASE" />
+    <option name="LAST_COMMIT_MESSAGE" value="feature/update-3.1.2-RELEASE" />
   </component>
 </project>
