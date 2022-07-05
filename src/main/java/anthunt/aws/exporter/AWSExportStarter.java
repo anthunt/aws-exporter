@@ -118,6 +118,8 @@ public class AWSExportStarter
       case PROXY_PORT: 
         amazonAccess.setProxyPort(Integer.valueOf(Integer.parseInt(value)));
         break;
+      default:
+          break;
       }
       
       this.amazonAccess = amazonAccess;

@@ -161,7 +161,7 @@ public class AWSRegionSelector
         {
           int selectedIdx = Integer.parseInt(selectedIndex.trim());
           if ((selectedIdx < 1) || (selectedIdx > this.allRegions.size())) {
-            throw new Exception("[" + selectedIdx + "] is an optional value that is not supported..");
+            throw new RegionSelectorException("[" + selectedIdx + "] is an optional value that is not supported..");
           }
           if (favBuffer.length() > 0) {
             favBuffer.append(",");
@@ -236,7 +236,7 @@ public class AWSRegionSelector
             break;
           }
           if ((selectedIdx < 1) || (selectedIdx > this.allRegions.size())) {
-            throw new Exception("[" + selectedIdx + "] is an optional value that is not supported.");
+            throw new RegionSelectorException("[" + selectedIdx + "] is an optional value that is not supported.");
           }
           this.selectedRegions.add(this.allRegions.get(selectedIdx - 1));
         }

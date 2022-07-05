@@ -5,9 +5,7 @@ public class AmazonAccess
 	private Boolean useProxy;
 	private String proxyHost;
 	private Integer proxyPort;
-  
-	public AmazonAccess() {}
-	  	  
+
 	public Boolean isUseProxy()
 	{
 	    return this.useProxy;

@@ -23,7 +23,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b9d525a6-1b15-4655-83a5-0ae5b456c4c1" name="Default Changelist" comment="change readme.md">
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/anthunt/aws/exporter/RegionSelectorException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/anthunt/aws/exporter/AWSExportStarter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/anthunt/aws/exporter/AWSExportStarter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/anthunt/aws/exporter/AWSRegionSelector.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/anthunt/aws/exporter/AWSRegionSelector.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/anthunt/aws/exporter/model/AmazonAccess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/anthunt/aws/exporter/model/AmazonAccess.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -289,7 +293,14 @@
       <option name="project" value="LOCAL" />
       <updated>1657005882893</updated>
     </task>
-    <option name="localTasksCounter" value="24" />
+    <task id="LOCAL-00024" summary="change readme.md">
+      <created>1657006231804</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1657006231804</updated>
+    </task>
+    <option name="localTasksCounter" value="25" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
