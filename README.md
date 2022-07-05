@@ -12,9 +12,9 @@ AWSExporter extracts configuration information about resources you create in AWS
 :wrench: Installation
 -------------
 
-1.  Download [aws-exporter-v3.1.4-RELEASE.zip](https://github.com/anthunt/aws-exporter/releases/download/v3.1.4-RELEASE/aws-exporter-v3.1.4-RELEASE.zip) to your local path and run install
-2.  Unzip file
-3.  install jar - it will be download dependencies and make structures
+1.   Download [aws-exporter-v3.1.4-RELEASE.zip](https://github.com/anthunt/aws-exporter/releases/download/v3.1.4-RELEASE/aws-exporter-v3.1.4-RELEASE.zip) to your local path and run install
+2.   Unzip file
+3.   install jar - it will be download dependencies and make structures
 ```
 $ java -jar aws-exporter-3.1.4-RELEASE-full.jar
 ```
@@ -54,28 +54,28 @@ Output file will be create in exports directory.
 :heavy_check_mark: Support AWS Services
 -------------
 
-+  VPC
-+  Subnet
-+  Route Table
-+  Internet Gateway
-+  Egress Only Internet Gateway
-+  NAT Gateway
-+  Customer Gateway
-+  VPN Gateway
-+  VPN Connection
-+  Security Group
-+  EC2 Instance
-+  EBS Volume
-+  ElasticLoadBalancer (ALB, NLB, CLB)
-+  ElastiCache
-+  RDS
-+  Key Management Service
-+  Certificate Manager
-+  Simple Storage Service
-+  Direct Connect Connection
-+  Direct Connect Location
-+  Virtual Gateway
-+  Virtual Interface
-+  LAG
-+  Direct Connect Gateway
-+  Directory Service
++   VPC
++   Subnet
++   Route Table
++   Internet Gateway
++   Egress Only Internet Gateway
++   NAT Gateway
++   Customer Gateway
++   VPN Gateway
++   VPN Connection
++   Security Group
++   EC2 Instance
++   EBS Volume
++   ElasticLoadBalancer (ALB, NLB, CLB)
++   ElastiCache
++   RDS
++   Key Management Service
++   Certificate Manager
++   Simple Storage Service
++   Direct Connect Connection
++   Direct Connect Location
++   Virtual Gateway
++   Virtual Interface
++   LAG
++   Direct Connect Gateway
++   Directory Service
