@@ -82,5 +82,7 @@
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.poi:poi-excelant:5.2.1" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.ant:ant:1.10.12" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.ant:ant-launcher:1.10.12" level="project" />
+    <orderEntry type="library" name="Maven: anthunt.poi:poi-helper:2.1.1-RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: anthunt.mvn:mvn-artifact-downloader:1.0.1-RELEASE" level="project" />
   </component>
 </module>
