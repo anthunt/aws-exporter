@@ -22,12 +22,9 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b9d525a6-1b15-4655-83a5-0ae5b456c4c1" name="Default Changelist" comment="change readme.md">
-      <change afterPath="$PROJECT_DIR$/src/main/java/anthunt/aws/exporter/RegionSelectorException.java" afterDir="false" />
+    <list default="true" id="b9d525a6-1b15-4655-83a5-0ae5b456c4c1" name="Default Changelist" comment="fix/codacy-issues-20220705">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/anthunt/aws/exporter/AWSExportStarter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/anthunt/aws/exporter/AWSExportStarter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/anthunt/aws/exporter/AWSRegionSelector.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/anthunt/aws/exporter/AWSRegionSelector.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/anthunt/aws/exporter/model/AmazonAccess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/anthunt/aws/exporter/model/AmazonAccess.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/anthunt/aws/exporter/AmazonClients.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/anthunt/aws/exporter/AmazonClients.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -300,7 +297,14 @@
       <option name="project" value="LOCAL" />
       <updated>1657006231804</updated>
     </task>
-    <option name="localTasksCounter" value="25" />
+    <task id="LOCAL-00025" summary="fix/codacy-issues-20220705">
+      <created>1657006733743</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1657006733743</updated>
+    </task>
+    <option name="localTasksCounter" value="26" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -326,6 +330,7 @@
     <MESSAGE value="feature/update-3.1.3-RELEASE" />
     <MESSAGE value="feature/update-3.1.4-RELEASE" />
     <MESSAGE value="change readme.md" />
-    <option name="LAST_COMMIT_MESSAGE" value="change readme.md" />
+    <MESSAGE value="fix/codacy-issues-20220705" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix/codacy-issues-20220705" />
   </component>
 </project>

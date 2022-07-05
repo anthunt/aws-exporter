@@ -52,25 +52,7 @@ public class AmazonClients
 
 	public AmazonClients(AmazonAccess amazonAccess, String profileName, Region region) {
 
-		URI proxy = null;
-		SdkHttpClient httpClient = null;
-
-		if(amazonAccess.isUseProxy()) {
-			proxy = URI.create(amazonAccess.getProxyHost() + ":" + amazonAccess.getProxyPort().intValue());
-			httpClient = ApacheHttpClient.builder()
-					.socketTimeout(Duration.ofSeconds(20))
-					.connectionTimeout(Duration.ofSeconds(5))
-					.proxyConfiguration(ProxyConfiguration.builder()
-							.endpoint(proxy)
-							.useSystemPropertyValues(amazonAccess.isUseProxy().booleanValue())
-							.build())
-					.build();
-		} else {
-			httpClient = ApacheHttpClient.builder()
-					.socketTimeout(Duration.ofSeconds(20))
-					.connectionTimeout(Duration.ofSeconds(5))
-					.build();
-		}
+		SdkHttpClient httpClient = this.initializeClientConfig(amazonAccess);
 
 		Supplier<ProfileFile> defaultProfileFileLoader = ProfileFile::defaultProfileFile;
 		ProfileFile profileFile = defaultProfileFileLoader.get();
@@ -93,19 +75,7 @@ public class AmazonClients
 
 		boolean useMFA = !stsMFASerial.equals("");
 
-		String tokenCode = "";
-		if(useMFA) {
-			Scanner sc = null;
-			try {
-				sc = new Scanner(System.in);
-				System.out.print("MFA code : ");
-				while (!sc.hasNextLine()) {
-					sc.next();
-				}
-				tokenCode = sc.nextLine();
-			} catch (Exception skip) {
-			}
-		}
+		String tokenCode = this.setTokenCode(useMFA);
 
 		Credentials credentials = null;
 
@@ -134,6 +104,53 @@ public class AmazonClients
 		);
 
 		initial(region, StaticCredentialsProvider.create(awsSessionCredentials));
+
+	}
+
+	private SdkHttpClient initializeClientConfig(AmazonAccess amazonAccess) {
+
+		URI proxy = null;
+		SdkHttpClient httpClient = null;
+
+		if(amazonAccess.isUseProxy()) {
+			proxy = URI.create(amazonAccess.getProxyHost() + ":" + amazonAccess.getProxyPort().intValue());
+			httpClient = ApacheHttpClient.builder()
+					.socketTimeout(Duration.ofSeconds(20))
+					.connectionTimeout(Duration.ofSeconds(5))
+					.proxyConfiguration(ProxyConfiguration.builder()
+							.endpoint(proxy)
+							.useSystemPropertyValues(amazonAccess.isUseProxy().booleanValue())
+							.build())
+					.build();
+		} else {
+			httpClient = ApacheHttpClient.builder()
+					.socketTimeout(Duration.ofSeconds(20))
+					.connectionTimeout(Duration.ofSeconds(5))
+					.build();
+		}
+
+		return httpClient;
+
+	}
+
+	private String setTokenCode(boolean useMFA) {
+
+		String tokenCode = "";
+
+		if(useMFA) {
+			Scanner sc = null;
+			try {
+				sc = new Scanner(System.in);
+				System.out.print("MFA code : ");
+				while (!sc.hasNextLine()) {
+					sc.next();
+				}
+				tokenCode = sc.nextLine();
+			} catch (Exception skip) {
+			}
+		}
+
+		return tokenCode;
 
 	}
 
