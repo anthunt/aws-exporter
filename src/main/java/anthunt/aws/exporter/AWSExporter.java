@@ -3175,8 +3175,8 @@ public class AWSExporter
 				this.xssfHelper.setCell(row, this.getEnumName(instance.instanceType()));
 				this.xssfHelper.setCell(row, subnet == null ? "" : subnet.availabilityZone());
 				this.xssfHelper.setCell(row, instance.privateIpAddress());
-				this.xssfHelper.setCell(row, instance.publicIpAddress());
 				this.xssfHelper.setCell(row, instance.privateDnsName());
+				this.xssfHelper.setCell(row, instance.publicIpAddress());
 				this.xssfHelper.setCell(row, instance.publicDnsName());
 
 				StringBuffer securityGroups = new StringBuffer();
