@@ -495,7 +495,7 @@ public class AWSExporter
 			this.xssfHelper.setCell(row, autoScalingGroup.autoScalingGroupName());
 			this.xssfHelper.setCell(row, (autoScalingGroup.launchTemplate() == null ? "" : autoScalingGroup.launchTemplate().launchTemplateName() + "[" + autoScalingGroup.launchTemplate().launchTemplateId() + "]"));
 			this.xssfHelper.setCell(row, autoScalingGroup.launchConfigurationName());
-			this.xssfHelper.setCell(row, autoScalingGroup.instances().size());
+			this.xssfHelper.setCell(row, Integer.toString(autoScalingGroup.instances().size()));
 			this.xssfHelper.setCell(row, autoScalingGroup.status());
 			this.xssfHelper.setCell(row, autoScalingGroup.desiredCapacity().toString());
 			this.xssfHelper.setCell(row, autoScalingGroup.minSize().toString());
