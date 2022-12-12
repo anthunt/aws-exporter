@@ -512,30 +512,50 @@ public class AWSExporter
 			this.xssfHelper.setCell(row, autoScalingGroup.healthCheckGracePeriod().toString());
 			this.xssfHelper.setRightThinCell(row, this.getAllTagDescriptionValue(autoScalingGroup.tags()));
 
-			int instanceIdx = 0;
-			int instanceRow = row.getRowNum();
-			for(software.amazon.awssdk.services.autoscaling.model.Instance instance : autoScalingGroup.instances()) {
+			if(instanceIdx > 0) {
 				row = this.xssfHelper.createRow(this.autoScalingSheet, 1);
-				if(instanceIdx == 0) {
-					this.xssfHelper.setHeadLeftThinCell(row, "Instances");
-				} else {
-					this.xssfHelper.setCell(row, "");	
+				this.xssfHelper.setSubHeadLeftThinCell(row, "Instances");
+				this.xssfHelper.setSubHeadCell(row, "");
+				this.xssfHelper.setSubHeadCell(row, "");
+				this.xssfHelper.setSubHeadCell(row, "");
+				this.xssfHelper.setSubHeadCell(row, "");
+				this.xssfHelper.setSubHeadCell(row, "");
+				this.xssfHelper.setSubHeadCell(row, "");
+				this.xssfHelper.setSubHeadCell(row, "");
+				this.xssfHelper.setSubHeadCell(row, "Instance Id");
+				this.xssfHelper.setSubHeadCell(row, "Lifecycle State");
+				this.xssfHelper.setSubHeadCell(row, "Launch Configuration Name");
+				this.xssfHelper.setSubHeadCell(row, "Availability Zone");
+				this.xssfHelper.setSubHeadRightThinCell(row, "Health Status");
+			
+				this.autoScalingSheet.addMergedRegion(new CellRangeAddress(row.getRowNum(), row.getRowNum(), 0, 7));
+
+				int instanceIdx = 0;
+				int instanceRow = row.getRowNum();
+				for(software.amazon.awssdk.services.autoscaling.model.Instance instance : autoScalingGroup.instances()) {
+					row = this.xssfHelper.createRow(this.autoScalingSheet, 1);
+					if(instanceIdx == 0) {
+						this.xssfHelper.setHeadLeftThinCell(row, "Instances");
+					} else {
+						this.xssfHelper.setCell(row, "");	
+					}
+					this.xssfHelper.setCell(row, "");
+					this.xssfHelper.setCell(row, "");
+					this.xssfHelper.setCell(row, "");
+					this.xssfHelper.setCell(row, "");
+					this.xssfHelper.setCell(row, "");
+					this.xssfHelper.setCell(row, "");
+					this.xssfHelper.setCell(row, "");
+					this.xssfHelper.setCell(row, instance.instanceId());
+					this.xssfHelper.setCell(row, instance.lifecycleState().toString());
+					this.xssfHelper.setCell(row, instance.launchConfigurationName());
+					this.xssfHelper.setCell(row, instance.availabilityZone());
+					this.xssfHelper.setRightThinCell(row, instance.healthStatus());
+					instanceIdx++;
 				}
-				this.xssfHelper.setCell(row, "");
-				this.xssfHelper.setCell(row, "");
-				this.xssfHelper.setCell(row, "");
-				this.xssfHelper.setCell(row, "");
-				this.xssfHelper.setCell(row, "");
-				this.xssfHelper.setCell(row, "");
-				this.xssfHelper.setCell(row, "");
-				this.xssfHelper.setCell(row, instance.instanceId());
-				this.xssfHelper.setCell(row, instance.lifecycleState().toString());
-				this.xssfHelper.setCell(row, instance.launchConfigurationName());
-				this.xssfHelper.setCell(row, instance.availabilityZone());
-				this.xssfHelper.setRightThinCell(row, instance.healthStatus());
-				instanceIdx++;
+				
+				this.autoScalingSheet.addMergedRegion(new CellRangeAddress(instanceRow + 1, row.getRowNum(), 0, 7));
 			}
-			this.autoScalingSheet.addMergedRegion(new CellRangeAddress(instanceRow, row.getRowNum(), 0, 7));
 
 		}
 
