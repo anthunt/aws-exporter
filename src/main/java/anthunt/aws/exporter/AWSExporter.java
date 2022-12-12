@@ -512,7 +512,7 @@ public class AWSExporter
 			this.xssfHelper.setCell(row, autoScalingGroup.healthCheckGracePeriod().toString());
 			this.xssfHelper.setRightThinCell(row, this.getAllTagDescriptionValue(autoScalingGroup.tags()));
 
-			if(instanceIdx > 0) { 
+			if(autoScalingGroup.instances().size() > 0) { 
 				row = this.xssfHelper.createRow(this.autoScalingSheet, 1);
 				this.xssfHelper.setSubHeadLeftThinCell(row, "Instances");
 				this.xssfHelper.setSubHeadCell(row, "");
