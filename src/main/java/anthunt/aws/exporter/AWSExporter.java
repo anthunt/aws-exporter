@@ -30,6 +30,8 @@ import software.amazon.awssdk.services.acm.model.ExtendedKeyUsage;
 import software.amazon.awssdk.services.acm.model.KeyUsage;
 import software.amazon.awssdk.services.acm.model.ListCertificatesResponse;
 import software.amazon.awssdk.services.acm.model.RenewalSummary;
+import software.amazon.awssdk.services.autoscaling.model.AutoScalingGroup;
+import software.amazon.awssdk.services.autoscaling.model.DescribeAutoScalingGroupsResponse;
 import software.amazon.awssdk.services.directconnect.model.BGPPeer;
 import software.amazon.awssdk.services.directconnect.model.Connection;
 import software.amazon.awssdk.services.directconnect.model.DescribeConnectionsResponse;
@@ -255,6 +257,7 @@ public class AWSExporter
 	private XSSFSheet securityGroupSheet;
 	private XSSFSheet ec2InstanceSheet;
 	private XSSFSheet ebsSheet;
+	private XSSFSheet autoScalingSheet;
 	private XSSFSheet classicElbSheet;
 	private XSSFSheet otherElbSheet;
 	private XSSFSheet elastiCacheSheet;
@@ -310,34 +313,38 @@ public class AWSExporter
   
 	private void initializeWorkbook() {
 		this.workbook = new XSSFWorkbook();
-		this.vpcSheet = this.workbook.createSheet("1.VPCs");
-		this.vpcPeeringSheet = this.workbook.createSheet("2.VPCPeerings");
-		this.subnetSheet = this.workbook.createSheet("3.Subnets");
-		this.routeTableSheet = this.workbook.createSheet("4.Route Tables");
-		this.internetGatewaySheet = this.workbook.createSheet("5.Internet Gateways");
-		this.egressInternetGatewaySheet = this.workbook.createSheet("6.Egress Only Internet Gateways");
-		this.natGatewaySheet = this.workbook.createSheet("7.NAT Gateways");
-		this.customerGatewaySheet = this.workbook.createSheet("8.Customer Gateways");
-		this.vpnGatewaySheet = this.workbook.createSheet("9.VPN Gateways");
-		this.vpnConnectionSheet = this.workbook.createSheet("10.VPN Connections");
-		this.securityGroupSheet = this.workbook.createSheet("11.Security Groups");
-		this.ec2InstanceSheet = this.workbook.createSheet("12.EC2 Instances");
-		this.ebsSheet = this.workbook.createSheet("13.EBS Volumes");
-		this.classicElbSheet = this.workbook.createSheet("14.Classic ELBs");
-		this.otherElbSheet = this.workbook.createSheet("15.Other ELBs");
-		this.elastiCacheSheet = this.workbook.createSheet("16.ElastiCaches");
-		this.rdsClusterSheet = this.workbook.createSheet("17.RDS-Clusters");
-		this.rdsInstanceSheet = this.workbook.createSheet("18.RDS-Instances");
-		this.kmsSheet = this.workbook.createSheet("19.KMS");
-		this.acmSheet = this.workbook.createSheet("20.ACM");
-		this.s3Sheet = this.workbook.createSheet("21.S3");
-		this.directConnectSheet = this.workbook.createSheet("22.Direct Connects");
-		this.directLocationSheet = this.workbook.createSheet("23.Direct Connect Locations");
-		this.virtualGatewaySheet = this.workbook.createSheet("24.Virtual Gateways");
-		this.virtualInterfaceSheet = this.workbook.createSheet("25.Virtual Interfaces");
-		this.lagSheet = this.workbook.createSheet("26.Lags");
-		this.directConnectGatewaySheet = this.workbook.createSheet("27.Direct Connect Gateways");
-		this.directorySheet = this.workbook.createSheet("28.Directory Services");
+
+		int sheetNumber = 1;
+
+		this.vpcSheet = this.workbook.createSheet(sheetNumber++ + ".VPCs");
+		this.vpcPeeringSheet = this.workbook.createSheet(sheetNumber++ + ".VPCPeerings");
+		this.subnetSheet = this.workbook.createSheet(sheetNumber++ + ".Subnets");
+		this.routeTableSheet = this.workbook.createSheet(sheetNumber++ + ".Route Tables");
+		this.internetGatewaySheet = this.workbook.createSheet(sheetNumber++ + ".Internet Gateways");
+		this.egressInternetGatewaySheet = this.workbook.createSheet(sheetNumber++ + ".Egress Only Internet Gateways");
+		this.natGatewaySheet = this.workbook.createSheet(sheetNumber++ + ".NAT Gateways");
+		this.customerGatewaySheet = this.workbook.createSheet(sheetNumber++ + ".Customer Gateways");
+		this.vpnGatewaySheet = this.workbook.createSheet(sheetNumber++ + ".VPN Gateways");
+		this.vpnConnectionSheet = this.workbook.createSheet(sheetNumber++ + ".VPN Connections");
+		this.securityGroupSheet = this.workbook.createSheet(sheetNumber++ + ".Security Groups");
+		this.ec2InstanceSheet = this.workbook.createSheet(sheetNumber++ + ".EC2 Instances");
+		this.ebsSheet = this.workbook.createSheet(sheetNumber++ + ".EBS Volumes");
+		this.autoScalingSheet = this.workbook.createSheet(sheetNumber++ + ".Auto Scaling Groups");
+		this.classicElbSheet = this.workbook.createSheet(sheetNumber++ + ".Classic ELBs");
+		this.otherElbSheet = this.workbook.createSheet(sheetNumber++ + ".Other ELBs");
+		this.elastiCacheSheet = this.workbook.createSheet(sheetNumber++ + ".ElastiCaches");
+		this.rdsClusterSheet = this.workbook.createSheet(sheetNumber++ + ".RDS-Clusters");
+		this.rdsInstanceSheet = this.workbook.createSheet(sheetNumber++ + ".RDS-Instances");
+		this.kmsSheet = this.workbook.createSheet(sheetNumber++ + ".KMS");
+		this.acmSheet = this.workbook.createSheet(sheetNumber++ + ".ACM");
+		this.s3Sheet = this.workbook.createSheet(sheetNumber++ + ".S3");
+		this.directConnectSheet = this.workbook.createSheet(sheetNumber++ + ".Direct Connects");
+		this.directLocationSheet = this.workbook.createSheet(sheetNumber++ + ".Direct Connect Locations");
+		this.virtualGatewaySheet = this.workbook.createSheet(sheetNumber++ + ".Virtual Gateways");
+		this.virtualInterfaceSheet = this.workbook.createSheet(sheetNumber++ + ".Virtual Interfaces");
+		this.lagSheet = this.workbook.createSheet(sheetNumber++ + ".Lags");
+		this.directConnectGatewaySheet = this.workbook.createSheet(sheetNumber++ + ".Direct Connect Gateways");
+		this.directorySheet = this.workbook.createSheet(sheetNumber++ + ".Directory Services");
 		
 		this.xssfHelper = new XSSFHelper(this.workbook);
 	}
@@ -353,6 +360,20 @@ public class AWSExporter
 		return name;
 	}
   
+	private String getAllTagDescriptionValue(List<software.amazon.awssdk.services.autoscaling.model.TagDescription> tagDescriptions) {
+		StringBuffer tagValues = new StringBuffer();
+		for(software.amazon.awssdk.services.autoscaling.model.TagDescription tagDescription : tagDescriptions) {
+			if(tagValues.length() > 0) {
+				tagValues.append("\n");
+			}
+			tagValues.append(tagDescription.key());
+			tagValues.append("=");
+			tagValues.append(tagDescription.value());
+		}
+
+		return tagValues.toString();
+	}
+
 	private String getAllTagValue(List<Tag> tags) {
 		StringBuffer tagValues = new StringBuffer();
 		for (Tag tag : tags) {
@@ -436,6 +457,7 @@ public class AWSExporter
 		try { makeSecurityGroup(); printProgress("SecurityGroup Export complete"); } catch (Exception e) { System.out.println("SecurityGroup Export failure - [" + e.getMessage() + "]"); e.printStackTrace(); }
 		try { makeEC2Instance(); printProgress("EC2Instances Export complete"); } catch (Exception e) { System.out.println("EC2Instances Export failure - [" + e.getMessage() + "]"); e.printStackTrace(); }
 		try { makeEBS(); printProgress("EBS Export complete"); } catch (Exception e) { System.out.println("EBS Export failure - [" + e.getMessage() + "]"); e.printStackTrace(); }
+		try { makeAutoScaling(); printProgress("Auto Scaling Groups Export complete"); } catch (Exception e) { System.out.println("Auto Scaling Groups Export failure - [" + e.getMessage() + "]"); e.printStackTrace(); }
 		try { makeClassicELB(); printProgress("Classic ELB Export complete"); } catch (Exception e) { System.out.println("Classic ELB Export failure - [" + e.getMessage() + "]"); e.printStackTrace(); }
 		try { makeOtherELB(); printProgress("Other ELB Export complete"); } catch (Exception e) { System.out.println("Other ELB Export failure - [" + e.getMessage() + "]"); e.printStackTrace(); }
 		try { makeElasticCache(); printProgress("ElasticCache Export complete"); } catch (Exception e) { System.out.println("ElasticCache Export failure - [" + e.getMessage() + "]"); e.printStackTrace(); }
@@ -460,7 +482,65 @@ public class AWSExporter
 
 		this.xssfHelper.setAutoSizeColumn();
 	}
-	
+
+	private void makeAutoScaling() {
+		XSSFRow row = null;
+
+		DescribeAutoScalingGroupsResponse describeAutoScalingGroupsResponse = this.amazonClients.autoScalingClient.describeAutoScalingGroups();
+		List<AutoScalingGroup> autoScalingGroups = describeAutoScalingGroupsResponse.autoScalingGroups();
+		for(AutoScalingGroup autoScalingGroup : autoScalingGroups) {
+
+			row = this.xssfHelper.createRow(this.autoScalingSheet, 1);
+			this.xssfHelper.setLeftThinCell(row, Integer.toString(row.getRowNum() - 1));
+			this.xssfHelper.setCell(row, autoScalingGroup.autoScalingGroupName());
+			this.xssfHelper.setCell(row, (autoScalingGroup.launchTemplate() == null ? "" : autoScalingGroup.launchTemplate().launchTemplateName() + "[" + autoScalingGroup.launchTemplate().launchTemplateId() + "]"));
+			this.xssfHelper.setCell(row, autoScalingGroup.launchConfigurationName());
+			this.xssfHelper.setCell(row, autoScalingGroup.instances().size());
+			this.xssfHelper.setCell(row, autoScalingGroup.status());
+			this.xssfHelper.setCell(row, autoScalingGroup.desiredCapacity().toString());
+			this.xssfHelper.setCell(row, autoScalingGroup.minSize().toString());
+			this.xssfHelper.setCell(row, autoScalingGroup.maxSize().toString());
+
+			List<String> availabilityZones = autoScalingGroup.availabilityZones();
+			StringBuffer availabilityZoneBuffer = new StringBuffer();
+			for(String availabilityZone : availabilityZones) {
+				availabilityZoneBuffer.append(availabilityZone);
+				availabilityZoneBuffer.append(",");
+			}
+			this.xssfHelper.setCell(row, availabilityZoneBuffer.toString());
+			this.xssfHelper.setCell(row, autoScalingGroup.defaultCooldown().toString());
+			this.xssfHelper.setCell(row, autoScalingGroup.healthCheckGracePeriod().toString());
+			this.xssfHelper.setRightThinCell(row, this.getAllTagDescriptionValue(autoScalingGroup.tags()));
+
+			int instanceIdx = 0;
+			int instanceRow = row.getRowNum();
+			for(software.amazon.awssdk.services.autoscaling.model.Instance instance : autoScalingGroup.instances()) {
+				row = this.xssfHelper.createRow(this.autoScalingSheet, 1);
+				if(instanceIdx == 0) {
+					this.xssfHelper.setHeadLeftThinCell(row, "Instances");
+				} else {
+					this.xssfHelper.setCell(row, "");	
+				}
+				this.xssfHelper.setCell(row, "");
+				this.xssfHelper.setCell(row, "");
+				this.xssfHelper.setCell(row, "");
+				this.xssfHelper.setCell(row, "");
+				this.xssfHelper.setCell(row, "");
+				this.xssfHelper.setCell(row, "");
+				this.xssfHelper.setCell(row, "");
+				this.xssfHelper.setCell(row, instance.instanceId());
+				this.xssfHelper.setCell(row, instance.lifecycleState().toString());
+				this.xssfHelper.setCell(row, instance.launchConfigurationName());
+				this.xssfHelper.setCell(row, instance.availabilityZone());
+				this.xssfHelper.setRightThinCell(row, instance.healthStatus());
+				instanceIdx++;
+			}
+			this.autoScalingSheet.addMergedRegion(new CellRangeAddress(instanceRow, row.getRowNum(), 0, 7));
+
+		}
+
+	}
+
 	private void makeDirectoryService() {
 		XSSFRow row = null;
 		DescribeDirectoriesResponse describeDirectoriesResponse = this.amazonClients.directoryClient.describeDirectories();
@@ -1341,6 +1421,21 @@ public class AWSExporter
 		this.xssfHelper.setHeadCell(row, "Attachment Information");
 		this.xssfHelper.setHeadCell(row, "Encrypted");
 		this.xssfHelper.setHeadCell(row, "KMS ID");
+		this.xssfHelper.setHeadRightThinCell(row, "Tags");
+
+		row = this.xssfHelper.createRow(this.autoScalingSheet, 1);
+		this.xssfHelper.setHeadLeftThinCell(row, "No.");
+		this.xssfHelper.setHeadCell(row, "Name");
+		this.xssfHelper.setHeadCell(row, "Launch template");
+		this.xssfHelper.setHeadCell(row, "Launch Configuration");
+		this.xssfHelper.setHeadCell(row, "Instances");
+		this.xssfHelper.setHeadCell(row, "Status");
+		this.xssfHelper.setHeadCell(row, "Desired");
+		this.xssfHelper.setHeadCell(row, "Min");
+		this.xssfHelper.setHeadCell(row, "Max");
+		this.xssfHelper.setHeadCell(row, "Availability Zones");
+		this.xssfHelper.setHeadCell(row, "Default Cooldown");
+		this.xssfHelper.setHeadCell(row, "Health Check Grace period");
 		this.xssfHelper.setHeadRightThinCell(row, "Tags");
     
 		row = this.xssfHelper.createRow(this.classicElbSheet, 1);
