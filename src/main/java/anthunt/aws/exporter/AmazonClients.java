@@ -10,6 +10,7 @@ import software.amazon.awssdk.profiles.ProfileFile;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.acm.AcmClient;
 import software.amazon.awssdk.services.apigateway.ApiGatewayClient;
+import software.amazon.awssdk.services.autoscaling.AutoScalingClient;
 import software.amazon.awssdk.services.directconnect.DirectConnectClient;
 import software.amazon.awssdk.services.directory.DirectoryClient;
 import software.amazon.awssdk.services.ec2.Ec2Client;
@@ -36,6 +37,7 @@ import java.util.function.Supplier;
 public class AmazonClients
 {
 	public Ec2Client ec2Client;
+	public AutoScalingClient autoScalingClient;
 	public ElasticLoadBalancingClient elasticLoadBalancingClient;
 	public ElasticLoadBalancingV2Client elasticLoadBalancingV2Client;
 	public ElastiCacheClient elastiCacheClient;
@@ -159,6 +161,11 @@ public class AmazonClients
 		this.ec2Client = Ec2Client.builder()
 				.region(region)
 				.credentialsProvider(profileCredentialsProvider)
+				.build();
+
+		this.autoScalingClient = AutoScalingClient.builder()
+				.region(region)
+				.credentialsProvider(profileCredentialsProvider)		
 				.build();
 
 		this.elastiCacheClient = ElastiCacheClient.builder()
